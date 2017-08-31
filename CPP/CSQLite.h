@@ -33,7 +33,7 @@ namespace SQL
 
 	// C++ interface to C# SQLite class
 	public:
-		void Open();
+		int Open();
 		void Close();
 		// SQLiteDataReader ExecuteReader(string query)
 		int Execute(char* query);

@@ -3,6 +3,7 @@ packages/
 x64/
 *.ico
 *.rc
+CSTest/
 
 CSharp/bin/
 CSharp/obj/

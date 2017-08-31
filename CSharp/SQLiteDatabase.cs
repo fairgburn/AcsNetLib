@@ -36,23 +36,31 @@ namespace SQLite_NET
 
 
         /* open the connection, create .sqlite file if necessary */
-        public void Open()
+        public bool Open()
         {
-            if (_isOpen) return;
+            // don't repeat an Open()
+            if (_isOpen) return false;
 
-            // make sure the database file and directory exist
+            // fail if file not found
             if (!System.IO.File.Exists(_database))
             {
-                System.IO.Directory.CreateDirectory(Util.GetDirectoryFromPath(_database));
-                SQLiteConnection.CreateFile(_database);
+                return false;
             }
 
+            // attempt to start connection
             var connection_string = $"Data Source={_database};Version=3;";
+            try
+            {
+                _conn = new SQLiteConnection(connection_string);
+                _conn.Open();
 
-            _conn = new SQLiteConnection(connection_string);
-            _conn.Open();
-
-            _isOpen = true;
+                _isOpen = true;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /* close the connection */
@@ -110,13 +118,5 @@ namespace SQLite_NET
                 }
             }
         }
-
-
-        /*public string GetAdjacentProc(string lineId, string where)
-        {
-            var cmd = new SQLiteCommand($"select FPROC_ID from sys where descr = {lineId}");
-            return Execute(cmd);
-        }*/
-
     }
 }

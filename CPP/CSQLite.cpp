@@ -45,11 +45,11 @@ namespace SQL
 
 
 	// call C# Open()
-	void CSQLite::Open()
+	int CSQLite::Open()
 	{
 		GCHandle h = GCHandle::FromIntPtr(IntPtr(__NET_HEAP__SQLiteDatabase));
 		SQLiteDatabase^ db = safe_cast<SQLiteDatabase^>(h.Target);
-		db->Open();
+		return db->Open();
 	}
 
 	// call C# Close()
