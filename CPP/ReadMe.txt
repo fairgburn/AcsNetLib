@@ -1,0 +1,1 @@
+Library to bridge gap between .NET C# code and native C++ code for SQLite operations
