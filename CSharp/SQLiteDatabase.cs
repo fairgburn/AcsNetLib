@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 
-namespace SQLite_CS
+namespace SQLite_NET
 {
     public class SQLiteDatabase
     {
@@ -110,6 +110,13 @@ namespace SQLite_CS
                 }
             }
         }
+
+
+        /*public string GetAdjacentProc(string lineId, string where)
+        {
+            var cmd = new SQLiteCommand($"select FPROC_ID from sys where descr = {lineId}");
+            return Execute(cmd);
+        }*/
 
     }
 }

@@ -1,3 +1,11 @@
+/*__________________________________________________________________
+	CSQLite.h
+	
+	Interface for wrapping 
+
+__________________________________________________________________*/
+
+
 #pragma once
 
 #ifdef INSIDE_MANAGED_CODE
@@ -12,6 +20,8 @@
 
 namespace SQL
 {
+	//_________________________________
+	// CSQLite
 	class DECLSPECIFIER CSQLite
 	{
 

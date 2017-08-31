@@ -1,13 +1,9 @@
-*.sln
 .vs/
 packages/
 x64/
-*.vcxproj
-*.filters
 *.ico
 *.rc
-*.csproj
-*.config
 
 CSharp/bin/
 CSharp/obj/
+NativeCppTest/
