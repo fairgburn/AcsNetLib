@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
+using extensions;
 
 namespace database.structs
 {
@@ -57,6 +58,18 @@ namespace database.structs
         {
 			get { return (byte[])_data[s]; }
 			set { _data[s] = value; }
+        }
+
+		// return data as string
+		public string GetString(string s)
+        {
+            return this[s].ToUTF8();
+        }
+
+		// return data as int
+		public int GetInt(string s)
+        {
+            return this[s].ToInt();
         }
 
     }

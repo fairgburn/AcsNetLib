@@ -10,14 +10,14 @@ namespace database
 {
     public class FoxProBuffer
     {
-        string _filePath;
-        byte[] _data;
-        List<Field> _fields;
-        List<Record> _records;
+        private string _filePath;
+        private byte[] _data;
+        private List<Field> _fields;
+        private List<Record> _records;
 
-        int _firstRecord;
-        int _numRecords;
-        int _recordLength;
+        private int _firstRecord;
+        private int _numRecords;
+        private int _recordLength;
 
 
         /** constructor: save path to DBF **/
@@ -61,33 +61,7 @@ namespace database
                 cursor += _recordLength;
             }
             System.IO.File.WriteAllBytes("test.dbf", _data);
-
-
-
-            /*int cursor = _firstRecord;
-            foreach (var rec in Records)
-            {
-                foreach (var field in Fields)
-                {
-                    string o = rec[field.Name.ToLower()];
-
-                    for (int i = 0; i < field.Length; i++)
-                    {
-                        try
-                        {
-                            _data[cursor + i] = (byte)o[i];
-                        }
-                        catch
-                        {
-                            _data[cursor + i] = 0;
-                        }
-                    }
-                }
-
-                cursor += _recordLength;
-            }
             
-            System.IO.File.WriteAllBytes("test.dbf", _data);*/
         }
 
         //___________________________
@@ -101,11 +75,11 @@ namespace database
 
 
 
-        /****************************/
+        /*--------------------------*/
         // helper methods
-        /****************************/
+        /*--------------------------*/
 
-        //______________________________________________________
+        //------------------------------------------------------
         // get the fields from the DBF 
         private List<Field> GetFieldsFromDBF(byte[] data)
         {
@@ -116,7 +90,7 @@ namespace database
             for (int cursor = 32; data[cursor] != 0x0D; cursor += 32)
             {
                 var name = data.SubRange(cursor, 10).ToUTF8().ToLower();
-                var type = (char)data[cursor + 11];// data.SubRange(cursor + 11, 1).ToUTF8();
+                var type = (char)data[cursor + 11];
                 var offset = data.SubRange(cursor + 12, 4).ToInt();
                 var length = data[cursor + 16];
 
@@ -129,7 +103,7 @@ namespace database
             return fields;
         }
 
-        //______________________________________________________
+        //------------------------------------------------------
         // get the records from the DBF
         private List<Record> GetRecordsFromDBF(byte[] data, Field[] fields = null)
         {
