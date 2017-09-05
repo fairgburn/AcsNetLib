@@ -72,6 +72,18 @@ namespace database.structs
             return this[s].ToInt();
         }
 
+		// modify data in field
+		public void Set(string field, string val)
+        {
+            byte[] new_value = new byte[this[field].Length];
+			for (int i = 0; i < val.Length; i++)
+            {
+                new_value[i] = (byte)val[i];
+            } // if val is too short, new_value is filled out with 0 (null character)
+
+            _data[field] = new_value;
+        }
+
     }
 
 

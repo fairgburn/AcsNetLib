@@ -30,7 +30,7 @@ namespace database
         /*****************************/
 
 
-        //_____________________________________
+        //-------------------------------------
         // Open: store file data in _data array
         public void Open()
         {
@@ -39,7 +39,7 @@ namespace database
             _records = GetRecordsFromDBF(_data, _fields.ToArray());
         }
 
-        //______________________________
+        //------------------------------
         // write buffer to disk
         public void Save()
         {
@@ -61,7 +61,13 @@ namespace database
                 cursor += _recordLength;
             }
             System.IO.File.WriteAllBytes("test.dbf", _data);
-            
+        }
+
+        //-------------------------------
+        // Update a record
+        public void Update(Record rec, string field, string val)
+        {
+            rec.Set(field, val);
         }
 
         //___________________________
