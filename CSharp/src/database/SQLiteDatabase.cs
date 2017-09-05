@@ -1,9 +1,10 @@
 ﻿/**
- * SQLite class
+ * SQLiteDatabase.cs - SQLite class (C#)
  * 
  * Represents a connection to a SQLite database file 
  * and provides methods for manipulating it.
  * 
+ * Brandon Fairburn 8/24/2017
  **/
 
 using System;

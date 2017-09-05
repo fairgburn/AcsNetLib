@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.IO;
 
 
-namespace SQLite_NET
+namespace AcsLib_NET
 {
     class Util
     {
