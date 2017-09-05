@@ -37,10 +37,6 @@ namespace database
             _data = System.IO.File.ReadAllBytes(_filePath);
             _fields = GetFieldsFromDBF(_data);
             _records = GetRecordsFromDBF(_data, _fields.ToArray());
-
-            _firstRecord = _data.SubRange(8, 2).ToInt();
-            _numRecords = _data.SubRange(4, 4).ToInt();
-            _recordLength = _data.SubRange(10, 2).ToInt();
         }
 
         //______________________________
@@ -48,6 +44,15 @@ namespace database
         public void Save()
         {
             int cursor = _firstRecord;
+
+            // iterate through each record
+            foreach (var rec in Records)
+            {
+                // todo next
+            }
+
+
+            /*int cursor = _firstRecord;
             foreach (var rec in Records)
             {
                 foreach (var field in Fields)
@@ -70,7 +75,7 @@ namespace database
                 cursor += _recordLength;
             }
             
-            System.IO.File.WriteAllBytes("test.dbf", _data);
+            System.IO.File.WriteAllBytes("test.dbf", _data);*/
         }
 
         //___________________________
@@ -119,38 +124,36 @@ namespace database
             if (fields == null) fields = GetFieldsFromDBF(data).ToArray();
 
             // info about records from DBF header
-            int first_record = data.SubRange(8, 2).ToInt();
-            int num_records = data.SubRange(4, 4).ToInt();
-            int record_length = data.SubRange(10, 2).ToInt();
+            _firstRecord = data.SubRange(8, 2).ToInt();
+            _numRecords = data.SubRange(4, 4).ToInt();
+            _recordLength = data.SubRange(10, 2).ToInt();
 
             // move cursor to first record
-            int cursor = first_record;
+            int cursor = _firstRecord;
 
             // load all the records to a list
             List<Record> records = new List<Record>();
 
             // loop for each record
-            for (int i = 0; i < num_records; i++)
+            for (int i = 0; i < _numRecords; i++)
             {
                 // record we're about to assemble
                 Record rec = new Record(fields.Length);
 
                 // loop for each field
-                int j = 0;
                 foreach (var field in fields)
                 {
                     // index of the first byte of the record
                     int start = cursor + field.Offset;
 
-                    // store the data for this field as a string (type conversion will happen later)
-                    rec[field.Name.ToLower()] = data.SubRange(start, field.Length).ToUTF8NoTrim();
-
-                    j++;
+                    // store the data for this field as a byte array
+                    rec[field.Name.ToLower()] = data.SubRange(start, field.Length);
+                    
                 }
 
                 // append the record to the list and move cursor to the next record
                 records.Add(rec);
-                cursor += record_length;
+                cursor += _recordLength;
             }
 
             // return the list of records as an array

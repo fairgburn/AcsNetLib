@@ -35,30 +35,28 @@ namespace database.structs
     // data structure for storing info about a record from the DBF
     public struct Record
     {
-        private string[] _data;
-        private OrderedDictionary data;
+        private OrderedDictionary _data;
 
-        public int Length => data.Count;
+        public int Length => _data.Count;
 
         // initialize with a number of fields
         public Record(int numberOfFields)
         {
-            _data = new string[numberOfFields];
-            data = new OrderedDictionary();
+            _data = new OrderedDictionary();
         }
 
         // allow for record[index] notation
-        public string this[int i]
+        public byte[] this[int i]
         {
-            get { return (string)data[i]; }
-            set { data[i] = value; }
+            get { return (byte[])_data[i]; }
+            set { _data[i] = value; }
         }
 
 		// allow for record[key] notation
-		public string this[string s]
+		public byte[] this[string s]
         {
-			get { return (string)data[s]; }
-			set { data[s] = value; }
+			get { return (byte[])_data[s]; }
+			set { _data[s] = value; }
         }
 
     }
@@ -112,7 +110,7 @@ namespace database.structs
             int i = 0;
             foreach (var col in columns)
             {
-                _data[col.Name] = record[i++];
+                //_data[col.Name] = record[i++];
 
             }
         }
