@@ -48,8 +48,20 @@ namespace database
             // iterate through each record
             foreach (var rec in Records)
             {
-                // todo next
+                // individual field data from record
+                foreach (var field in Fields)
+                {
+                    // data: rec[field.Name]
+                    var data = rec[field.Name];
+                    for (int i = 0; i < field.Length; i++)
+                    {
+                        _data[cursor + i + field.Offset] = data[i];
+                    }
+                }
+                cursor += _recordLength;
             }
+            System.IO.File.WriteAllBytes("test.dbf", _data);
+
 
 
             /*int cursor = _firstRecord;
@@ -103,7 +115,7 @@ namespace database
             // read the field subrecords (info to fill Field structure)
             for (int cursor = 32; data[cursor] != 0x0D; cursor += 32)
             {
-                var name = data.SubRange(cursor, 10).ToUTF8();
+                var name = data.SubRange(cursor, 10).ToUTF8().ToLower();
                 var type = (char)data[cursor + 11];// data.SubRange(cursor + 11, 1).ToUTF8();
                 var offset = data.SubRange(cursor + 12, 4).ToInt();
                 var length = data[cursor + 16];

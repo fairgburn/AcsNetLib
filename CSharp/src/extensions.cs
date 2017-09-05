@@ -5,7 +5,7 @@ using database.structs;
 
 namespace extensions
 {
-    static class Extensions
+    public static class Extensions
     {
 
         /*************** strings **************/
