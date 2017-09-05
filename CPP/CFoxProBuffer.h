@@ -15,11 +15,44 @@
 #endif
 
 #include <map>
+#include <vector>
 
 namespace AcsNetLib
 {
 	namespace FoxPro
 	{
+		/*---------------------*/
+		// FoxPro structures
+		/*---------------------*/
+
+		struct DECLSPECIFIER SField
+		{
+			char* Name;
+			char Type;
+			int Offset, Length;
+
+			SField(char* name, char type, int offset, int length)
+			{
+				this->Name = name;
+				this->Type = type;
+				this->Offset = offset;
+				this->Length = length;
+			}
+		};
+
+		struct DECLSPECIFIER SRecord
+		{
+			int ID;
+
+			int Length();
+			char* Get(char* field);
+			void Set(char* field, char* val);
+		};
+
+		/*-----------------*/
+		// main class
+		/*-----------------*/
+
 		class DECLSPECIFIER CFoxProBuffer
 		{
 		// constructor / destructor
@@ -31,7 +64,11 @@ namespace AcsNetLib
 		public:
 			void Open();
 			void Save();
-			void Update();
+			void Update(SRecord rec, char* field, char* val);
+
+			std::vector<SField> GetFields();
+			std::vector<SRecord> GetRecords();
+
 
 		// internal
 		private:
@@ -40,29 +77,6 @@ namespace AcsNetLib
 		};
 
 		
-		/*---------------------*/
-		// FoxPro structures
-		/*---------------------*/
-
-		struct Field
-		{
-			char* Name;
-			char Type;
-			int Offset, Length;
-
-			Field(char* name, char type, int offset, int length)
-			{
-				this->Name = name;
-				this->Type = type;
-				this->Offset = offset;
-				this->Length = length;
-			}
-		};
-
-		struct Record
-		{
-			std::map<char*, char*> _data;
-			
-		};
+		
 	}
 }

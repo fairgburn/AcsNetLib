@@ -6,7 +6,7 @@ using System.Text;
 using database.structs;
 using extensions;
 
-namespace database
+namespace FoxPro_NET
 {
     public class FoxProBuffer
     {
