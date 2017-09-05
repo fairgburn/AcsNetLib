@@ -6,6 +6,7 @@ x64/
 CSTest/
 
 Release/
+Debug/
 CSharp/bin/
 CSharp/obj/
 CPP/Debug/

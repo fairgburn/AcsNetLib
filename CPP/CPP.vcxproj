@@ -133,10 +133,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="CFoxProBuffer.cpp" />
     <ClCompile Include="CSQLite.cpp" />
     <ClCompile Include="Stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CFoxProBuffer.h" />
     <ClInclude Include="CSQLite.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />

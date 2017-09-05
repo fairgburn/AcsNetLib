@@ -70,20 +70,19 @@ namespace database
             rec.Set(field, val);
         }
 
-        //___________________________
+        //---------------------------
         // access records from DBF
         public List<Record> Records => _records;
 
-        //_____________________________
+        //-----------------------------
         // access fields from DBF
         public List<Field> Fields => _fields;
 
-
-
-
+        
         /*--------------------------*/
         // helper methods
         /*--------------------------*/
+
 
         //------------------------------------------------------
         // get the fields from the DBF 

@@ -1,9 +1,8 @@
-/*__________________________________________________________________
+/*------------------------------------------------------------------
 	CSQLite.h
 	
-	Interface for wrapping 
-
-__________________________________________________________________*/
+	Interface for wrapping C# SQLiteDatabase to native C++
+------------------------------------------------------------------*/
 
 
 #pragma once
@@ -19,7 +18,6 @@ __________________________________________________________________*/
 #include <string>
 namespace AcsNetLib
 {
-	void ShowErrorMessageAndExit(char* msg);
 	namespace SQL
 	{
 		//_________________________________
@@ -42,42 +40,11 @@ namespace AcsNetLib
 			//void ExecuteBatch(std::string commands);
 
 
-			/*********************/
-
-			SQLIterator GetFirstRow();
-			SQLReader ExecuteReader(char*);
-			/***********************/
-
-
 		// internal
 		private:
 			// address of C# class instance in .NET heap
 			void* __NET_HEAP__SQLiteDatabase;
 
-		};
-
-		/*------------------------------*/
-		class SQLException
-		{
-		public:
-			SQLException(char* msg);
-			char* GetMessage();
-		};
-
-		class SQLReader
-		{
-		public:
-			SQLReader() {}
-			SQLIterator GetFirst();
-		};
-		class SQLIterator
-		{
-		public:
-			SQLIterator() {}
-			bool HasNext() { return true; }
-			void MoveNext() {}
-			int GetInt(char*);
-			char* GetString(char*);
 		};
 	}
 }
