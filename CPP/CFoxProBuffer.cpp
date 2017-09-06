@@ -10,7 +10,8 @@
 #include "CFoxProBuffer.h"
 #include "util.h"
 
-
+// shortcut for getting pointer to .NET FoxProBuffer
+#define _FPBUFFER NET_POINTER(FoxProBuffer, NET_HANDLE(__NET_HEAP__FoxProBuffer))
 
 // C# namespaces
 using namespace System;
@@ -22,7 +23,6 @@ using namespace database::structs;
 // header namespace
 using namespace AcsNetLib::FoxPro;
 
-using std::vector;
 
 /*-----------------------------*/
 // constructor / desctructor 
@@ -42,6 +42,9 @@ CFoxProBuffer::CFoxProBuffer(char* inputFile)
 CFoxProBuffer::~CFoxProBuffer()
 {
     NET_HANDLE(__NET_HEAP__FoxProBuffer).Free();
+
+    delete[] _fields;
+    delete[] _records;
 }
 
 
@@ -52,45 +55,52 @@ CFoxProBuffer::~CFoxProBuffer()
 void CFoxProBuffer::Open()
 {
     // call Open() on the C# instance
-    FoxProBuffer^ fp = NET_POINTER(FoxProBuffer, NET_HANDLE(__NET_HEAP__FoxProBuffer));
+    FoxProBuffer^ fp = _FPBUFFER;
     fp->Open();
 
-    // get the C# fields
+    // initiate the fields list & get fields from C# instance
+    _fields = new CFoxProField[fp->Fields->Count];
+    int index = 0;
     for each (Field^ field in fp->Fields)
     {
         // convert .NET fields to native CFoxProField and store them
-        char* name = util::ManagedStringToCharArray(field->Name);
-        CFoxProField f(name, field->Type, field->Offset, field->Length);
-        _fields.push_back(f);
+        ///void* ptr = GCHandle::ToIntPtr(GCHandle::Alloc(field)).ToPointer();
+        ///Console::WriteLine("field: " + *(int*)ptr);
+        _fields[index].Name = util::ManagedStringToCharArray(field->Name);
+        _fields[index].Type = field->Type;
+        _fields[index].Length = field->Length;
+        _fields[index].Offset = field->Offset;
+        index++;
 
     }
 
-    // get the C# records
+    // initiate records list & get records from C# instance
+    _records = new CFoxProRecord[fp->Records->Count];
+    index = 0;
     for each (Record^ rec in fp->Records)
     {
         // same as above: converting .NET type to native type
         // records have a pointer back to the .NET record
         void* ptr = GCHandle::ToIntPtr(GCHandle::Alloc(rec)).ToPointer();
-        CFoxProRecord r(ptr);
-        _records.push_back(r);
+        _records[index]._set_ptr(ptr);
     }
 }
 
 
 void CFoxProBuffer::Save()
 {
-    FoxProBuffer^ fp = NET_POINTER(FoxProBuffer, NET_HANDLE(__NET_HEAP__FoxProBuffer));
+    FoxProBuffer^ fp = _FPBUFFER;
     fp->Save();
 }
 
 
-vector<CFoxProField> CFoxProBuffer::GetFields()
+CFoxProField* CFoxProBuffer::GetFields()
 {
     return _fields;
 }
 
 
-vector<CFoxProRecord> CFoxProBuffer::GetRecords()
+CFoxProRecord* CFoxProBuffer::GetRecords()
 {
     return _records;
 }

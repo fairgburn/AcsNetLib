@@ -29,11 +29,15 @@ namespace AcsNetLib
         public:
             // constructor with pointer to .NET Record instance
             CFoxProRecord(void* pointer);
+            CFoxProRecord() {}
             ~CFoxProRecord();
 
             int Length();
             char* Get(char* field);
             void Set(char* field, char* new_value);
+
+            // DO NOT use this; internal DLL use only
+            void _set_ptr(void* ptr);
 
         private:
             // pointer to object in .NET heap

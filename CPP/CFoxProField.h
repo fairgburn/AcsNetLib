@@ -31,6 +31,7 @@ namespace AcsNetLib
             int Offset, Length;
 
             CFoxProField(char* name, char type, int offset, int length);
+            CFoxProField() {}
             ~CFoxProField();
         };
     }

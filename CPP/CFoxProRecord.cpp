@@ -68,3 +68,9 @@ void CFoxProRecord::Set(char* field, char* new_value)
 
     rec->Set(f, v);
 }
+
+
+void CFoxProRecord::_set_ptr(void* ptr)
+{
+    __NET_HEAP__Record = ptr;
+}

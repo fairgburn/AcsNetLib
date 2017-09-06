@@ -18,8 +18,6 @@
     #define EXPIMP_TEMPLATE extern
 #endif
 
-#include <vector>
-
 #include "CFoxProField.h"
 #include "CFoxProRecord.h"
 
@@ -27,7 +25,6 @@ namespace AcsNetLib
 {
     namespace FoxPro
     {
-
         
 
         /*-----------------*/
@@ -36,28 +33,29 @@ namespace AcsNetLib
 
         class DECLSPECIFIER CFoxProBuffer
         {
-            // constructor / destructor
+        // constructor / destructor
         public:
             CFoxProBuffer(char* inputFile);
             ~CFoxProBuffer();
 
-            // interface to C# class
+        // interface to C# class
         public:
             void Open();
             void Save();
             //void Update(CFoxProRecord rec, char* field, char* val);
 
-            std::vector<CFoxProField> GetFields();
-            std::vector<CFoxProRecord> GetRecords();
+            CFoxProField* GetFields();
+            CFoxProRecord* GetRecords();
 
 
-            // internal
+        // internal
         private:
             // address of C# class in .NET heap
             void* __NET_HEAP__FoxProBuffer;
 
-            std::vector<CFoxProField> _fields;
-            std::vector<CFoxProRecord> _records;
+
+            CFoxProField* _fields;
+            CFoxProRecord* _records;
         };
 
 
