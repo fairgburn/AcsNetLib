@@ -129,7 +129,7 @@ namespace FoxPro_NET
             for (int i = 0; i < _numRecords; i++)
             {
                 // record we're about to assemble
-                Record rec = new Record(fields.Length);
+                Record rec = new Record();
 
                 // loop for each field
                 foreach (var field in fields)

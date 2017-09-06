@@ -1,7 +1,16 @@
-#include "CFoxProBuffer.h"
+/*-----------------------------------------------------
+    CFoxProBuffer.cpp
+    [AcsCppLib.NET.dll]
 
-#define _NET_HANDLE GCHandle::FromIntPtr(IntPtr(__NET_HEAP__FoxProBuffer))
-#define _FPBUFFER(handle) safe_cast<FoxProBuffer^>(handle.Target);
+    definitions for the FoxPro interface
+
+    Brandon Fairburn 9/6/2017
+-------------------------------------------------------*/
+
+#include "CFoxProBuffer.h"
+#include "util.h"
+
+
 
 // C# namespaces
 using namespace System;
@@ -15,84 +24,73 @@ using namespace AcsNetLib::FoxPro;
 
 using std::vector;
 
-/*--------------------*/
-// CFoxProBuffer
-/*--------------------*/
+/*-----------------------------*/
+// constructor / desctructor 
+/*-----------------------------*/
 
 CFoxProBuffer::CFoxProBuffer(char* inputFile)
 {
-	String^ _net_file = gcnew String(inputFile);
-	FoxProBuffer^ fp = gcnew FoxProBuffer(_net_file);
+    String^ _net_file = gcnew String(inputFile);
+    FoxProBuffer^ fp = gcnew FoxProBuffer(_net_file);
 
-	// pin the .NET object
-	__NET_HEAP__FoxProBuffer = GCHandle::ToIntPtr(GCHandle::Alloc(fp)).ToPointer();
+
+    // pin the .NET object
+    __NET_HEAP__FoxProBuffer = GCHandle::ToIntPtr(GCHandle::Alloc(fp)).ToPointer();
 }
 
 
 CFoxProBuffer::~CFoxProBuffer()
 {
-	_NET_HANDLE.Free();
+    NET_HANDLE(__NET_HEAP__FoxProBuffer).Free();
 }
 
+
+/*-----------------------------*/
+//  Public functions
+/*-----------------------------*/
 
 void CFoxProBuffer::Open()
 {
-	FoxProBuffer^ fp = _FPBUFFER(_NET_HANDLE);
-	fp->Open();
+    // call Open() on the C# instance
+    FoxProBuffer^ fp = NET_POINTER(FoxProBuffer, NET_HANDLE(__NET_HEAP__FoxProBuffer));
+    fp->Open();
+
+    // get the C# fields
+    for each (Field^ field in fp->Fields)
+    {
+        // convert .NET fields to native CFoxProField and store them
+        char* name = util::ManagedStringToCharArray(field->Name);
+        CFoxProField f(name, field->Type, field->Offset, field->Length);
+        _fields.push_back(f);
+
+    }
+
+    // get the C# records
+    for each (Record^ rec in fp->Records)
+    {
+        // same as above: converting .NET type to native type
+        // records have a pointer back to the .NET record
+        void* ptr = GCHandle::ToIntPtr(GCHandle::Alloc(rec)).ToPointer();
+        CFoxProRecord r(ptr);
+        _records.push_back(r);
+    }
 }
+
 
 void CFoxProBuffer::Save()
 {
-	FoxProBuffer^ fp = _FPBUFFER(_NET_HANDLE);
-	fp->Save();
+    FoxProBuffer^ fp = NET_POINTER(FoxProBuffer, NET_HANDLE(__NET_HEAP__FoxProBuffer));
+    fp->Save();
 }
 
-void CFoxProBuffer::Update(SRecord rec, char* field, char* val)
+
+vector<CFoxProField> CFoxProBuffer::GetFields()
 {
-	String^ net_field = gcnew String(field);
-	String^ net_val = gcnew String(val);
-	
-	FoxProBuffer^ fp = _FPBUFFER(_NET_HANDLE);
-
-	for (int i = 0; i < fp->Records->Count; i++)
-	{
-		Record^ r = fp->Records[i];
-		if (r->GetHashCode() == rec.ID)
-		{
-			r->Set(net_field, net_val);
-			break;
-		}
-
-	}
+    return _fields;
 }
 
-vector<SField> CFoxProBuffer::GetFields()
+
+vector<CFoxProRecord> CFoxProBuffer::GetRecords()
 {
-	vector<SField> result;
-	FoxProBuffer^ fp = _FPBUFFER(_NET_HANDLE);
-
-	for (int i = 0; i < fp->Fields->Count; i++)
-	{
-		Field^ net_field = fp->Fields[i];
-		SField f("name", net_field->Type, net_field->Offset, net_field->Length);
-		result.push_back(f);
-	}
-
-	return result;
-}
-
-vector<SRecord> CFoxProBuffer::GetRecords()
-{
-	vector<SRecord> result;
-	FoxProBuffer^ fp = _FPBUFFER(_NET_HANDLE);
-
-	for (int i = 0; i < fp->Records->Count; i++)
-	{
-		Record^ net_record = fp->Records[i];
-		SRecord r;
-		r.ID = net_record->GetHashCode();
-		result.push_back(r);
-	}
-
-	return result;
+    return _records;
 }

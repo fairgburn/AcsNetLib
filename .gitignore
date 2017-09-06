@@ -11,4 +11,6 @@ CSharp/bin/
 CSharp/obj/
 CPP/Debug/
 CPP/Release/
-NativeCppTest/
+
+CppNativeTest/
+CppManagedTest/

@@ -34,17 +34,11 @@ namespace database.structs
 
     //__________________________________________________________________
     // data structure for storing info about a record from the DBF
-    public struct Record
+    public class Record
     {
-        private OrderedDictionary _data;
+        private OrderedDictionary _data = new OrderedDictionary();
 
         public int Length => _data.Count;
-
-        // initialize with a number of fields
-        public Record(int numberOfFields)
-        {
-            _data = new OrderedDictionary();
-        }
 
         // allow for record[index] notation
         public byte[] this[int i]

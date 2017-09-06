@@ -134,14 +134,20 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="CFoxProBuffer.cpp" />
+    <ClCompile Include="CFoxProField.cpp" />
+    <ClCompile Include="CFoxProRecord.cpp" />
     <ClCompile Include="CSQLite.cpp" />
     <ClCompile Include="Stdafx.cpp" />
+    <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CFoxProBuffer.h" />
+    <ClInclude Include="CFoxProField.h" />
+    <ClInclude Include="CFoxProRecord.h" />
     <ClInclude Include="CSQLite.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
+    <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharp\AcsLib.NET.csproj">
