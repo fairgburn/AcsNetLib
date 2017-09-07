@@ -7,7 +7,7 @@
     Brandon Fairburn 9/6/2017
 -----------------------------------------------------*/
 
-#include "CFoxProBuffer.h"
+#include "FoxPro.NET.h"
 #include "util.h"
 
 // shortcut for getting a pointer to the actual .NET object with the data

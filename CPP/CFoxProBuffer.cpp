@@ -7,7 +7,7 @@
     Brandon Fairburn 9/6/2017
 -------------------------------------------------------*/
 
-#include "CFoxProBuffer.h"
+#include "FoxPro.NET.h"
 #include "util.h"
 
 // shortcut for getting pointer to .NET FoxProBuffer
@@ -67,7 +67,7 @@ void CFoxProBuffer::Open()
         ///void* ptr = GCHandle::ToIntPtr(GCHandle::Alloc(field)).ToPointer();
         ///Console::WriteLine("field: " + *(int*)ptr);
         _fields[index].Name = util::ManagedStringToCharArray(field->Name);
-        _fields[index].Type = field->Type;
+        _fields[index].Type = static_cast<char> (field->Type);
         _fields[index].Length = field->Length;
         _fields[index].Offset = field->Offset;
         index++;

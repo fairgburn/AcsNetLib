@@ -1,4 +1,4 @@
-#include "CFoxProField.h"
+#include "FoxPro.NET.h"
 
 using namespace AcsNetLib::FoxPro;
 
