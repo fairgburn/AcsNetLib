@@ -17,7 +17,7 @@
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
-using namespace FoxPro_NET;
+using namespace AcsNetLib::FoxPro;
 using namespace database::structs;
 
 // header namespace
@@ -36,6 +36,9 @@ CFoxProBuffer::CFoxProBuffer(char* inputFile)
 
     // pin the .NET object
     __NET_HEAP__FoxProBuffer = GCHandle::ToIntPtr(GCHandle::Alloc(fp)).ToPointer();
+
+    // go ahead and open the file
+    Open();
 }
 
 

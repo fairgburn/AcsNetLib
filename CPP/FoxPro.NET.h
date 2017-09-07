@@ -14,14 +14,13 @@
 
 // building DLL or using it?
 #ifdef INSIDE_MANAGED_CODE
-    #define DECLSPECIFIER __declspec(dllexport)
+    #define DLL __declspec(dllexport)
     #define EXPIMP_TEMPLATE
 #else
-    #define DECLSPECIFIER __declspec(dllimport)
+    #define DLL __declspec(dllimport)
     #define EXPIMP_TEMPLATE extern
 #endif
 
-#include <vector>
 
 namespace AcsNetLib
 {
@@ -30,13 +29,14 @@ namespace AcsNetLib
 		// forward declarations
 		class CFoxProField;
 		class CFoxProRecord;
+        typedef CFoxProField* FieldArray;
+        typedef CFoxProRecord* RecordArray;
 
 		
-
 		/*--------------------------------------------------------------*/
         // main interface for FoxPro manipulation
 		/*--------------------------------------------------------------*/
-        class DECLSPECIFIER CFoxProBuffer
+        class DLL CFoxProBuffer
         {
         // constructor / destructor
         public:
@@ -48,8 +48,8 @@ namespace AcsNetLib
             void Open();
             void Save();
 
-            CFoxProField* GetFields();
-            CFoxProRecord* GetRecords();
+            FieldArray GetFields();
+            RecordArray GetRecords();
 
 			int NumFields();
 			int NumRecords();
@@ -68,12 +68,38 @@ namespace AcsNetLib
 		/*______________________________________________________________*/
 		/*______________________________________________________________*/
 
+        /*----------------------------------------------------------*/
+        // data structure for FoxPro records
+        /*----------------------------------------------------------*/
+        class DLL CFoxProRecord
+        {
+        public:
+            // constructor with pointer to .NET Record instance
+            CFoxProRecord(void* pointer);
+            CFoxProRecord() {}
+            ~CFoxProRecord();
+
+            int Length();
+            char* Get(char* field);
+            void Set(char* field, char* new_value);
+
+            // DO NOT use this; internal DLL use only
+            void _set_ptr(void* ptr);
+
+        private:
+            // pointer to object in .NET heap
+            void* __NET_HEAP__Record;
+        };
+        /*__________________________________________________________*/
+        /*__________________________________________________________*/
+
+
 
 
 		/*-------------------------------------------------------------------*/
 		// data structure for FoxPro fields
 		/*-------------------------------------------------------------------*/
-		class DECLSPECIFIER CFoxProField
+		class DLL CFoxProField
 		{
 		public:
 			char* Name;
@@ -89,30 +115,7 @@ namespace AcsNetLib
 
 
 
-		/*----------------------------------------------------------*/
-		// data structure for FoxPro records
-		/*----------------------------------------------------------*/
-		class DECLSPECIFIER CFoxProRecord
-		{
-		public:
-			// constructor with pointer to .NET Record instance
-			CFoxProRecord(void* pointer);
-			CFoxProRecord() {}
-			~CFoxProRecord();
-
-			int Length();
-			char* Get(char* field);
-			void Set(char* field, char* new_value);
-
-			// DO NOT use this; internal DLL use only
-			void _set_ptr(void* ptr);
-
-		private:
-			// pointer to object in .NET heap
-			void* __NET_HEAP__Record;
-		};
-		/*__________________________________________________________*/
-		/*__________________________________________________________*/
+		
 
     }
 }

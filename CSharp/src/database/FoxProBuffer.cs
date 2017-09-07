@@ -6,11 +6,11 @@ using System.Text;
 using database.structs;
 using extensions;
 
-namespace FoxPro_NET
+namespace AcsNetLib.FoxPro
 {
     public class FoxProBuffer
     {
-        private string _filePath;
+        private string _dbfPath;
         private byte[] _data;
         private List<Field> _fields;
         private List<Record> _records;
@@ -19,11 +19,15 @@ namespace FoxPro_NET
         private int _numRecords;
         private int _recordLength;
 
+        private string _backupDir;
+
 
         /** constructor: save path to DBF **/
         public FoxProBuffer(string file)
         {
-            _filePath = file;
+            _dbfPath = file;
+            _backupDir = $"{System.IO.Directory.GetCurrentDirectory()}\\.backup";
+            System.IO.Directory.CreateDirectory(_backupDir);
         }
 
 
@@ -34,7 +38,7 @@ namespace FoxPro_NET
         // Open: store file data in _data array
         public void Open()
         {
-            _data = System.IO.File.ReadAllBytes(_filePath);
+            _data = System.IO.File.ReadAllBytes(_dbfPath);
             _fields = GetFieldsFromDBF(_data);
             _records = GetRecordsFromDBF(_data, _fields.ToArray());
         }
@@ -60,7 +64,14 @@ namespace FoxPro_NET
                 }
                 cursor += _recordLength;
             }
-            System.IO.File.WriteAllBytes("test.dbf", _data);
+
+            // create backup and save the DBF
+            var backup_file = $"{_backupDir}\\{Util.GetFileFromPath(_dbfPath)}.bak";
+            if (!System.IO.File.Exists(backup_file))
+            {
+                System.IO.File.Copy(_dbfPath, $"{_backupDir}\\{Util.GetFileFromPath(_dbfPath)}.bak");
+            }
+            System.IO.File.WriteAllBytes(_dbfPath, _data);
         }
 
         //-------------------------------

@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 using System.IO;
 
 
-namespace AcsLib_NET
+namespace AcsNetLib
 {
-    class Util
+    public static class Util
     {
 
         //___________________________________________________

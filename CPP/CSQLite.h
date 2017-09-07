@@ -8,10 +8,10 @@
 #pragma once
 
 #ifdef INSIDE_MANAGED_CODE
-#    define DECLSPECIFIER __declspec(dllexport)
+#    define DLL __declspec(dllexport)
 #    define EXPIMP_TEMPLATE
 #else
-#    define DECLSPECIFIER __declspec(dllimport)
+#    define DLL __declspec(dllimport)
 #    define EXPIMP_TEMPLATE extern
 #endif
 
@@ -22,7 +22,7 @@ namespace AcsNetLib
     {
         //_________________________________
         // CSQLite
-        class DECLSPECIFIER CSQLite
+        class DLL CSQLite
         {
 
             // constructor / destructor
