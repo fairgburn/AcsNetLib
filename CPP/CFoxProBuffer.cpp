@@ -59,13 +59,12 @@ void CFoxProBuffer::Open()
     fp->Open();
 
     // initiate the fields list & get fields from C# instance
+	Console::WriteLine("fields: " + fp->Fields->Count);
     _fields = new CFoxProField[fp->Fields->Count];
     int index = 0;
     for each (Field^ field in fp->Fields)
     {
         // convert .NET fields to native CFoxProField and store them
-        ///void* ptr = GCHandle::ToIntPtr(GCHandle::Alloc(field)).ToPointer();
-        ///Console::WriteLine("field: " + *(int*)ptr);
         _fields[index].Name = util::ManagedStringToCharArray(field->Name);
         _fields[index].Type = static_cast<char> (field->Type);
         _fields[index].Length = field->Length;
@@ -76,6 +75,7 @@ void CFoxProBuffer::Open()
 
     // initiate records list & get records from C# instance
     _records = new CFoxProRecord[fp->Records->Count];
+	Console::WriteLine("records: " + fp->Records->Count);
     index = 0;
     for each (Record^ rec in fp->Records)
     {
@@ -83,6 +83,7 @@ void CFoxProBuffer::Open()
         // records have a pointer back to the .NET record
         void* ptr = GCHandle::ToIntPtr(GCHandle::Alloc(rec)).ToPointer();
         _records[index]._set_ptr(ptr);
+		index++;
     }
 }
 
@@ -96,11 +97,11 @@ void CFoxProBuffer::Save()
 
 CFoxProField* CFoxProBuffer::GetFields()
 {
-    return _fields;
+	return _fields;
 }
 
 
 CFoxProRecord* CFoxProBuffer::GetRecords()
 {
-    return _records;
+	return _records;
 }

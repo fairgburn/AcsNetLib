@@ -21,6 +21,8 @@
     #define EXPIMP_TEMPLATE extern
 #endif
 
+#include <vector>
+
 namespace AcsNetLib
 {
     namespace FoxPro
@@ -58,7 +60,7 @@ namespace AcsNetLib
 
 
             CFoxProField* _fields;
-            CFoxProRecord* _records;
+			CFoxProRecord* _records;
         };
 		/*______________________________________________________________*/
 		/*______________________________________________________________*/
