@@ -47,10 +47,12 @@ namespace AcsNetLib
         public:
             void Open();
             void Save();
-            //void Update(CFoxProRecord rec, char* field, char* val);
 
             CFoxProField* GetFields();
             CFoxProRecord* GetRecords();
+
+			int NumFields();
+			int NumRecords();
 
 
         // internal
@@ -61,6 +63,7 @@ namespace AcsNetLib
 
             CFoxProField* _fields;
 			CFoxProRecord* _records;
+
         };
 		/*______________________________________________________________*/
 		/*______________________________________________________________*/

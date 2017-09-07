@@ -59,7 +59,6 @@ void CFoxProBuffer::Open()
     fp->Open();
 
     // initiate the fields list & get fields from C# instance
-	Console::WriteLine("fields: " + fp->Fields->Count);
     _fields = new CFoxProField[fp->Fields->Count];
     int index = 0;
     for each (Field^ field in fp->Fields)
@@ -75,7 +74,6 @@ void CFoxProBuffer::Open()
 
     // initiate records list & get records from C# instance
     _records = new CFoxProRecord[fp->Records->Count];
-	Console::WriteLine("records: " + fp->Records->Count);
     index = 0;
     for each (Record^ rec in fp->Records)
     {
@@ -104,4 +102,18 @@ CFoxProField* CFoxProBuffer::GetFields()
 CFoxProRecord* CFoxProBuffer::GetRecords()
 {
 	return _records;
+}
+
+
+int CFoxProBuffer::NumFields()
+{
+	FoxProBuffer^ fp = _FPBUFFER;
+	return fp->Fields->Count;
+}
+
+
+int CFoxProBuffer::NumRecords()
+{
+	FoxProBuffer^ fp = _FPBUFFER;
+	return fp->Records->Count;
 }
