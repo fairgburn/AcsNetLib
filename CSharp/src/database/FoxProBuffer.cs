@@ -31,7 +31,9 @@ namespace AcsNetLib.FoxPro
         }
 
 
-        /*****************************/
+        /*--------------------------*/
+        // public methods
+        /*--------------------------*/
 
 
         //-------------------------------------
@@ -39,8 +41,8 @@ namespace AcsNetLib.FoxPro
         public void Open()
         {
             _data = System.IO.File.ReadAllBytes(_dbfPath);
-            _fields = GetFieldsFromDBF(_data);
-            _records = GetRecordsFromDBF(_data, _fields.ToArray());
+            _fields = ReadFieldsFromDBF(_data);
+            _records = ReadRecordsFromDBF(_data, _fields.ToArray());
         }
 
         //------------------------------
@@ -74,13 +76,6 @@ namespace AcsNetLib.FoxPro
             System.IO.File.WriteAllBytes(_dbfPath, _data);
         }
 
-        //-------------------------------
-        // Update a record
-        public void Update(Record rec, string field, string val)
-        {
-            rec.Set(field, val);
-        }
-
         //---------------------------
         // access records from DBF
         public List<Record> Records => _records;
@@ -91,13 +86,13 @@ namespace AcsNetLib.FoxPro
 
         
         /*--------------------------*/
-        // helper methods
+        // private methods
         /*--------------------------*/
 
 
         //------------------------------------------------------
         // get the fields from the DBF 
-        private List<Field> GetFieldsFromDBF(byte[] data)
+        private List<Field> ReadFieldsFromDBF(byte[] data)
         {
             // store the fields in a list while we read them
             List<Field> fields = new List<Field>();
@@ -121,9 +116,9 @@ namespace AcsNetLib.FoxPro
 
         //------------------------------------------------------
         // get the records from the DBF
-        private List<Record> GetRecordsFromDBF(byte[] data, Field[] fields = null)
+        private List<Record> ReadRecordsFromDBF(byte[] data, Field[] fields = null)
         {
-            if (fields == null) fields = GetFieldsFromDBF(data).ToArray();
+            if (fields == null) fields = ReadFieldsFromDBF(data).ToArray();
 
             // info about records from DBF header
             _firstRecord = data.SubRange(8, 2).ToInt();
