@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Windows.Forms;
 
 using extensions;
 
@@ -70,10 +71,25 @@ namespace database.structs
 		public void Set(string field, string val)
         {
             byte[] new_value = new byte[this[field].Length];
-			for (int i = 0; i < val.Length; i++)
+            try
             {
-                new_value[i] = (byte)val[i];
-            } // if val is too short, new_value is filled out with 0 (null character)
+                for (int i = 0; i < val.Length; i++)
+                {
+                    new_value[i] = (byte)val[i];
+                } // if val is too short, new_value is filled out with 0 (null character)
+            }
+
+            // check that value isn't too long for the field
+            catch (System.IndexOutOfRangeException)
+            {
+                var cur_method = System.Reflection.MethodBase.GetCurrentMethod();
+                string errmsg = $"FoxPro: exception in Record.Set(\"{field}\", \"{val}\")\n\n" +
+                                $"ERROR: value \"{val}\" is too long for field \"{field}\"\n" +
+                                "Value was not changed in DBF";
+
+                MessageBox.Show(errmsg, "Exception in AcsLib.NET.dll");
+                return;
+            }
 
             _data[field] = new_value;
         }

@@ -43,37 +43,19 @@ namespace AcsNetLib.FoxPro
             _records = GetRecordsFromDBF(_data, _fields.ToArray());
         }
 
-        //------------------------------
-        // write buffer to disk
+        //----------------------------------------------------------------
+        // Save() - save changes to default DBF file
+        // SaveAs(string) - client specifies where to save changes
         public void Save()
         {
-            int cursor = _firstRecord;
-
-            // iterate through each record
-            foreach (var rec in Records)
-            {
-                // individual field data from record
-                foreach (var field in Fields)
-                {
-                    // data: rec[field.Name]
-                    var data = rec[field.Name];
-                    for (int i = 0; i < field.Length; i++)
-                    {
-                        _data[cursor + i + field.Offset] = data[i];
-                    }
-                }
-                cursor += _recordLength;
-            }
-
-            // create backup and save the DBF
-            var backup_file = $"{_backupDir}\\{Util.GetFileFromPath(_dbfPath)}.bak";
-            if (!System.IO.File.Exists(backup_file))
-            {
-                System.IO.File.Copy(_dbfPath, $"{_backupDir}\\{Util.GetFileFromPath(_dbfPath)}.bak");
-            }
-            System.IO.File.WriteAllBytes(_dbfPath, _data);
+            WriteBufferToDisk(_dbfPath);
         }
 
+        public void SaveAs(string fileName)
+        {
+            WriteBufferToDisk(fileName);
+        }
+        
         //-------------------------------
         // Update a record
         public void Update(Record rec, string field, string val)
@@ -160,6 +142,39 @@ namespace AcsNetLib.FoxPro
 
             // return the list of records as an array
             return records;
+        }
+
+        //-----------------------
+        // save changes to disk
+        private void WriteBufferToDisk(string outFile)
+        {
+            int cursor = _firstRecord;
+
+            // iterate through each record
+            foreach (var rec in Records)
+            {
+                // individual field data from record
+                foreach (var field in Fields)
+                {
+                    // data: rec[field.Name]
+                    var data = rec[field.Name];
+                    for (int i = 0; i < field.Length; i++)
+                    {
+                        _data[cursor + i + field.Offset] = data[i];
+                    }
+                }
+                cursor += _recordLength;
+            }
+
+            // create backup
+            var backup_file = $"{_backupDir}\\{Util.GetFileFromPath(_dbfPath)}.bak";
+            if (!System.IO.File.Exists(backup_file))
+            {
+                System.IO.File.Copy(_dbfPath, $"{_backupDir}\\{Util.GetFileFromPath(_dbfPath)}.bak");
+            }
+
+            // save file; allow client to specify a new output file
+            System.IO.File.WriteAllBytes(outFile, _data);
         }
 
     }

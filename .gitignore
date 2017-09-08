@@ -5,6 +5,7 @@ x64/
 *.rc
 CSTest/
 
+lib/
 Release/
 Debug/
 CSharp/bin/

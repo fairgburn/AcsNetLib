@@ -44,13 +44,13 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CSQLite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FoxPro.NET.h">
+    <ClInclude Include="..\include\CSQLite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FoxPro.NET.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

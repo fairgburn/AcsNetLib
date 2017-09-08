@@ -47,6 +47,7 @@ namespace AcsNetLib
         public:
             void Open();
             void Save();
+            void SaveAs(char* outputFile);
 
             FieldArray GetFields();
             RecordArray GetRecords();

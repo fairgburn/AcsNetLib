@@ -44,6 +44,9 @@ CFoxProBuffer::CFoxProBuffer(char* inputFile)
 
 CFoxProBuffer::~CFoxProBuffer()
 {
+    FoxProBuffer^ fp = _FPBUFFER;
+    fp->Save();
+
     NET_HANDLE(__NET_HEAP__FoxProBuffer).Free();
 
     delete[] _fields;
@@ -93,6 +96,13 @@ void CFoxProBuffer::Save()
 {
     FoxProBuffer^ fp = _FPBUFFER;
     fp->Save();
+}
+
+void CFoxProBuffer::SaveAs(char* outputFile)
+{
+    FoxProBuffer^ fp = _FPBUFFER;
+    String^ net_outputFile = util::CharArrayToManagedString(outputFile);
+    fp->SaveAs(net_outputFile);
 }
 
 
