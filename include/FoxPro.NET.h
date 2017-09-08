@@ -85,7 +85,9 @@ namespace AcsNetLib
             void Set(char* field, char* new_value);
 
             // DO NOT use this; internal DLL use only
+			#ifdef INSIDE_MANAGED_CODE
             void _set_ptr(void* ptr);
+			#endif
 
         private:
             // pointer to object in .NET heap
