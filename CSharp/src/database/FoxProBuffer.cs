@@ -52,8 +52,7 @@ namespace AcsNetLib.FoxPro
         {
             WriteBufferToDisk(_dbfPath);
         }
-
-<<<<<<< HEAD
+		
         public void SaveAs(string fileName)
         {
             WriteBufferToDisk(fileName);
@@ -66,8 +65,6 @@ namespace AcsNetLib.FoxPro
             rec.Set(field, val);
         }
 
-=======
->>>>>>> 2884c01f8903a16aad3d1f5379e689818c0d2a4b
         //---------------------------
         // access records from DBF
         public List<Record> Records => _records;
