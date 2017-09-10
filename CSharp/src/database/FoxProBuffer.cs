@@ -28,6 +28,8 @@ namespace AcsNetLib.FoxPro
             _dbfPath = file;
             _backupDir = $"{System.IO.Directory.GetCurrentDirectory()}\\.backup";
             System.IO.Directory.CreateDirectory(_backupDir);
+
+            Open();
         }
 
 
