@@ -10,6 +10,12 @@ namespace AcsNetLib.FoxPro
 {
     public class FoxProBuffer
     {
+
+        /*------------------------------------------
+            | internal data and constructor |
+        -------------------------------------------*/
+        #region Internals
+
         private string _dbfPath;
         private byte[] _data;
         private List<Field> _fields;
@@ -32,11 +38,23 @@ namespace AcsNetLib.FoxPro
             Open();
         }
 
+        //-- end of class internals --//
+        #endregion Internals
 
-        /*--------------------------*/
-        // public methods
-        /*--------------------------*/
 
+        /*-----------------------------------------------------------------
+            | public methods (no returns) |
+            -------------------------------
+              Open()
+               - parse the DBF file into field and record data structures
+
+              Save()
+               - overwrite DBF file with changes
+
+              SaveAs(string fileName)
+               - write changes to a new DBF file (useful for testing)
+        -------------------------------------------------------------------*/
+        #region Public Methods
 
         //-------------------------------------
         // Open: store file data in _data array
@@ -54,12 +72,12 @@ namespace AcsNetLib.FoxPro
         {
             WriteBufferToDisk(_dbfPath);
         }
-		
+
         public void SaveAs(string fileName)
         {
             WriteBufferToDisk(fileName);
         }
-        
+
         //-------------------------------
         // Update a record
         public void Update(Record rec, string field, string val)
@@ -67,19 +85,33 @@ namespace AcsNetLib.FoxPro
             rec.Set(field, val);
         }
 
-        //---------------------------
-        // access records from DBF
+        //---------------------------------------------------------------
+        // Property: access records from DBF
+        // allows adding records by doing aBuffer.Records.Add(aRecord)
         public List<Record> Records => _records;
 
-        //-----------------------------
-        // access fields from DBF
+        //-----------------------------------
+        // Property: access fields from DBF
         public List<Field> Fields => _fields;
 
-        
-        /*--------------------------*/
-        // private methods
-        /*--------------------------*/
+        //-- end of public methods --//
+        #endregion Public Methods
 
+
+        /*------------------------------------------------------------------------------------
+            | private methods |
+            -------------------
+              ReadFieldsFromDBF(byte[] data) => return List<Field>
+               - returns a list containing the fields in the DBF
+
+              ReadRecordsFromDBF(byte[] data, Field[] fields = null) => return List<Record>
+               - returns a list containing the records in the DBF
+
+              WriteBufferToDisk(string outFile) (no return)
+               - writes all record data to 'outFile' on disk
+               - used by public methods Save and SaveAs
+        ------------------------------------------------------------------------------------*/
+        #region Private Methods
 
         //------------------------------------------------------
         // get the fields from the DBF 
@@ -88,7 +120,10 @@ namespace AcsNetLib.FoxPro
             // store the fields in a list while we read them
             List<Field> fields = new List<Field>();
 
-            // read the field subrecords (info to fill Field structure)
+            // read the field headers (info to fill Field structure)
+            // each header is 32 bytes long
+            // data[cursor] == 0x0D indicates end of field headers,
+            //  so end the loop there
             for (int cursor = 32; data[cursor] != 0x0D; cursor += 32)
             {
                 var name = data.SubRange(cursor, 10).ToUTF8().ToLower();
@@ -128,7 +163,7 @@ namespace AcsNetLib.FoxPro
                 // record we're about to assemble
                 Record rec = new Record();
 
-                // loop for each field
+                // loop for each field to build the record structure
                 foreach (var field in fields)
                 {
                     // index of the first byte of the record
@@ -148,15 +183,41 @@ namespace AcsNetLib.FoxPro
             return records;
         }
 
-        //-----------------------
+        //-----------------------------------------------------------------------------
         // save changes to disk
+        //  - move record data in memory back to DBF format and write it to the disk
         private void WriteBufferToDisk(string outFile)
         {
+            // need to work with a mutable data structure in case records were added/removed
+            bool sizeChanged = (_records.Count != _numRecords);
+            var dataMap = new Dictionary<int, byte>();
+            for (int i = 0; i < _firstRecord; i++)
+                dataMap[i] = _data[i];
+
+            // if records were added or removed, update the record count in the DBF
+            // DBF stores number of records as a little-endian 32 bit (4 byte) integer
+            //  - https://en.wikipedia.org/wiki/Endianness
+            if (sizeChanged)
+            {
+                int start_position = 4;
+                int length = 4;
+                for (int i = 0; i < length; i++)
+                {
+                    dataMap[start_position + i] = (byte)(
+                        (_records.Count >> (8 * i)) & 0xFF
+                        );
+                }
+            }
+
+            // place cursor at first record of DBF
             int cursor = _firstRecord;
 
             // iterate through each record
             foreach (var rec in Records)
             {
+                // set the delete flag
+                dataMap[cursor] = (byte) ((rec.Deleted) ? '*' : ' ');
+
                 // individual field data from record
                 foreach (var field in Fields)
                 {
@@ -164,11 +225,15 @@ namespace AcsNetLib.FoxPro
                     var data = rec[field.Name];
                     for (int i = 0; i < field.Length; i++)
                     {
-                        _data[cursor + i + field.Offset] = data[i];
+                        dataMap[cursor + i + field.Offset] = data[i];
                     }
                 }
                 cursor += _recordLength;
+                //dataList[cursor] = (byte)' '; // delete flag
             }
+
+            // update the internal data model
+            _data = dataMap.Values.ToArray();
 
             // create backup
             var backup_file = $"{_backupDir}\\{Util.GetFileFromPath(_dbfPath)}.bak";
@@ -177,9 +242,12 @@ namespace AcsNetLib.FoxPro
                 System.IO.File.Copy(_dbfPath, $"{_backupDir}\\{Util.GetFileFromPath(_dbfPath)}.bak");
             }
 
-            // save file; allow client to specify a new output file
+            // save file; allow client to specify a new output file through SaveAs method
             System.IO.File.WriteAllBytes(outFile, _data);
         }
+
+        //-- end of private methods --//
+        #endregion Private Methods
 
     }
 }

@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows.Forms;
+using System.Linq;
 
 using extensions;
 
@@ -37,9 +38,30 @@ namespace database.structs
     // data structure for storing info about a record from the DBF
     public class Record
     {
-        private OrderedDictionary _data = new OrderedDictionary();
+        private OrderedDictionary _data;
+
+        //-----------------------------
+        // copy this record
+        public Record Copy() { return new Record(_data); }
+        private Record(OrderedDictionary d)
+        {
+            _data = new OrderedDictionary();
+            foreach (var key in d.Keys)
+            {
+                // copy the bytes from original record to clone record
+                var original_val = (byte[]) d[key];
+                var clone_val = (from i in Enumerable.Range(0, original_val.Length)
+                                 select original_val[i])
+                                 .ToArray();
+                _data[key] = clone_val;
+            }
+        }
+
+        // default constructor
+        public Record() { _data = new OrderedDictionary(); }
 
         public int Length => _data.Count;
+        public bool Deleted = false;
 
         // allow for record[index] notation
         public byte[] this[int i]
@@ -59,12 +81,6 @@ namespace database.structs
 		public string GetString(string s)
         {
             return this[s].ToUTF8();
-        }
-
-		// return data as int
-		public int GetInt(string s)
-        {
-            return this[s].ToInt();
         }
 
 		// modify data in field
