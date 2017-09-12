@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Data Structures">
+      <UniqueIdentifier>{08fdde2e-1405-4db3-8146-8fb13160203b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data Structures\include">
+      <UniqueIdentifier>{b52730f3-29a8-460b-9e88-edbcf0a2b4d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Stdafx.cpp">
@@ -36,6 +42,9 @@
     <ClCompile Include="util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ds\RecordList.cpp">
+      <Filter>Data Structures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -52,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="..\include\FoxPro.NET.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ds\include\RecordList.h">
+      <Filter>Data Structures\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

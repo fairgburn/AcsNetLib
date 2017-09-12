@@ -149,12 +149,14 @@
     <ClCompile Include="CFoxProField.cpp" />
     <ClCompile Include="CFoxProRecord.cpp" />
     <ClCompile Include="CSQLite.cpp" />
+    <ClCompile Include="ds\RecordList.cpp" />
     <ClCompile Include="Stdafx.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CSQLite.h" />
     <ClInclude Include="..\include\FoxPro.NET.h" />
+    <ClInclude Include="ds\include\RecordList.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
     <ClInclude Include="util.h" />
