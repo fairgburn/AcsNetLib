@@ -16,7 +16,7 @@ namespace AcsNetLib.FoxPro
         -------------------------------------------*/
         #region Internals
 
-        private bool _recover; // flag to save recovery file on ungraceful exit
+        
 
         private string _dbfPath;
         private byte[] _data;
@@ -27,18 +27,20 @@ namespace AcsNetLib.FoxPro
         private int _numRecords;
         private int _recordLength;
 
+        private bool _recover; // flag to save recovery file if client doesn't call Close()
         private string _recoveryDir;
+        private string _recoveryFile;
 
 
         // constructor: save path to DBF
         public FoxProBuffer(string file)
         {
             _dbfPath = file;
-            _recoveryDir = $"{System.IO.Directory.GetCurrentDirectory()}\\.recover";
-            System.IO.Directory.CreateDirectory(_recoveryDir);
 
             _recover = true;
-
+            _recoveryDir = $"{System.IO.Directory.GetCurrentDirectory()}\\.recover";
+            _recoveryFile = $"{Math.Abs(_dbfPath.GetHashCode())}.fprecover";
+            
             Open();
         }
 
@@ -47,6 +49,7 @@ namespace AcsNetLib.FoxPro
         {
             if (_recover)
             {
+                System.IO.Directory.CreateDirectory(_recoveryDir);
                 SaveAs($"{_recoveryDir}\\RECOVER_{Util.GetFileFromPath(_dbfPath)}");
             }
         }
@@ -77,6 +80,12 @@ namespace AcsNetLib.FoxPro
         // Open: store file data in _data array
         public void Open()
         {
+            // check if a recovery file exists
+            if (System.IO.File.Exists($"{_recoveryDir}\\{_recoveryFile}"))
+            {
+
+            }
+
             _data = System.IO.File.ReadAllBytes(_dbfPath);
             _fields = ReadFieldsFromDBF(_data);
             _records = ReadRecordsFromDBF(_data, _fields.ToArray());

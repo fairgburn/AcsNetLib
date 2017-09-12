@@ -82,6 +82,20 @@ CFoxProRecord CFoxProRecord::Copy()
 	return r;
 }
 
+
+void CFoxProRecord::SetDeleted(bool tf)
+{
+    Record^ rec = _RECORD;
+    rec->Deleted = tf;
+}
+
+
+bool CFoxProRecord::IsDeleted()
+{
+    Record^ rec = _RECORD;
+    return rec->Deleted;
+}
+
 #ifdef INSIDE_MANAGED_CODE
 void CFoxProRecord::_set_ptr(void* ptr)
 {

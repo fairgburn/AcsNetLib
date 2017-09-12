@@ -90,6 +90,10 @@ namespace AcsNetLib
             void Set(char* field, char* new_value);
 			CFoxProRecord Copy(); // returns new copy of this record
 
+            // 'deleted' flag access
+            void SetDeleted(bool); // set the deleted flag true or false
+            bool IsDeleted();      // check the flag
+
             // DO NOT use this; internal DLL use only
 			#ifdef INSIDE_MANAGED_CODE
             void _set_ptr(void* ptr);
