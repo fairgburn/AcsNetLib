@@ -29,7 +29,7 @@ namespace AcsNetLib
         {
         public:
             // constructor / destructor
-            CRecordList();
+            CRecordList(void* ptr);
             ~CRecordList();
 
             // access
@@ -40,6 +40,8 @@ namespace AcsNetLib
         private:
             RecordListNode* _head;
             RecordListNode* _current;
+
+            void* __NET_HEAP__List;
 
         };
     }

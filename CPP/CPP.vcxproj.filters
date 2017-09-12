@@ -42,7 +42,7 @@
     <ClCompile Include="util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ds\RecordList.cpp">
+    <ClCompile Include="ds\CRecordList.cpp">
       <Filter>Data Structures</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,7 +62,7 @@
     <ClInclude Include="..\include\FoxPro.NET.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ds\include\RecordList.h">
+    <ClInclude Include="ds\include\CRecordList.h">
       <Filter>Data Structures\include</Filter>
     </ClInclude>
   </ItemGroup>

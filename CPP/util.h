@@ -16,6 +16,7 @@
 // shortcuts to access .NET objects
 #define NET_HANDLE(pointer) GCHandle::FromIntPtr(IntPtr(pointer))
 #define NET_POINTER(type, hnd) safe_cast<type^>(hnd.Target);
+#define NET_ALLOC_GETPTR(objptr) GCHandle::ToIntPtr(GCHandle::Alloc(objptr)).ToPointer()
 
 // C# namespaces
 using namespace System;

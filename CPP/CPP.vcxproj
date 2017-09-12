@@ -78,12 +78,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>AcsCppLib.NET</TargetName>
     <OutDir>$(SolutionDir)\lib\debug</OutDir>
-    <IncludePath>$(SolutionDir)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetName>AcsCppLib.NET</TargetName>
     <OutDir>$(SolutionDir)\lib</OutDir>
-    <IncludePath>$(SolutionDir)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>AcsCppLib.NET</TargetName>
@@ -149,14 +149,14 @@
     <ClCompile Include="CFoxProField.cpp" />
     <ClCompile Include="CFoxProRecord.cpp" />
     <ClCompile Include="CSQLite.cpp" />
-    <ClCompile Include="ds\RecordList.cpp" />
+    <ClCompile Include="ds\CRecordList.cpp" />
     <ClCompile Include="Stdafx.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CSQLite.h" />
     <ClInclude Include="..\include\FoxPro.NET.h" />
-    <ClInclude Include="ds\include\RecordList.h" />
+    <ClInclude Include="ds\include\CRecordList.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
     <ClInclude Include="util.h" />
