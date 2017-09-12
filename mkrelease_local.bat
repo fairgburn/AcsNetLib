@@ -1,0 +1,1 @@
+scripts\mkrelease.cmd ".release"
