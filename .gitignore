@@ -5,6 +5,8 @@ x64/
 *.rc
 CSTest/
 
+.release/
+
 lib/
 Release/
 Debug/

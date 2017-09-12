@@ -46,6 +46,7 @@ namespace AcsNetLib
         // interface to C# class
         public:
             void Open();
+            void Close();
             void Save();
             void SaveAs(char* outputFile);
 
@@ -64,13 +65,14 @@ namespace AcsNetLib
             // address of C# class in .NET heap
             void* __NET_HEAP__FoxProBuffer;
 
-
             CFoxProField* _fields;
 			CFoxProRecord* _records;
 
         };
 		/*______________________________________________________________*/
 		/*______________________________________________________________*/
+
+
 
         /*----------------------------------------------------------*/
         // data structure for FoxPro records
@@ -97,6 +99,7 @@ namespace AcsNetLib
         private:
             // pointer to object in .NET heap
             void* __NET_HEAP__Record;
+
         };
         /*__________________________________________________________*/
         /*__________________________________________________________*/

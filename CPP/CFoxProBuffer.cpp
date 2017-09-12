@@ -23,9 +23,28 @@ using namespace database::structs;
 // header namespace
 using namespace AcsNetLib::FoxPro;
 
+/*-------------------------------------*/
+// helper functions (not part of class)
+/*-------------------------------------*/
+
+RecordArray hfManagedRecordsToNative(List<Record^>^ records)
+{
+    RecordArray rarr = new CFoxProRecord[records->Count];
+
+    int index = 0;
+    for each (Record^ rec in records)
+    {
+        void* ptr = GCHandle::ToIntPtr(GCHandle::Alloc(rec)).ToPointer();
+        rarr[index]._set_ptr(ptr);
+    }
+
+    return rarr;
+}
+
+
 
 /*-----------------------------*/
-// constructor / desctructor 
+// constructor / destructor 
 /*-----------------------------*/
 
 CFoxProBuffer::CFoxProBuffer(char* inputFile)
@@ -44,9 +63,6 @@ CFoxProBuffer::CFoxProBuffer(char* inputFile)
 
 CFoxProBuffer::~CFoxProBuffer()
 {
-    FoxProBuffer^ fp = _FPBUFFER;
-    fp->Save();
-
     NET_HANDLE(__NET_HEAP__FoxProBuffer).Free();
 
     delete[] _fields;
@@ -89,6 +105,13 @@ void CFoxProBuffer::Open()
         _records[index]._set_ptr(ptr);
 		index++;
     }
+}
+
+
+void CFoxProBuffer::Close()
+{
+    FoxProBuffer^ fp = _FPBUFFER;
+    fp->Close();
 }
 
 

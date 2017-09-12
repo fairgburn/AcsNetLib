@@ -16,6 +16,8 @@ namespace AcsNetLib.FoxPro
         -------------------------------------------*/
         #region Internals
 
+        private bool _recover; // flag to save recovery file on ungraceful exit
+
         private string _dbfPath;
         private byte[] _data;
         private List<Field> _fields;
@@ -25,17 +27,28 @@ namespace AcsNetLib.FoxPro
         private int _numRecords;
         private int _recordLength;
 
-        private string _backupDir;
+        private string _recoveryDir;
 
 
-        /** constructor: save path to DBF **/
+        // constructor: save path to DBF
         public FoxProBuffer(string file)
         {
             _dbfPath = file;
-            _backupDir = $"{System.IO.Directory.GetCurrentDirectory()}\\.backup";
-            System.IO.Directory.CreateDirectory(_backupDir);
+            _recoveryDir = $"{System.IO.Directory.GetCurrentDirectory()}\\.recover";
+            System.IO.Directory.CreateDirectory(_recoveryDir);
+
+            _recover = true;
 
             Open();
+        }
+
+        // finalizer: save recovery file if Close() was not called
+        ~FoxProBuffer()
+        {
+            if (_recover)
+            {
+                SaveAs($"{_recoveryDir}\\RECOVER_{Util.GetFileFromPath(_dbfPath)}");
+            }
         }
 
         //-- end of class internals --//
@@ -47,6 +60,10 @@ namespace AcsNetLib.FoxPro
             -------------------------------
               Open()
                - parse the DBF file into field and record data structures
+
+              Close()
+               - signal an intentional exit
+               - tells the library that we don't need to save a recovery file
 
               Save()
                - overwrite DBF file with changes
@@ -63,6 +80,13 @@ namespace AcsNetLib.FoxPro
             _data = System.IO.File.ReadAllBytes(_dbfPath);
             _fields = ReadFieldsFromDBF(_data);
             _records = ReadRecordsFromDBF(_data, _fields.ToArray());
+        }
+
+        //-------------------------------------------------
+        // Close: intentional exit, unset recovery flag
+        public void Close()
+        {
+            _recover = false;
         }
 
         //----------------------------------------------------------------
@@ -158,6 +182,10 @@ namespace AcsNetLib.FoxPro
                 // record we're about to assemble
                 Record rec = new Record();
 
+                // get the deleted flag
+                // true if data[cursor] is an asterisk
+                rec.Deleted = (data[cursor] == (byte) '*');
+
                 // loop for each field to build the record structure
                 foreach (var field in fields)
                 {
@@ -185,9 +213,9 @@ namespace AcsNetLib.FoxPro
         {
             // need to work with a mutable data structure in case records were added/removed
             bool sizeChanged = (_records.Count != _numRecords);
-            var dataMap = new Dictionary<int, byte>();
+            var dataTable = new Dictionary<int, byte>();
             for (int i = 0; i < _firstRecord; i++)
-                dataMap[i] = _data[i];
+                dataTable[i] = _data[i];
 
             // if records were added or removed, update the record count in the DBF
             // DBF stores number of records as a little-endian 32 bit (4 byte) integer
@@ -198,10 +226,11 @@ namespace AcsNetLib.FoxPro
                 int length = 4;
                 for (int i = 0; i < length; i++)
                 {
-                    dataMap[start_position + i] = (byte)(
+                    dataTable[start_position + i] = (byte)(
                         (_records.Count >> (8 * i)) & 0xFF
                         );
                 }
+                _numRecords = _records.Count;
             }
 
             // place cursor at first record of DBF
@@ -211,31 +240,23 @@ namespace AcsNetLib.FoxPro
             foreach (var rec in Records)
             {
                 // set the delete flag
-                dataMap[cursor] = (byte) ((rec.Deleted) ? '*' : ' ');
+                dataTable[cursor] = (byte) ((rec.Deleted) ? '*' : ' ');
 
                 // individual field data from record
+                // Record object is indexed by field name (string)
                 foreach (var field in Fields)
                 {
-                    // data: rec[field.Name]
                     var data = rec[field.Name];
                     for (int i = 0; i < field.Length; i++)
                     {
-                        dataMap[cursor + i + field.Offset] = data[i];
+                        dataTable[cursor + i + field.Offset] = data[i];
                     }
                 }
                 cursor += _recordLength;
-                //dataList[cursor] = (byte)' '; // delete flag
             }
 
             // update the internal data model
-            _data = dataMap.Values.ToArray();
-
-            // create backup
-            var backup_file = $"{_backupDir}\\{Util.GetFileFromPath(_dbfPath)}.bak";
-            if (!System.IO.File.Exists(backup_file))
-            {
-                System.IO.File.Copy(_dbfPath, $"{_backupDir}\\{Util.GetFileFromPath(_dbfPath)}.bak");
-            }
+            _data = dataTable.Values.ToArray();
 
             // save file; allow client to specify a new output file through SaveAs method
             System.IO.File.WriteAllBytes(outFile, _data);
