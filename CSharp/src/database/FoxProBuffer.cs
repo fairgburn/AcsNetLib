@@ -78,12 +78,7 @@ namespace AcsNetLib.FoxPro
             WriteBufferToDisk(fileName);
         }
 
-        //-------------------------------
-        // Update a record
-        public void Update(Record rec, string field, string val)
-        {
-            rec.Set(field, val);
-        }
+        
 
         //---------------------------------------------------------------
         // Property: access records from DBF

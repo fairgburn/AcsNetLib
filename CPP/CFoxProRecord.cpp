@@ -25,7 +25,7 @@ using namespace AcsNetLib::FoxPro;
 
 
 /*-----------------------------*/
-// constructor / desctructor 
+// constructor / destructor 
 /*-----------------------------*/
 
 CFoxProRecord::CFoxProRecord(void* ptr)
@@ -69,9 +69,27 @@ void CFoxProRecord::Set(char* field, char* new_value)
     rec->Set(f, v);
 }
 
+
+CFoxProRecord CFoxProRecord::Copy()
+{
+	Record^ original = _RECORD;
+	Record^ clone = original->Copy();
+	void* ptr = GCHandle::ToIntPtr(GCHandle::Alloc(clone)).ToPointer();
+
+	CFoxProRecord r;
+	r._set_ptr(ptr);
+
+	return r;
+}
+
 #ifdef INSIDE_MANAGED_CODE
 void CFoxProRecord::_set_ptr(void* ptr)
 {
     __NET_HEAP__Record = ptr;
+}
+
+void* CFoxProRecord::_get_ptr()
+{
+	return __NET_HEAP__Record;
 }
 #endif

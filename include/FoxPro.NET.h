@@ -49,6 +49,9 @@ namespace AcsNetLib
             void Save();
             void SaveAs(char* outputFile);
 
+			void AddRecord(CFoxProRecord record);
+			void RemoveRecord(int index);
+
             FieldArray GetFields();
             RecordArray GetRecords();
 
@@ -83,10 +86,12 @@ namespace AcsNetLib
             int Length();
             char* Get(char* field);
             void Set(char* field, char* new_value);
+			CFoxProRecord Copy(); // returns new copy of this record
 
             // DO NOT use this; internal DLL use only
 			#ifdef INSIDE_MANAGED_CODE
             void _set_ptr(void* ptr);
+			void* _get_ptr();
 			#endif
 
         private:

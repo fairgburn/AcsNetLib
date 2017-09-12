@@ -98,11 +98,28 @@ void CFoxProBuffer::Save()
     fp->Save();
 }
 
+
 void CFoxProBuffer::SaveAs(char* outputFile)
 {
     FoxProBuffer^ fp = _FPBUFFER;
     String^ net_outputFile = util::CharArrayToManagedString(outputFile);
     fp->SaveAs(net_outputFile);
+}
+
+
+void CFoxProBuffer::AddRecord(CFoxProRecord record)
+{
+	FoxProBuffer^ fp = _FPBUFFER;
+	Record^ rec = NET_POINTER(Record, NET_HANDLE(record._get_ptr()));
+
+	fp->Records->Add(rec);
+}
+
+
+void CFoxProBuffer::RemoveRecord(int index)
+{
+	FoxProBuffer^ fp = _FPBUFFER;
+	fp->Records->RemoveAt(index);
 }
 
 
