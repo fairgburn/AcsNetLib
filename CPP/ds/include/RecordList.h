@@ -6,11 +6,23 @@ namespace AcsNetLib
 {
     namespace FoxPro
     {
+        class RecordIterator
+        {
+        public:
+            RecordIterator(CFoxProRecord* rec);
+            bool MoveNext();
+            CFoxProRecord& operator*();
+
+
+        private:
+            int _index;
+            CFoxProRecord* _data;
+        };
+
         struct RecordListNode
         {
             CFoxProRecord* Record;
             RecordListNode* next;
-            //RecordListNode* previous;
         };
 
         class CRecordList
