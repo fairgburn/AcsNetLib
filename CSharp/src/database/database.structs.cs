@@ -89,7 +89,8 @@ namespace database.structs
             byte[] new_value = new byte[this[field].Length];
             try
             {
-                for (int i = 0; i < val.Length; i++)
+                
+                for (int i = 0; i < new_value.Length; i++)
                 {
                     new_value[i] = (byte)val[i];
                 } // if val is too short, new_value is filled out with 0 (null character)
@@ -98,13 +99,16 @@ namespace database.structs
             // check that value isn't too long for the field
             catch (System.IndexOutOfRangeException)
             {
-                var cur_method = System.Reflection.MethodBase.GetCurrentMethod();
+                // input value shorter than field length; take no action
+                // results in: new_value[x] equals 0 (null) where x is out of range for val
+
+                /*var cur_method = System.Reflection.MethodBase.GetCurrentMethod();
                 string errmsg = $"FoxPro: exception in Record.Set(\"{field}\", \"{val}\")\n\n" +
                                 $"ERROR: value \"{val}\" is too long for field \"{field}\"\n" +
                                 "Value was not changed in DBF";
 
                 MessageBox.Show(errmsg, "Exception in AcsLib.NET.dll");
-                return;
+                return;*/
             }
 
             _data[field] = new_value;

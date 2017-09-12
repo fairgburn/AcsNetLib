@@ -3,6 +3,7 @@ packages/
 x64/
 *.ico
 *.rc
+*.zip
 CSTest/
 
 .release/
@@ -17,3 +18,4 @@ CPP/Release/
 
 CppNativeTest/
 CppManagedTest/
+CSharpTest/
