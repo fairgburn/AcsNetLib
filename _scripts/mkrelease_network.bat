@@ -1,5 +1,6 @@
-set dest=%1
+set dest=J:\Programs\DotNet\AcsNetLib
 
+cd ..
 rmdir /S %dest%
 mkdir %dest% %dest%\include %dest%\lib
 copy _build\lib\*.dll %dest%
