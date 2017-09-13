@@ -154,7 +154,6 @@
     <ClCompile Include="Stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\CRecordList.h" />
     <ClInclude Include="include\CSQLite.h" />
     <ClInclude Include="include\FoxPro.NET.h" />
     <ClInclude Include="resource.h" />

@@ -9,8 +9,8 @@
 
     Brandon Fairburn 9/6/2017
 ------------------------------------------------------------------*/
-
 #pragma once
+
 
 // building DLL or using it?
 #ifdef INSIDE_MANAGED_CODE
@@ -21,7 +21,6 @@
     #define EXPIMP_TEMPLATE extern
 #endif
 
-
 namespace AcsNetLib
 {
     namespace FoxPro
@@ -29,8 +28,8 @@ namespace AcsNetLib
 		// forward declarations
 		class CFoxProField;
 		class CFoxProRecord;
-        typedef CFoxProField* FieldArray;
-        typedef CFoxProRecord* RecordArray;
+		class CRecordList;
+		typedef CFoxProField* FieldArray;
 
 		
 		/*--------------------------------------------------------------*/
@@ -54,7 +53,7 @@ namespace AcsNetLib
 			void RemoveRecord(int index);
 
             FieldArray GetFields();
-            RecordArray GetRecords();
+            CRecordList GetRecords();
 
 			int NumFields();
 			int NumRecords();
@@ -109,6 +108,29 @@ namespace AcsNetLib
         /*__________________________________________________________*/
 
 
+		/*----------------------------------------------------------*/
+		// list of CFoxProRecords
+		//  - wrapper back to C# list
+		/*----------------------------------------------------------*/
+		class DLL CRecordList
+		{
+		public:
+			// constructor / destructor
+			CRecordList(void* ptr);
+			~CRecordList() {};
+
+			// access
+			CFoxProRecord GetAt(int index);
+			void Add(CFoxProRecord record);
+			
+
+
+		private:
+			int _index;
+			void* __NET_HEAP__List;
+		};
+		/*__________________________________________________________*/
+		/*__________________________________________________________*/
 
 
 		/*-------------------------------------------------------------------*/

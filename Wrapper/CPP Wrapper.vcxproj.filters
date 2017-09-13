@@ -33,14 +33,14 @@
     <ClCompile Include="src\CFoxProRecord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CRecordList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\CSQLite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\util\util.cpp">
       <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CRecordList.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -48,9 +48,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\CRecordList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\CSQLite.h">

@@ -27,7 +27,7 @@ using namespace AcsNetLib::FoxPro;
 // helper functions (not part of class)
 /*-------------------------------------*/
 
-RecordArray hfManagedRecordsToNative(List<Record^>^ records)
+/*RecordArray hfManagedRecordsToNative(List<Record^>^ records)
 {
     RecordArray rarr = new CFoxProRecord[records->Count];
 
@@ -39,7 +39,7 @@ RecordArray hfManagedRecordsToNative(List<Record^>^ records)
     }
 
     return rarr;
-}
+}*/
 
 
 
@@ -152,9 +152,16 @@ CFoxProField* CFoxProBuffer::GetFields()
 }
 
 
-CFoxProRecord* CFoxProBuffer::GetRecords()
+CRecordList CFoxProBuffer::GetRecords()
 {
-	return _records;
+	FoxProBuffer^ fp = _FPBUFFER;
+
+	// get pointer to the C# buffer's record list
+	void* ptr = NET_ALLOC_GETPTR(fp->Records);
+
+	CRecordList rec_list(ptr);
+	return rec_list;
+
 }
 
 
