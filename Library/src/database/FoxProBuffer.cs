@@ -59,20 +59,24 @@ namespace AcsNetLib.FoxPro
 
 
         /*-----------------------------------------------------------------
-            | public methods (no returns) |
-            -------------------------------
-              Open()
+            | public methods |
+            ------------------
+              Open() - void
                - parse the DBF file into field and record data structures
 
-              Close()
+              Close() - void
                - signal an intentional exit
                - tells the library that we don't need to save a recovery file
 
-              Save()
+              Save() - void
                - overwrite DBF file with changes
 
-              SaveAs(string fileName)
+              SaveAs(string fileName) - void
                - write changes to a new DBF file (useful for testing)
+
+              RecordFactory(char defaultChar) - new Record
+               - create a record that's formatted for this DBF
+               - defaultChar: character to fill bytes of record with
         -------------------------------------------------------------------*/
         #region Public Methods
 
@@ -109,6 +113,24 @@ namespace AcsNetLib.FoxPro
         public void SaveAs(string fileName)
         {
             WriteBufferToDisk(fileName);
+        }
+
+        //--------------------------------------------
+        // RecordFactory(): create formatted record
+        public Record RecordFactory(char defaultChar = '\0')
+        {
+            Record result = new Record();
+
+            // initialize the record items
+            foreach (var field in _fields)
+            {
+                byte[] data = new byte[field.Length];
+                for (int i = 0; i < field.Length; i++)
+                    data[i] = (byte)defaultChar;
+                result[field.Name] = data;
+            }
+
+            return result;
         }
 
         

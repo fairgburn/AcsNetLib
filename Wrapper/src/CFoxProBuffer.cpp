@@ -165,6 +165,21 @@ CRecordList CFoxProBuffer::GetRecords()
 }
 
 
+CFoxProRecord CFoxProBuffer::RecordFactory(char defaultChar)
+{
+    // create a new record in .NET
+    FoxProBuffer^ fp = _FPBUFFER;
+    Record^ new_record = fp->RecordFactory(defaultChar);
+    
+    // create/return a new wrapper record
+    void* ptr = NET_ALLOC_GETPTR(new_record);
+    CFoxProRecord result;
+    result._set_ptr(ptr);
+
+    return result;
+}
+
+
 int CFoxProBuffer::NumFields()
 {
 	FoxProBuffer^ fp = _FPBUFFER;

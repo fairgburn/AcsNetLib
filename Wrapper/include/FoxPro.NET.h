@@ -55,6 +55,12 @@ namespace AcsNetLib
             FieldArray GetFields();
             CRecordList GetRecords();
 
+            // let C# create and manage a new record so we know the size and
+            // memory is handled properly (internally, record items are byte arrays that
+            // must be exactly the right size every time or the file will be corrupted)
+            // Parameter: the character with which to fill a record item (default to space ' ')
+            CFoxProRecord RecordFactory(char defaultChar = ' ');
+
 			int NumFields();
 			int NumRecords();
 
