@@ -4,6 +4,7 @@ x64/
 *.ico
 *.rc
 *.zip
+*.dbf
 CSTest/
 
 .release/
