@@ -71,7 +71,6 @@ namespace AcsNetLib
             void* __NET_HEAP__FoxProBuffer;
 
             CFoxProField* _fields;
-			CFoxProRecord* _records;
 
         };
 		/*______________________________________________________________*/
@@ -91,7 +90,8 @@ namespace AcsNetLib
             ~CFoxProRecord();
 
             int Length();
-            char* Get(char* field);
+            char* GetString(int index);
+            char* GetString(char* field);
             void Set(char* field, char* new_value);
 			CFoxProRecord Copy(); // returns new copy of this record
 
@@ -128,6 +128,7 @@ namespace AcsNetLib
 			// access
 			CFoxProRecord GetAt(int index);
 			void Add(CFoxProRecord record);
+            int Length();
 			
 
 

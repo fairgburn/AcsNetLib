@@ -17,10 +17,10 @@
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
-using namespace database::structs;
 
 // header namespace
 using namespace AcsNetLib::FoxPro;
+using namespace  AcsNetLib::Database;
 
 
 /*-----------------------------*/
@@ -47,10 +47,20 @@ int CFoxProRecord::Length()
 {
     Record^ rec = _RECORD;
     return rec->Length;
+    
 }
 
 
-char* CFoxProRecord::Get(char* field)
+char* CFoxProRecord::GetString(int index)
+{
+    Record^ rec = _RECORD;
+    String^ data = rec->GetString(index);
+
+    return util::ManagedStringToCharArray(data);
+}
+
+
+char* CFoxProRecord::GetString(char* field)
 {
     Record^ rec = _RECORD;
     String^ data = rec->GetString(gcnew String(field));

@@ -17,8 +17,6 @@
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
-using namespace AcsNetLib::FoxPro;
-using namespace database::structs;
 
 // header namespace
 using namespace AcsNetLib::FoxPro;
@@ -66,7 +64,6 @@ CFoxProBuffer::~CFoxProBuffer()
     NET_HANDLE(__NET_HEAP__FoxProBuffer).Free();
 
     delete[] _fields;
-    delete[] _records;
 }
 
 
@@ -91,19 +88,6 @@ void CFoxProBuffer::Open()
         _fields[index].Length = field->Length;
         _fields[index].Offset = field->Offset;
         index++;
-
-    }
-
-    // initiate records list & get records from C# instance
-    _records = new CFoxProRecord[fp->Records->Count];
-    index = 0;
-    for each (Record^ rec in fp->Records)
-    {
-        // same as above: converting .NET type to native type
-        // records have a pointer back to the .NET record
-        void* ptr = GCHandle::ToIntPtr(GCHandle::Alloc(rec)).ToPointer();
-        _records[index]._set_ptr(ptr);
-		index++;
     }
 }
 

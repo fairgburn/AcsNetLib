@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using database.structs;
 using extensions;
 
 namespace AcsNetLib.FoxPro
@@ -39,7 +38,7 @@ namespace AcsNetLib.FoxPro
 
             _recover = true;
             _recoveryDir = $"{System.IO.Directory.GetCurrentDirectory()}\\.recover";
-            _recoveryFile = $"{Math.Abs(_dbfPath.GetHashCode())}.fprecover";
+            _recoveryFile = $"{Math.Abs(_dbfPath.GetHashCode())}.dbf_recover";
             
             Open();
         }
@@ -50,12 +49,12 @@ namespace AcsNetLib.FoxPro
             if (_recover)
             {
                 System.IO.Directory.CreateDirectory(_recoveryDir);
-                SaveAs($"{_recoveryDir}\\RECOVER_{Util.GetFileFromPath(_dbfPath)}");
+                SaveAs($"{_recoveryDir}\\{_recoveryFile}");
             }
         }
-
-        //-- end of class internals --//
+        
         #endregion Internals
+        //___________________
 
 
         /*-----------------------------------------------------------------
@@ -80,6 +79,14 @@ namespace AcsNetLib.FoxPro
         -------------------------------------------------------------------*/
         #region Public Methods
 
+
+        /*------------------------------------------------
+         * 
+         * File IO
+         * 
+         * ------------------------------------------------*/
+        #region File IO
+
         //-------------------------------------
         // Open: store file data in _data array
         public void Open()
@@ -87,7 +94,7 @@ namespace AcsNetLib.FoxPro
             // check if a recovery file exists
             if (System.IO.File.Exists($"{_recoveryDir}\\{_recoveryFile}"))
             {
-
+                // TODO
             }
 
             _data = System.IO.File.ReadAllBytes(_dbfPath);
@@ -115,9 +122,36 @@ namespace AcsNetLib.FoxPro
             WriteBufferToDisk(fileName);
         }
 
+        #endregion File IO
+        //___________________
+
+
+        /*------------------------------------------------
+         * 
+         * Data Manipulation
+         * 
+         * ------------------------------------------------*/
+        #region Data
+
+        //---------------------------------------------------------------
+        // Property: access records from DBF
+        // allows adding records by doing aBuffer.Records.Add(aRecord)
+        public List<Record> Records => _records;
+
+        //-----------------------------------
+        // Property: access fields from DBF
+        public List<Field> Fields => _fields;
+
+        //--------------------------------------------
+        // AddRecord: put another record in the buffer
+        public void AddRecord(Record r)
+        {
+            _records.Add(r);
+        }
+
         //--------------------------------------------
         // RecordFactory(): create formatted record
-        public Record RecordFactory(char defaultChar = '\0')
+        public Record RecordFactory(char defaultChar = ' ')
         {
             Record result = new Record();
 
@@ -135,17 +169,14 @@ namespace AcsNetLib.FoxPro
 
         
 
-        //---------------------------------------------------------------
-        // Property: access records from DBF
-        // allows adding records by doing aBuffer.Records.Add(aRecord)
-        public List<Record> Records => _records;
+        
+        
+        #endregion Data
+        //___________________
+        
 
-        //-----------------------------------
-        // Property: access fields from DBF
-        public List<Field> Fields => _fields;
-
-        //-- end of public methods --//
         #endregion Public Methods
+        //___________________
 
 
         /*------------------------------------------------------------------------------------
@@ -292,9 +323,9 @@ namespace AcsNetLib.FoxPro
             // save file; allow client to specify a new output file through SaveAs method
             System.IO.File.WriteAllBytes(outFile, _data);
         }
-
-        //-- end of private methods --//
+        
         #endregion Private Methods
+        //___________________
 
     }
 }

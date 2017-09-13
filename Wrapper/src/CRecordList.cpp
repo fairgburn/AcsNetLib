@@ -14,7 +14,6 @@
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
-using namespace database::structs;
 
 // header namespace
 using namespace AcsNetLib::FoxPro;

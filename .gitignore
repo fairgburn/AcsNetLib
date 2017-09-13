@@ -9,6 +9,7 @@ CSTest/
 
 .release/
 _test/
+_build/
 
 lib/
 Release/
