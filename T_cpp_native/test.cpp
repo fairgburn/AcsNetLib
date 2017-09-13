@@ -5,24 +5,35 @@ using namespace AcsNetLib::FoxPro;
 
 int main()
 {
-    // create buffer and grab a few records
-    CFoxProBuffer fpBuffer("C:\\Users\\bfairburn\\workspace\\VS2017\\AcsNetLib\\_build\\tests\\T_cpp_native\\Debug\\sys.dbf");
-    CFoxProRecord rec = fpBuffer.GetRecords().GetAt(0);
+    // create buffer and get record list
+    CFoxProBuffer fpBuffer("sys.dbf");
+	CRecordList recordList = fpBuffer.GetRecords();
 
-    // verify we're looking at the right file
-    /*char* name1 = rec[0].Get("descr");
-    char* name2 = rec[1].Get("descr");
-    char* name3 = rec[2].Get("descr");*/
+	// example looping through all records
+	// record_list.Length() and fpBuffer.NumRecords() are interchangeable
+	for (int i = 0; i < recordList.Length(); i++) {
+		CFoxProRecord current_record = recordList.GetAt(i); // will implement record_list[i] soon
 
-    // Making a new record (be sure to use this instead of making your own)
-    // RecordFactory() - create a new record with guaranteed memory safety
-    CFoxProRecord new_record = fpBuffer.RecordFactory();
+		// do something with current_record
+		if (current_record.Get("maxlen"))
+			printf("Line %s is 120 inches wide", current_record.Get("descr"));
+	}
 
-    // set all the fields; for example:
-    new_record.Set("maxlen", "120");
+	// creating a new record
+	// always use this method to make a new record, do not create your own because
+	// RecordFactory() sets the length of the data in the new record based on the dbf field data
+	// It also can take a char as a parameter to define what char will fill an "empty" record (default: space ' ')
+	CFoxProRecord new_record = fpBuffer.RecordFactory();
+	// or (to make empty values fill with nulls): fpBuffer.RecordFactory('\0');
 
-    char* name = new_record.Get("descr");
+	// set data in the record; for example:
+	new_record.Set("maxlen", "120"); // maxlen is set to 120, all other values are empty
 
+	// add the record to the buffer
+	fpBuffer.AddRecord(new_record);
 
-    getchar();
+	// save to the disk
+	fpBuffer.Save();
+
+	return 0;
 }

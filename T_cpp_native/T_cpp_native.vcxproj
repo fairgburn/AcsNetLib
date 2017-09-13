@@ -71,13 +71,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\_build\tests\$(ProjectName)\$(Configuration)\</OutDir>
-    <IncludePath>C:\Users\bfairburn\workspace\VS2017\AcsNetLib\Wrapper\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\bfairburn\workspace\VS2017\AcsNetLib\_build\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Wrapper\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\_build\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\_build\tests\$(ProjectName)\$(Configuration)\</OutDir>
-    <IncludePath>C:\Users\bfairburn\workspace\VS2017\AcsNetLib\Wrapper\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\bfairburn\workspace\VS2017\AcsNetLib\_build\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Wrapper\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\_build\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
