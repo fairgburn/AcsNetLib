@@ -13,37 +13,34 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Data Structures">
-      <UniqueIdentifier>{08fdde2e-1405-4db3-8146-8fb13160203b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data Structures\include">
-      <UniqueIdentifier>{b52730f3-29a8-460b-9e88-edbcf0a2b4d3}</UniqueIdentifier>
+    <Filter Include="util">
+      <UniqueIdentifier>{a02195bd-6799-4825-9e1b-13be279c020b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CSQLite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AssemblyInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CFoxProBuffer.cpp">
+    <ClCompile Include="src\CFoxProBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CFoxProRecord.cpp">
+    <ClCompile Include="src\CFoxProField.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CFoxProField.cpp">
+    <ClCompile Include="src\CFoxProRecord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="util.cpp">
+    <ClCompile Include="src\CRecordList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ds\CRecordList.cpp">
-      <Filter>Data Structures</Filter>
+    <ClCompile Include="src\CSQLite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\util.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -53,17 +50,17 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="util.h">
+    <ClInclude Include="include\CRecordList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CSQLite.h">
+    <ClInclude Include="include\CSQLite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\FoxPro.NET.h">
+    <ClInclude Include="include\FoxPro.NET.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ds\include\CRecordList.h">
-      <Filter>Data Structures\include</Filter>
+    <ClInclude Include="src\util\util.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

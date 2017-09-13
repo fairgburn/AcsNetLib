@@ -9,7 +9,7 @@
 
 ----------------------------------------------------*/
 
-#include "include/CRecordList.h"
+#include "CRecordList.h"
 #include "util.h"
 
 // shortcut for getting a pointer to the actual .NET object with the data

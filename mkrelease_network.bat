@@ -1,1 +1,1 @@
-scripts\mkrelease.cmd "J:\Programs\DotNet\AcsNetLib"
+_scripts\mkrelease.cmd "J:\Programs\DotNet\AcsNetLib"

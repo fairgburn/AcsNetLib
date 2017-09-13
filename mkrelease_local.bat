@@ -1,1 +1,1 @@
-scripts\mkrelease.cmd ".release"
+_scripts\mkrelease.cmd ".release"
