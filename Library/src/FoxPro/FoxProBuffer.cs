@@ -151,25 +151,22 @@ namespace AcsNetLib.FoxPro
 
         //--------------------------------------------
         // RecordFactory(): create formatted record
-        public Record RecordFactory(char defaultChar = ' ')
+        public Record RecordFactory(byte defaultFill = (byte)' ')
         {
-            Record result = new Record();
+            Record result = new Record() { DefaultFill = defaultFill };
 
             // initialize the record items
             foreach (var field in _fields)
             {
                 byte[] data = new byte[field.Length];
                 for (int i = 0; i < field.Length; i++)
-                    data[i] = (byte)defaultChar;
+                    data[i] = (byte)defaultFill;
                 result[field.Name] = data;
             }
 
             return result;
         }
 
-        
-
-        
         
         #endregion Data
         //___________________

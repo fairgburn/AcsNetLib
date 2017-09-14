@@ -13,10 +13,29 @@ namespace AcsNetLib.FoxPro
     // data structure for storing info about a record from the DBF
     public class Record
     {
+        /*-----------------------
+            internal data
+        ------------------------*/
+        #region internal
+
+        // default constructor
+        public Record()
+        {
+            _data = new OrderedDictionary();
+        }
+
+        // data from DBF
         private OrderedDictionary _data;
 
-        //-----------------------------
-        // copy this record
+        // byte used to fill empty records and pad client inputs that are too short (default: space)
+        // set by FoxProBuffer.RecordFactory()
+        public byte DefaultFill { get; set; } = (byte)' ';
+
+        public bool Deleted { get; set; } = false;
+        public int Length => _data.Count;
+
+        //-------------------------------------------------
+        // copy this record using a private contructor
         public Record Copy() { return new Record(_data); }
         private Record(OrderedDictionary d)
         {
@@ -32,12 +51,6 @@ namespace AcsNetLib.FoxPro
             }
         }
 
-        // default constructor
-        public Record() { _data = new OrderedDictionary(); }
-
-        public int Length => _data.Count;
-        public bool Deleted = false;
-
         // allow for record[index] notation
         public byte[] this[int i]
         {
@@ -52,8 +65,11 @@ namespace AcsNetLib.FoxPro
             set { _data[s] = value; }
         }
 
+        //___________________
+        #endregion internal
+
         /*-------------------------------
-         * Getters
+         * Get data
          * -----------------------------*/
 
         // return data as raw byte array (index by order in hashtable or field name)
@@ -64,25 +80,25 @@ namespace AcsNetLib.FoxPro
         public string GetString(int index) { return this[index].ToUTF8(); }
         public string GetString(string s) { return this[s].ToUTF8(); }
 
+
+        /*------------------------------
+         * Set data
+         * -----------------------------*/
+
         // modify data in field
         public void Set(string field, string val)
         {
+            // create byte array for the new value
             byte[] new_value = new byte[this[field].Length];
-            try
+            for (int i = 0; i < new_value.Length; i++)
             {
-
-                for (int i = 0; i < new_value.Length; i++)
-                {
-                    new_value[i] = (byte)val[i];
-                } // if val is too short, new_value is filled out with 0 (null character)
-            }
-
-            // check that value isn't too long for the field
-            catch (System.IndexOutOfRangeException)
-            {
-                // input value shorter than field length; take no action
-                // results in: new_value[x] equals 0 (null) where x is out of range for val
-            }
+                // copy bytes from string parameter
+                // if input is too long, extra bytes are ignored
+                // if input is too short, catch the exception 
+                try { new_value[i] = (byte)val[i]; }
+                catch (System.IndexOutOfRangeException) { break; }
+            } // if val is too short, new_value is filled out with 0 (null character)
+            
 
             _data[field] = new_value;
         }

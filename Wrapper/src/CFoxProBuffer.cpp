@@ -11,7 +11,7 @@
 #include "util.h"
 
 // shortcut for getting pointer to .NET FoxProBuffer
-#define _FPBUFFER NET_POINTER(FoxProBuffer, NET_HANDLE(__NET_HEAP__FoxProBuffer))
+#define _FPBUFFER NET_CAST(FoxProBuffer, NET_HANDLE(_ptr))
 
 // C# namespaces
 using namespace System;
@@ -51,8 +51,8 @@ CFoxProBuffer::CFoxProBuffer(char* inputFile)
     FoxProBuffer^ fp = gcnew FoxProBuffer(_net_file);
 
 
-    // pin the .NET object
-    __NET_HEAP__FoxProBuffer = GCHandle::ToIntPtr(GCHandle::Alloc(fp)).ToPointer();
+    // pin the C# buffer
+    _ptr = GCHandle::ToIntPtr(GCHandle::Alloc(fp)).ToPointer();
 
     // go ahead and open the file
     Open();
@@ -61,7 +61,7 @@ CFoxProBuffer::CFoxProBuffer(char* inputFile)
 
 CFoxProBuffer::~CFoxProBuffer()
 {
-    NET_HANDLE(__NET_HEAP__FoxProBuffer).Free();
+    NET_HANDLE(_ptr).Free();
 
     delete[] _fields;
 }
@@ -76,6 +76,10 @@ void CFoxProBuffer::Open()
     // call Open() on the C# instance
     FoxProBuffer^ fp = _FPBUFFER;
     fp->Open();
+
+	// pin the C# record list
+	void* list_ptr = NET_ALLOC_GETPTR(fp->Records);
+	_records = new CRecordList(list_ptr);
 
     // initiate the fields list & get fields from C# instance
     _fields = new CFoxProField[fp->Fields->Count];
@@ -117,13 +121,13 @@ void CFoxProBuffer::SaveAs(char* outputFile)
 void CFoxProBuffer::AddRecord(CFoxProRecord record)
 {
 	FoxProBuffer^ fp = _FPBUFFER;
-	Record^ rec = NET_POINTER(Record, NET_HANDLE(record._get_ptr()));
+	Record^ rec = NET_CAST(Record, NET_HANDLE(record._get_ptr()));
 
 	fp->Records->Add(rec);
 }
 
 
-void CFoxProBuffer::RemoveRecord(int index)
+void CFoxProBuffer::Remove(int index)
 {
 	FoxProBuffer^ fp = _FPBUFFER;
 	fp->Records->RemoveAt(index);
@@ -136,16 +140,16 @@ CFoxProField* CFoxProBuffer::GetFields()
 }
 
 
-CRecordList CFoxProBuffer::GetRecords()
+CRecordList* CFoxProBuffer::GetRecords()
 {
-	FoxProBuffer^ fp = _FPBUFFER;
+	return _records;
+	/*FoxProBuffer^ fp = _FPBUFFER;
 
 	// get pointer to the C# buffer's record list
 	void* ptr = NET_ALLOC_GETPTR(fp->Records);
 
 	CRecordList rec_list(ptr);
-	return rec_list;
-
+	return rec_list;*/
 }
 
 

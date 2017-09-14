@@ -130,6 +130,9 @@
     <ProjectReference Include="..\Library\AcsLib.NET.csproj">
       <Project>{70aed991-a1d8-44c3-bca9-f5050a7e6ddb}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Wrapper\CPP Wrapper.vcxproj">
+      <Project>{9bbef3fc-978f-44a2-b4ff-66e73f158c4f}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Wrapper\include\FoxPro.NET.h" />

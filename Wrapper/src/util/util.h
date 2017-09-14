@@ -10,12 +10,13 @@
 
 #pragma once
 
+
 // don't need to use this outside the library itself
 #ifdef INSIDE_MANAGED_CODE
 
 // shortcuts to access .NET objects
 #define NET_HANDLE(pointer) GCHandle::FromIntPtr(IntPtr(pointer))
-#define NET_POINTER(type, hnd) safe_cast<type^>(hnd.Target);
+#define NET_CAST(type, hnd) safe_cast<type^>(hnd.Target);
 #define NET_ALLOC_GETPTR(objptr) GCHandle::ToIntPtr(GCHandle::Alloc(objptr)).ToPointer()
 
 // C# namespaces

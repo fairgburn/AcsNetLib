@@ -11,7 +11,7 @@
 #include "util.h"
 
 // shortcut for getting a pointer to the actual .NET object with the data
-#define _RECORD NET_POINTER(Record, NET_HANDLE(__NET_HEAP__Record))
+#define _RECORD NET_CAST(Record, NET_HANDLE(_ptr))
 
 // C# namespaces
 using namespace System;
@@ -29,13 +29,13 @@ using namespace  AcsNetLib::Database;
 
 CFoxProRecord::CFoxProRecord(void* ptr)
 {
-    __NET_HEAP__Record = ptr;
+    _ptr = ptr;
 }
 
 
 CFoxProRecord::~CFoxProRecord()
 {
-    NET_HANDLE(__NET_HEAP__Record).Free();
+    NET_HANDLE(_ptr).Free();
 }
 
 
@@ -108,11 +108,11 @@ bool CFoxProRecord::IsDeleted()
 #ifdef INSIDE_MANAGED_CODE
 void CFoxProRecord::_set_ptr(void* ptr)
 {
-    __NET_HEAP__Record = ptr;
+    _ptr = ptr;
 }
 
 void* CFoxProRecord::_get_ptr()
 {
-	return __NET_HEAP__Record;
+	return _ptr;
 }
 #endif

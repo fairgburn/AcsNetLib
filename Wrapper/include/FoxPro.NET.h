@@ -14,7 +14,8 @@
 
 // building DLL or using it?
 #ifdef INSIDE_MANAGED_CODE
-    #define DLL __declspec(dllexport)
+	#include <gcroot.h>
+	#define DLL __declspec(dllexport)
     #define EXPIMP_TEMPLATE
 #else
     #define DLL __declspec(dllimport)
@@ -31,10 +32,18 @@ namespace AcsNetLib
 		class CRecordList;
 		typedef CFoxProField* FieldArray;
 
+
 		
 		/*--------------------------------------------------------------*/
         // main interface for FoxPro manipulation
 		/*--------------------------------------------------------------*/
+
+		// forward declarations
+		class CFoxProRecord;
+		class CFoxProField;
+		class CRecordList;
+		typedef CFoxProField* FieldArray;
+
         class DLL CFoxProBuffer
         {
         // constructor / destructor
@@ -50,10 +59,10 @@ namespace AcsNetLib
             void SaveAs(char* outputFile);
 
 			void AddRecord(CFoxProRecord record);
-			void RemoveRecord(int index);
+			void Remove(int index);
 
             FieldArray GetFields();
-            CRecordList GetRecords();
+            CRecordList* GetRecords();
 
             // let C# create and manage a new record so we know the size and
             // memory is handled properly (internally, record items are byte arrays that
@@ -68,9 +77,13 @@ namespace AcsNetLib
         // internal
         private:
             // address of C# class in .NET heap
-            void* __NET_HEAP__FoxProBuffer;
+			#ifdef INSIDE_MANAGED_CODE
+            gcroot<FoxProBuffer^> _ptr;
+			#endif
 
-            CFoxProField* _fields;
+
+            FieldArray _fields;
+			CRecordList* _records;
 
         };
 		/*______________________________________________________________*/
@@ -107,7 +120,7 @@ namespace AcsNetLib
 
         private:
             // pointer to object in .NET heap
-            void* __NET_HEAP__Record;
+            void* _ptr;
 
         };
         /*__________________________________________________________*/
@@ -123,18 +136,23 @@ namespace AcsNetLib
 		public:
 			// constructor / destructor
 			CRecordList(void* ptr);
+			CRecordList() {}
 			~CRecordList() {};
 
 			// access
 			CFoxProRecord GetAt(int index);
 			void Add(CFoxProRecord record);
             int Length();
+
+			#ifdef INSIDE_MANAGED_CODE
+			void _set_ptr(void* ptr);
+			void* _get_ptr();
+			#endif
 			
 
 
 		private:
-			int _index;
-			void* __NET_HEAP__List;
+			void* _ptr;
 		};
 		/*__________________________________________________________*/
 		/*__________________________________________________________*/
