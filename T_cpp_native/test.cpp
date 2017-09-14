@@ -15,7 +15,7 @@ int main()
 		CFoxProRecord current_record = recordList.GetAt(i); // will implement record_list[i] soon
 
 		// do something with current_record// BOOKMARK
-		if (current_record.Get("maxlen"))
+		if (current_record.Get("maxlen") == "120")
 			printf("Line %s is 120 inches wide", current_record.Get("descr"));
 	}
 
