@@ -10,7 +10,7 @@ using System.Linq;
 
 using extensions;
 
-namespace AcsNetLib.Database
+namespace AcsLib.Database
 {
     /// 
     /// SQL data structures

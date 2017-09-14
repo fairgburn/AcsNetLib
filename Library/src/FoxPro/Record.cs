@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using extensions;
 
-namespace AcsNetLib.FoxPro
+namespace AcsLib.FoxPro
 {
     //__________________________________________________________________
     // data structure for storing info about a record from the DBF

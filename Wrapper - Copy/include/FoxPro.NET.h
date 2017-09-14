@@ -14,20 +14,15 @@
 
 // building DLL or using it?
 #ifdef INSIDE_MANAGED_CODE
+	#include <gcroot.h>
 	#define DLL __declspec(dllexport)
-    #define EXP_IMP
-    
-    // library internal
-    #include "AcsNetLibWrapper.h"
-    #define IBuffer AcsNetLib::FoxPro::CFoxProBuffer // native buffer
-    #define IRecord AcsNetLib::FoxPro::CFoxProRecord // native record
-    #define CSNS AcsLib::FoxPro                               // C# namespace
+    #define EXPIMP_TEMPLATE
 #else
     #define DLL __declspec(dllimport)
-    #define EXP_IMP extern
+    #define EXPIMP_TEMPLATE extern
 #endif
 
-namespace AcsNetLib
+namespace AcsNetLibCpp
 {
     namespace FoxPro
     {
@@ -37,43 +32,60 @@ namespace AcsNetLib
 		class CRecordList;
 		typedef CFoxProField* FieldArray;
 
+
+		
 		/*--------------------------------------------------------------*/
         // main interface for FoxPro manipulation
 		/*--------------------------------------------------------------*/
 
 		// forward declarations
-		struct CFoxProRecord;
-		struct CFoxProField;
-		struct CRecordList;
+		class CFoxProRecord;
+		class CFoxProField;
+		class CRecordList;
 		typedef CFoxProField* FieldArray;
 
-        struct DLL CFoxProBuffer
-        {   
-            virtual void Open() = 0;
-            virtual void Close() = 0;
-            virtual void Save() = 0;
-            virtual void SaveAs(char* outputFile) = 0;
+        class DLL CFoxProBuffer
+        {
+        // constructor / destructor
+        public:
+            CFoxProBuffer(char* inputFile);
+            ~CFoxProBuffer();
 
-            virtual void AddRecord(CFoxProRecord* record) = 0;
-            virtual void RemoveRecord(int index) = 0;
+        // interface to C# class
+        public:
+            void Open();
+            void Close();
+            void Save();
+            void SaveAs(char* outputFile);
 
-            /*virtual FieldArray GetFields() = 0;
-            virtual CRecordList* GetRecords() = 0;*/
+			void AddRecord(CFoxProRecord record);
+			void Remove(int index);
+
+            FieldArray GetFields();
+            CRecordList* GetRecords();
 
             // let C# create and manage a new record so we know the size and
             // memory is handled properly (internally, record items are byte arrays that
             // must be exactly the right size every time or the file will be corrupted)
             // Parameter: the character with which to fill a record item (default to space ' ')
-            virtual CFoxProRecord* RecordFactory(char defaultChar = ' ') = 0;
+            CFoxProRecord RecordFactory(char defaultChar = ' ');
 
-            virtual int NumFields() = 0;
-            virtual int NumRecords() = 0;
+			int NumFields();
+			int NumRecords();
+
+
+        // internal
+        private:
+            // address of C# class in .NET heap
+			#ifdef INSIDE_MANAGED_CODE
+            gcroot<AcsLib::FoxPro::FoxProBuffer^> _ptr;
+			#endif
+
+
+            FieldArray _fields;
+			CRecordList* _records;
+
         };
-
-        // create a new buffer
-        // Library: defined in ManagedFoxProBuffer.cpp 
-        EXP_IMP CFoxProBuffer* CreateFoxProBuffer(char* dbfFile);
-
 		/*______________________________________________________________*/
 		/*______________________________________________________________*/
 
@@ -82,7 +94,7 @@ namespace AcsNetLib
         /*----------------------------------------------------------*/
         // data structure for FoxPro records
         /*----------------------------------------------------------*/
-        struct DLL CFoxProRecord
+        class DLL CFoxProRecord
         {
         public:
             // constructor with pointer to .NET Record instance

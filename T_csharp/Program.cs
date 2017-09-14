@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using AcsNetLib.FoxPro;
+using AcsLib.FoxPro;
 
 namespace T_csharp
 {

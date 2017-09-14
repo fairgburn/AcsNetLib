@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AcsNetLib.FoxPro
+namespace AcsLib.FoxPro
 {
     //__________________________________________________________________
     // simple data structure for storing info about a DBF field

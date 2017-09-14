@@ -1,12 +1,13 @@
 #include <string>
 
+#include "stdafx.h"
 #include "CSQLite.h"
 
 using namespace SQLite_NET;
 using namespace System;
 using namespace System::Runtime::InteropServices;
 
-namespace AcsNetLib
+namespace AcsNetLibCpp
 {
     namespace SQL
     {

@@ -11,13 +11,12 @@
 #include "util.h"
 
 // shortcut for getting pointer to .NET FoxProBuffer
-#define _FPBUFFER NET_CAST(FoxProBuffer, NET_HANDLE(_netBuffer))
+#define _FPBUFFER NET_CAST(FoxProBuffer, NET_HANDLE(_ptr))
 
 // C# namespaces
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
-using namespace AcsLib::FoxPro;
 
 // header namespace
 using namespace AcsNetLibCpp::FoxPro;
@@ -48,13 +47,12 @@ using namespace AcsNetLibCpp::FoxPro;
 
 CFoxProBuffer::CFoxProBuffer(char* inputFile)
 {
-    String^ net_file = gcnew String(inputFile);
-    FoxProBuffer^ fp = gcnew FoxProBuffer(net_file);
+    String^ _net_file = gcnew String(inputFile);
+    FoxProBuffer^ fp = gcnew FoxProBuffer(_net_file);
 
 
     // pin the C# buffer
-    //##_netBuffer = GCHandle::ToIntPtr(GCHandle::Alloc(fp)).ToPointer();
-    _netBuffer = fp;
+    _ptr = GCHandle::ToIntPtr(GCHandle::Alloc(fp)).ToPointer();
 
     // go ahead and open the file
     Open();
@@ -63,7 +61,7 @@ CFoxProBuffer::CFoxProBuffer(char* inputFile)
 
 CFoxProBuffer::~CFoxProBuffer()
 {
-    //##NET_HANDLE(_netBuffer).Free();
+    NET_HANDLE(_ptr).Free();
 
     delete[] _fields;
 }
@@ -75,20 +73,18 @@ CFoxProBuffer::~CFoxProBuffer()
 
 void CFoxProBuffer::Open()
 {
-    ICallb
     // call Open() on the C# instance
-    //##fp->Open();
-    _netBuffer->Open();
+    FoxProBuffer^ fp = _FPBUFFER;
+    fp->Open();
 
 	// pin the C# record list
-	//##void* list_ptr = NET_ALLOC_GETPTR(fp->Records);
-	//##_records = new CRecordList(list_ptr);
-    _recordPtr = _netBuffer->Records;
+	void* list_ptr = NET_ALLOC_GETPTR(fp->Records);
+	_records = new CRecordList(list_ptr);
 
     // initiate the fields list & get fields from C# instance
-    _fields = new CFoxProField[_netBuffer->Fields->Count];
+    _fields = new CFoxProField[fp->Fields->Count];
     int index = 0;
-    for each (Field^ field in _netBuffer->Fields)
+    for each (Field^ field in fp->Fields)
     {
         // convert .NET fields to native CFoxProField and store them
         _fields[index].Name = util::ManagedStringToCharArray(field->Name);
@@ -102,39 +98,39 @@ void CFoxProBuffer::Open()
 
 void CFoxProBuffer::Close()
 {
-    //##FoxProBuffer^ fp = _FPBUFFER;
-    _netBuffer->Close();
+    FoxProBuffer^ fp = _FPBUFFER;
+    fp->Close();
 }
 
 
 void CFoxProBuffer::Save()
 {
-    //##FoxProBuffer^ fp = _FPBUFFER;
-    _netBuffer->Save();
+    FoxProBuffer^ fp = _FPBUFFER;
+    fp->Save();
 }
 
 
 void CFoxProBuffer::SaveAs(char* outputFile)
 {
-    //##FoxProBuffer^ fp = _FPBUFFER;
+    FoxProBuffer^ fp = _FPBUFFER;
     String^ net_outputFile = util::CharArrayToManagedString(outputFile);
-    _netBuffer->SaveAs(net_outputFile);
+    fp->SaveAs(net_outputFile);
 }
 
 
 void CFoxProBuffer::AddRecord(CFoxProRecord record)
 {
-	//##FoxProBuffer^ fp = _FPBUFFER;
+	FoxProBuffer^ fp = _FPBUFFER;
 	Record^ rec = NET_CAST(Record, NET_HANDLE(record._get_ptr()));
 
-	_netBuffer->Records->Add(rec);
+	fp->Records->Add(rec);
 }
 
 
 void CFoxProBuffer::Remove(int index)
 {
-	//FoxProBuffer^ fp = _FPBUFFER;
-	_netBuffer->Records->RemoveAt(index);
+	FoxProBuffer^ fp = _FPBUFFER;
+	fp->Records->RemoveAt(index);
 }
 
 

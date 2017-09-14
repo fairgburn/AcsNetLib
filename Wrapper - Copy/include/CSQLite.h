@@ -9,14 +9,14 @@
 
 #ifdef INSIDE_MANAGED_CODE
 #    define DLL __declspec(dllexport)
-#    define EXP_IMP
+#    define EXPIMP_TEMPLATE
 #else
 #    define DLL __declspec(dllimport)
-#    define EXP_IMP extern
+#    define EXPIMP_TEMPLATE extern
 #endif
 
 #include <string>
-namespace AcsNetLib
+namespace AcsNetLibCpp
 {
     namespace SQL
     {

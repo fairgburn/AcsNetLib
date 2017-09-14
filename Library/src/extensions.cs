@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using AcsNetLib.Database;
+using AcsLib.Database;
 
 namespace extensions
 {
@@ -84,14 +84,14 @@ namespace extensions
 
         //_________________________________________________
         // Field to SQL Column
-        public static Column ToColumn(this AcsNetLib.FoxPro.Field self)
+        public static Column ToColumn(this AcsLib.FoxPro.Field self)
         {
             return new Column(self);
         }
 
         //_____________________________________________________
         // enumerate columns from an array of fields
-        public static IEnumerable<Column> ToColumns(this AcsNetLib.FoxPro.Field[] self)
+        public static IEnumerable<Column> ToColumns(this AcsLib.FoxPro.Field[] self)
         {
             foreach (var field in self)
             {
@@ -107,7 +107,7 @@ namespace extensions
 
         //________________________________________
         // Record to SQL Row
-        public static Row ToRow(this AcsNetLib.FoxPro.Record self, Column[] columns)
+        public static Row ToRow(this AcsLib.FoxPro.Record self, Column[] columns)
         {
             return new Row(self, columns);
         }
@@ -116,7 +116,7 @@ namespace extensions
         //________________________________________
         // enumerate rows from array of records
         // receive the columns as a parameter
-        public static IEnumerable<Row> ToRows(this AcsNetLib.FoxPro.Record[] self, Column[] columns)
+        public static IEnumerable<Row> ToRows(this AcsLib.FoxPro.Record[] self, Column[] columns)
         {
             foreach (var record in self)
             {

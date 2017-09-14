@@ -5,7 +5,7 @@ using System.Text;
 
 using extensions;
 
-namespace AcsNetLib.FoxPro
+namespace AcsLib.FoxPro
 {
     public class FoxProBuffer
     {
