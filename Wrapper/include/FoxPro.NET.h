@@ -70,8 +70,8 @@ namespace AcsNetLib
             virtual int NumRecords() = 0;
         };
 
-        // create a new buffer
-        // Library: defined in ManagedFoxProBuffer.cpp 
+        // Library function: create a new record
+		// defined in ManagedFoxProBuffer.cpp 
         EXP_IMP CFoxProBuffer* CreateFoxProBuffer(char* dbfFile);
 
 		/*______________________________________________________________*/
