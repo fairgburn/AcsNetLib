@@ -4,6 +4,9 @@
 #include "FoxPro.NET.h"
 #include "ManagedFoxProRecord.h"
 
+// shorthand for getting this record from buffer
+#define _RECORD _buffer->Records[_index]
+
 using namespace System;
 using ManagedWrappers::ManagedFoxProRecord;
 
@@ -11,55 +14,47 @@ using ManagedWrappers::ManagedFoxProRecord;
 * class implementation
 * -------------------------------------*/
 
-ManagedFoxProRecord::ManagedFoxProRecord(CSNS::Record^ record) : _record(record) {}
+ManagedFoxProRecord::ManagedFoxProRecord(CSNS::FoxProBuffer^ buf, int index) : _buffer(buf)
+{
+    _index = index;
+}
 ManagedFoxProRecord::~ManagedFoxProRecord()
 {
     delete this;
 }
 
-// handle to C# record
-gcroot<CSNS::Record^> _record;
-
 // use factory model to create new records
-IRecord* ManagedFoxProRecord::CreateRecord(CSNS::Record^ record)
+IRecord* ManagedFoxProRecord::CreateRecord(CSNS::FoxProBuffer^ buf, int index)
 {
-    return new ManagedFoxProRecord(record);
+    return new ManagedFoxProRecord(buf, index);
 }
-
+void ManagedFoxProRecord::SetHandle(CSNS::Record^ rec) : _newRecord(rec) {}
 int ManagedFoxProRecord::Length()
 {
-    return _record->Length;
+    return _RECORD->Length;
 }
 char* ManagedFoxProRecord::Get(int index)
 {
-    return util::ManagedStringToCharArray(_record->GetString(index));
+    return util::ManagedStringToCharArray(_RECORD->GetString(index));
 }
 char* ManagedFoxProRecord::Get(char* field)
 {
     String^ net_string = gcnew String(field);
     printf("got this: ");
-    System::Console::WriteLine(_record->GetString(net_string));
-    return util::ManagedStringToCharArray(_record->GetString(net_string));
+    System::Console::WriteLine(_RECORD->GetString(net_string));
+    return util::ManagedStringToCharArray(_RECORD->GetString(net_string));
 }
 void ManagedFoxProRecord::Set(char* field, char* new_value)
 {
     String^ net_field = gcnew String(field);
     String^ net_new_value = gcnew String(new_value);
-    _record->Set(net_field, net_new_value);
-}
-IRecord* ManagedFoxProRecord::Copy()
-{
-    return new ManagedFoxProRecord(_record->Copy());
+    _RECORD->Set(net_field, net_new_value);
 }
 void ManagedFoxProRecord::SetDeleted(bool del)
 {
-    _record->Deleted = del;
+    _RECORD->Deleted = del;
 }
 bool ManagedFoxProRecord::IsDeleted()
 {
-    return _record->Deleted;
-}
-gcroot<CSNS::Record^> ManagedFoxProRecord::GetHandle()
-{
-    return _record;
+    return _RECORD->Deleted;
 }

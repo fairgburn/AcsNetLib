@@ -58,12 +58,12 @@ void ManagedFoxProBuffer::SaveAs(char* outputFile)
 
 IRecord* ManagedFoxProBuffer::GetRecord(int index)
 {
-    return ManagedFoxProRecord::CreateRecord(_buffer->RecordFactory(' '));
+    return ManagedFoxProRecord::CreateRecord(_buffer, index);
 }
 
 void ManagedFoxProBuffer::AddRecord(CFoxProRecord* record)
 {
-    _buffer->AddRecord(  ((ManagedFoxProRecord*)record)->GetHandle()  );
+    _buffer->AddRecord();
 }
 
 void ManagedFoxProBuffer::RemoveRecord(int index)

@@ -137,6 +137,10 @@ namespace AcsLib.FoxPro
         // Property: access records from DBF
         // allows adding records by doing aBuffer.Records.Add(aRecord)
         public List<Record> Records => _records;
+        public Record GetRecord(int index)
+        {
+            return Records[index];
+        }
 
         //-----------------------------------
         // Property: access fields from DBF

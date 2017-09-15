@@ -95,7 +95,6 @@ namespace AcsNetLib
             virtual char* Get(char* field) = 0;
 
             virtual void Set(char* field, char* new_value) = 0;
-            virtual CFoxProRecord* Copy() = 0; // returns new copy of this record
 
             // 'deleted' flag access
             virtual void SetDeleted(bool) = 0; // set the deleted flag true or false
