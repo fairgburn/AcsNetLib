@@ -9,8 +9,8 @@ namespace ManagedWrappers
     class ManagedFoxProBuffer : public IBuffer
     {
     protected:
-        ManagedFoxProBuffer(CSNS::FoxProBuffer^ buf) : _buffer(buf) {}
-        ~ManagedFoxProBuffer() { delete this; }
+        ManagedFoxProBuffer(CSNS::FoxProBuffer^ buf);
+        ~ManagedFoxProBuffer();
 
         // handle to C# buffer
         gcroot<CSNS::FoxProBuffer^> _buffer;
@@ -24,9 +24,11 @@ namespace ManagedWrappers
         void Save();
         void SaveAs(char* outputFile);
 
-        void AddRecord(AcsNetLib::FoxPro::CFoxProRecord* record);
+        IRecord* GetRecord(int index);
+
+        void AddRecord(IRecord* record);
         void RemoveRecord(int index);
-        CFoxProRecord* RecordFactory(char defaultChar = ' ');
+        IRecord* RecordFactory();
 
         int NumFields();
         int NumRecords();

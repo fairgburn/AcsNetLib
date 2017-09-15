@@ -7,17 +7,21 @@ using std::vector;
 
 int main()
 {
-	//char* filename = "C:\\Users\\Brandon\\workspace\\VS2017\\ACS.NET Library\\_build\\tests\\T_cpp_native\\Debug\\sys.dbf";
 	char* filename = "sys.dbf";
+    
     // create buffer and get record list
-    CFoxProBuffer fpBuffer("sys.dbf");
-	CRecordList recordList = fpBuffer.GetRecords();
-	//recordList.test();
+    CFoxProBuffer* fpBuffer = CreateFoxProBuffer("sys.dbf");
 	
-	CFoxProRecord* r1 = recordList.GetAt(0);
+    for (int i = 0; i < fpBuffer->NumRecords(); i++) {
+        
+        //printf("%s\n", fpBuffer->GetRecord(i)->Get("descr"));
+    }
 
-	printf("%s\n", r1->GetString("descr"));
-
+    CFoxProRecord* myRecord = fpBuffer->RecordFactory();
+    myRecord->Set("descr", "xyzzzzzzz");
+    printf("%s\n", myRecord->Get("descr"));
+    printf("%s\n", fpBuffer->GetRecord(0)->Get("descr"));
+    getchar();
 
 	return 0;
 }

@@ -2,11 +2,13 @@
 
 #include "FoxPro.NET.h"
 #include "ManagedFoxProBuffer.h"
+#include "ManagedFoxProRecord.h"
 
 using namespace System;
 using namespace AcsLib::FoxPro;
 using namespace AcsNetLib::FoxPro;
 using ManagedWrappers::ManagedFoxProBuffer;
+using ManagedWrappers::ManagedFoxProRecord;
 
 
 // native interface:
@@ -54,9 +56,14 @@ void ManagedFoxProBuffer::SaveAs(char* outputFile)
     _buffer->SaveAs(net_string);
 }
 
+IRecord* ManagedFoxProBuffer::GetRecord(int index)
+{
+    return ManagedFoxProRecord::CreateRecord(_buffer->RecordFactory(' '));
+}
+
 void ManagedFoxProBuffer::AddRecord(CFoxProRecord* record)
 {
-    // todo
+    _buffer->AddRecord(  ((ManagedFoxProRecord*)record)->GetHandle()  );
 }
 
 void ManagedFoxProBuffer::RemoveRecord(int index)
@@ -64,12 +71,11 @@ void ManagedFoxProBuffer::RemoveRecord(int index)
     _buffer->Records->RemoveAt(index);
 }
 
-CFoxProRecord* ManagedFoxProBuffer::RecordFactory(char defaultFill)
+CFoxProRecord* ManagedFoxProBuffer::RecordFactory()
 {
-    Record^ new_record = _buffer->RecordFactory(defaultFill);
-            
-    // todo
-    return 0;
+    Record^ new_record = _buffer->RecordFactory(' ');
+           
+    return ManagedFoxProRecord::CreateRecord(new_record);
 }
 
 int ManagedFoxProBuffer::NumFields()

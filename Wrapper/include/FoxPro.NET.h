@@ -54,17 +54,19 @@ namespace AcsNetLib
             virtual void Save() = 0;
             virtual void SaveAs(char* outputFile) = 0;
 
+            virtual CFoxProRecord* GetRecord(int index) = 0;
+
             virtual void AddRecord(CFoxProRecord* record) = 0;
             virtual void RemoveRecord(int index) = 0;
 
-            /*virtual FieldArray GetFields() = 0;
-            virtual CRecordList* GetRecords() = 0;*/
+            //virtual FieldArray GetFields() = 0;
+            //virtual CRecordList* GetRecords() = 0;
 
             // let C# create and manage a new record so we know the size and
             // memory is handled properly (internally, record items are byte arrays that
             // must be exactly the right size every time or the file will be corrupted)
             // Parameter: the character with which to fill a record item (default to space ' ')
-            virtual CFoxProRecord* RecordFactory(char defaultFill) = 0;
+            virtual CFoxProRecord* RecordFactory() = 0;
 
             virtual int NumFields() = 0;
             virtual int NumRecords() = 0;
@@ -72,7 +74,7 @@ namespace AcsNetLib
 
         // Library function: create a new buffer
 		// defined in ManagedFoxProBuffer.cpp 
-        EXP_IMP CFoxProBuffer* CreateFoxProBuffer(char* dbfFile);
+        DLL CFoxProBuffer* CreateFoxProBuffer(char* dbfFile);
 
 		/*______________________________________________________________*/
 		/*______________________________________________________________*/
@@ -86,19 +88,18 @@ namespace AcsNetLib
         {
         public:
 
-            int Length();
-            char* GetString(int index);
-            char* GetString(char* field);
-            void Set(char* field, char* new_value);
-			CFoxProRecord Copy(); // returns new copy of this record
+            virtual int Length() = 0;
+
+            // get DBF data as ASCII string
+            virtual char* Get(int index) = 0;
+            virtual char* Get(char* field) = 0;
+
+            virtual void Set(char* field, char* new_value) = 0;
+            virtual CFoxProRecord* Copy() = 0; // returns new copy of this record
 
             // 'deleted' flag access
-            void SetDeleted(bool); // set the deleted flag true or false
-            bool IsDeleted();      // check the flag
-
-        private:
-            // pointer to object in .NET heap
-            void* _ptr;
+            virtual void SetDeleted(bool) = 0; // set the deleted flag true or false
+            virtual bool IsDeleted() = 0;      // check the flag
 
         };
 
@@ -110,7 +111,7 @@ namespace AcsNetLib
 		// list of CFoxProRecords
 		//  - wrapper back to C# list
 		/*----------------------------------------------------------*/
-		class DLL CRecordList
+		/*class DLL CRecordList
 		{
 		public:
 			// constructor / destructor
@@ -119,8 +120,8 @@ namespace AcsNetLib
 			~CRecordList() {};
 
 			// access
-			CFoxProRecord GetAt(int index);
-			void Add(CFoxProRecord record);
+			CFoxProRecord* GetAt(int index);
+			void Add(CFoxProRecord* record);
             int Length();
 
 			#ifdef INSIDE_MANAGED_CODE
@@ -132,7 +133,7 @@ namespace AcsNetLib
 
 		private:
 			void* _ptr;
-		};
+		};*/
 		/*__________________________________________________________*/
 		/*__________________________________________________________*/
 
@@ -140,7 +141,7 @@ namespace AcsNetLib
 		/*-------------------------------------------------------------------*/
 		// data structure for FoxPro fields
 		/*-------------------------------------------------------------------*/
-		class DLL CFoxProField
+		struct DLL CFoxProField
 		{
 		public:
 			char* Name;
