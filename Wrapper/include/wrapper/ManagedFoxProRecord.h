@@ -11,11 +11,10 @@ namespace ManagedWrappers
     class ManagedFoxProRecord : public IRecord
     {
     protected:
-        ManagedFoxProRecord(CSNS::FoxProBuffer^ record, int index);
         ~ManagedFoxProRecord();
 
         // handle to parent C# buffer
-        gcroot<CSNS::FoxProBuffer^> _buffer;
+        gcroot<CSNS::Record^> _record;
 
         // which record in buffer we're looking at
         int _index;
@@ -26,10 +25,9 @@ namespace ManagedWrappers
 
     public:
         // use factory model to create new records
-		static IRecord* CreateRecord(CSNS::FoxProBuffer^ buf, int index);
+		//static IRecord* CreateRecord(CSNS::FoxProBuffer^ buf, int index);
 
-        // set a handle for new record
-        void SetHandle(CSNS::Record^ rec);
+        ManagedFoxProRecord(CSNS::Record^);
 
 		int Length();
 		char* Get(int index);
