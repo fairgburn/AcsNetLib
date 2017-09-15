@@ -1,4 +1,5 @@
 #include <gcroot.h>
+#include <stdio.h>
 #include "util.h"
 #include "FoxPro.NET.h"
 #include "ManagedFoxProRecord.h"
@@ -36,6 +37,8 @@ char* ManagedFoxProRecord::Get(int index)
 char* ManagedFoxProRecord::Get(char* field)
 {
     String^ net_string = gcnew String(field);
+    printf("got this: ");
+    System::Console::WriteLine(_record->GetString(net_string));
     return util::ManagedStringToCharArray(_record->GetString(net_string));
 }
 void ManagedFoxProRecord::Set(char* field, char* new_value)
