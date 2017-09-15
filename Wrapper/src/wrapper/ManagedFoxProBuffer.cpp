@@ -1,9 +1,6 @@
 #include <gcroot.h>
 
-// native interfaces
 #include "FoxPro.NET.h"
-
-// managed wrappers
 #include "ManagedFoxProBuffer.h"
 
 using namespace System;
@@ -25,7 +22,7 @@ CFoxProBuffer* AcsNetLib::FoxPro::CreateFoxProBuffer(char* dbfFile)
  * -------------------------------------*/
 
 // protected contructor/destructor 
-// force creation by using 
+// force creation by CreateBuffer()
 ManagedFoxProBuffer::ManagedFoxProBuffer(FoxProBuffer^ buf) : _buffer(buf) {}
 ManagedFoxProBuffer::~ManagedFoxProBuffer() { delete this; }
 
@@ -67,9 +64,9 @@ void ManagedFoxProBuffer::RemoveRecord(int index)
     _buffer->Records->RemoveAt(index);
 }
 
-CFoxProRecord* ManagedFoxProBuffer::RecordFactory(char defaultChar = ' ')
+CFoxProRecord* ManagedFoxProBuffer::RecordFactory(char defaultFill)
 {
-    Record^ new_record = _buffer->RecordFactory(defaultChar);
+    Record^ new_record = _buffer->RecordFactory(defaultFill);
             
     // todo
     return 0;

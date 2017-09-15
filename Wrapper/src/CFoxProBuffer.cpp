@@ -20,7 +20,7 @@ using namespace System::Runtime::InteropServices;
 using namespace AcsLib::FoxPro;
 
 // header namespace
-using namespace AcsNetLibCpp::FoxPro;
+using namespace AcsNetLib::FoxPro;
 
 /*-------------------------------------*/
 // helper functions (not part of class)

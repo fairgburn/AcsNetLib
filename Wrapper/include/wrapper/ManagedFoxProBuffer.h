@@ -13,7 +13,7 @@ namespace ManagedWrappers
         ~ManagedFoxProBuffer() { delete this; }
 
         // handle to C# buffer
-        gcroot<FoxProBuffer^> _buffer;
+        gcroot<CSNS::FoxProBuffer^> _buffer;
 
     public:
         // use factory model to create instances

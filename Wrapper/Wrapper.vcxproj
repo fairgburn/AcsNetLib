@@ -73,13 +73,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)\_build\tests\$(ProjectName)\</OutDir>
-    <IncludePath>$(ProjectDir)\include;$(ProjectDir)\src\util;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\_build\lib\</OutDir>
+    <IncludePath>$(ProjectDir)\include\wrapper;$(ProjectDir)\include\util;$(ProjectDir)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <TargetName>AcsCppLib.NET</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)\_build\tests\$(ProjectName)\</OutDir>
-    <IncludePath>$(ProjectDir)\include;$(ProjectDir)\src\util;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\_build\lib\</OutDir>
+    <IncludePath>$(ProjectDir)\include\wrapper;$(ProjectDir)\include\util;$(ProjectDir)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <TargetName>AcsCppLib.NET</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,22 +125,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ManagedFoxProBuffer.cpp" />
-    <ClCompile Include="ManagedFoxProRecord.cpp" />
-    <ClCompile Include="src\CSQLite.cpp" />
-    <ClCompile Include="src\util\util.cpp" />
+    <ProjectReference Include="..\Library\AcsLib.NET.csproj">
+      <Project>{70aed991-a1d8-44c3-bca9-f5050a7e6ddb}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CSQLite.h" />
     <ClInclude Include="include\FoxPro.NET.h" />
-    <ClInclude Include="ManagedFoxProBuffer.h" />
-    <ClInclude Include="ManagedFoxProRecord.h" />
-    <ClInclude Include="src\util\util.h" />
+    <ClInclude Include="include\util\util.h" />
+    <ClInclude Include="include\wrapper\ManagedFoxProBuffer.h" />
+    <ClInclude Include="include\wrapper\ManagedFoxProRecord.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Library\AcsLib.NET.csproj">
-      <Project>{70aed991-a1d8-44c3-bca9-f5050a7e6ddb}</Project>
-    </ProjectReference>
+    <ClCompile Include="src\CSQLite.cpp" />
+    <ClCompile Include="src\util\util.cpp" />
+    <ClCompile Include="src\wrapper\ManagedFoxProBuffer.cpp" />
+    <ClCompile Include="src\wrapper\ManagedFoxProRecord.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

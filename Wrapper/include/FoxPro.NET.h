@@ -18,7 +18,7 @@
     #define EXP_IMP
     
     // library internal
-    #include "AcsNetLibWrapper.h"
+    //#include "managed_wrappers/ManagedFoxProBuffer.h"
     #define IBuffer AcsNetLib::FoxPro::CFoxProBuffer // native buffer
     #define IRecord AcsNetLib::FoxPro::CFoxProRecord // native record
     #define CSNS AcsLib::FoxPro                               // C# namespace
@@ -64,13 +64,13 @@ namespace AcsNetLib
             // memory is handled properly (internally, record items are byte arrays that
             // must be exactly the right size every time or the file will be corrupted)
             // Parameter: the character with which to fill a record item (default to space ' ')
-            virtual CFoxProRecord* RecordFactory(char defaultChar = ' ') = 0;
+            virtual CFoxProRecord* RecordFactory(char defaultFill) = 0;
 
             virtual int NumFields() = 0;
             virtual int NumRecords() = 0;
         };
 
-        // Library function: create a new record
+        // Library function: create a new buffer
 		// defined in ManagedFoxProBuffer.cpp 
         EXP_IMP CFoxProBuffer* CreateFoxProBuffer(char* dbfFile);
 
@@ -85,10 +85,6 @@ namespace AcsNetLib
         struct DLL CFoxProRecord
         {
         public:
-            // constructor with pointer to .NET Record instance
-            CFoxProRecord(void* pointer);
-            CFoxProRecord() {}
-            ~CFoxProRecord();
 
             int Length();
             char* GetString(int index);
@@ -111,6 +107,7 @@ namespace AcsNetLib
             void* _ptr;
 
         };
+
         /*__________________________________________________________*/
         /*__________________________________________________________*/
 
