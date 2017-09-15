@@ -21,7 +21,7 @@
     //#include "managed_wrappers/ManagedFoxProBuffer.h"
     #define IBuffer AcsNetLib::FoxPro::CFoxProBuffer // native buffer
     #define IRecord AcsNetLib::FoxPro::CFoxProRecord // native record
-    #define CSNS AcsLib::FoxPro                               // C# namespace
+    #define CSNS AcsLib::FoxPro                      // C# namespace
 #else
     #define DLL __declspec(dllimport)
     #define EXP_IMP extern
@@ -32,9 +32,9 @@ namespace AcsNetLib
     namespace FoxPro
     {
 		// forward declarations
-		class CFoxProField;
-		class CFoxProRecord;
-		class CRecordList;
+		struct CFoxProField;
+		struct CFoxProRecord;
+		struct CRecordList;
 		typedef CFoxProField* FieldArray;
 
 		/*--------------------------------------------------------------*/
@@ -95,12 +95,6 @@ namespace AcsNetLib
             // 'deleted' flag access
             void SetDeleted(bool); // set the deleted flag true or false
             bool IsDeleted();      // check the flag
-
-            // DO NOT use this; internal DLL use only
-			#ifdef INSIDE_MANAGED_CODE
-            void _set_ptr(void* ptr);
-			void* _get_ptr();
-			#endif
 
         private:
             // pointer to object in .NET heap
