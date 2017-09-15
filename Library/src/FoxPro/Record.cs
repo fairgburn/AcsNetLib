@@ -19,20 +19,39 @@ namespace AcsLib.FoxPro
         #region internal
 
         // default constructor
-        public Record()
-        {
-            _data = new OrderedDictionary();
-        }
+        public Record() { _data = new OrderedDictionary(); }
 
         // data from DBF
         private OrderedDictionary _data;
+
+        // field info
+        private List<Field> _fields;
+        public List<Field> Fields
+        {
+            get { return _fields; }
+            set { _fields = value; }
+        }
 
         // byte used to fill empty records and pad client inputs that are too short (default: space)
         // set by FoxProBuffer.RecordFactory()
         public byte DefaultFill { get; set; } = (byte)' ';
 
+        // DBF deleted flag
         public bool Deleted { get; set; } = false;
-        public int Length => _data.Count;
+
+        // length of record in bytes
+        public int Length
+        {
+            get
+            {
+                int len = 0;
+                foreach (var field in _fields)
+                {
+                    len += field.Length;
+                }
+                return len;
+            }
+        }
 
         //-------------------------------------------------
         // copy this record using a private contructor
@@ -80,6 +99,25 @@ namespace AcsLib.FoxPro
         public string GetString(int index) { return this[index].ToUTF8(); }
         public string GetString(string s) { return this[s].ToUTF8(); }
 
+        // return data a single byte array
+        public byte[] GetBlob()
+        {
+            var result = new List<byte>();
+
+            // each byte[] in data
+            foreach (var objbytes in _data.Values)
+            {
+                var bytes = (byte[])objbytes;
+                // each individual byte in the field
+                foreach (var b in bytes)
+                {
+                    result.Add(b);
+                }
+            }
+
+            return result.ToArray();
+        }
+
 
         /*------------------------------
          * Set data
@@ -101,6 +139,25 @@ namespace AcsLib.FoxPro
             
 
             _data[field] = new_value;
+        }
+
+        // modify whole record at once
+        public void SetBlob(byte[] blob)
+        {
+            var new_data = new OrderedDictionary();
+
+            try
+            {
+                foreach (var field in _fields)
+                {
+                    new_data[field.Name] =  blob.SubRange(field.Offset, field.Length);
+                }
+
+                _data = new_data;
+            }
+
+            // if an exception is caught, throw it out to the caller and let them handle it
+            catch { throw; }
         }
 
     }

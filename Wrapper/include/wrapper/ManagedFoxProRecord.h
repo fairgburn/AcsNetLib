@@ -30,9 +30,14 @@ namespace ManagedWrappers
         ManagedFoxProRecord(CSNS::Record^);
 
 		int Length();
+
 		char* Get(int index);
 		char* Get(char* field);
-		void Set(char* field, char* new_value);
+        void Set(char* field, char* new_value);
+
+        void GetBlob(unsigned char* dest);
+        void SetBlob(const char* blob);
+
 
 		void SetDeleted(bool);
 		bool IsDeleted();

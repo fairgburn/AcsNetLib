@@ -90,11 +90,14 @@ namespace AcsNetLib
 
             virtual int Length() = 0;
 
-            // get DBF data as ASCII string
+            // get/set DBF data as ASCII string
             virtual char* Get(int index) = 0;
             virtual char* Get(char* field) = 0;
-
             virtual void Set(char* field, char* new_value) = 0;
+
+            // get/set DBF data as one blob of bytes
+            virtual void GetBlob(unsigned char* dest) = 0;
+            virtual void SetBlob(const char* blob) = 0;
 
             // 'deleted' flag access
             virtual void SetDeleted(bool) = 0; // set the deleted flag true or false

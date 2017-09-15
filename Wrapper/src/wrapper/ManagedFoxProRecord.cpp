@@ -1,13 +1,11 @@
 #include <gcroot.h>
-#include <stdio.h>
+#include <string.h>
 #include "util.h"
 #include "FoxPro.NET.h"
 #include "ManagedFoxProRecord.h"
 
-// shorthand for getting this record from buffer
-#define _RECORD _buffer->Records[_index]
-
 using namespace System;
+using namespace System::Collections::Generic;
 using ManagedWrappers::ManagedFoxProRecord;
 
 /*--------------------------------------
@@ -42,6 +40,21 @@ void ManagedFoxProRecord::Set(char* field, char* new_value)
     String^ net_field = gcnew String(field);
     String^ net_new_value = gcnew String(new_value);
     _record->Set(net_field, net_new_value);
+}
+
+void ManagedFoxProRecord::GetBlob(unsigned char* dest)
+{
+    return;
+}
+
+void ManagedFoxProRecord::SetBlob(const char* blob)
+{
+    auto bList = gcnew List<char>();
+    auto str = gcnew String("");
+    for (int i = 0; i < strlen(blob); i++) {
+        bList->Add(blob[i]);
+        str += blob[i];
+    }
 }
 
 void ManagedFoxProRecord::SetDeleted(bool del)
