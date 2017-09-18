@@ -49,12 +49,11 @@ void ManagedFoxProRecord::GetBlob(unsigned char* dest)
 
 void ManagedFoxProRecord::SetBlob(const char* blob)
 {
-    auto bList = gcnew List<char>();
-    auto str = gcnew String("");
-    for (int i = 0; i < strlen(blob); i++) {
+    auto bList = gcnew List<unsigned char>();
+    for (unsigned int i = 0; i < strlen(blob); i++) {
         bList->Add(blob[i]);
-        str += blob[i];
     }
+	_record->SetBlob(bList->ToArray());
 }
 
 void ManagedFoxProRecord::SetDeleted(bool del)

@@ -18,10 +18,9 @@
     #define EXP_IMP
     
     // library internal
-    //#include "managed_wrappers/ManagedFoxProBuffer.h"
     #define IBuffer AcsNetLib::FoxPro::CFoxProBuffer // native buffer
     #define IRecord AcsNetLib::FoxPro::CFoxProRecord // native record
-    #define CSNS AcsLib::FoxPro                      // C# namespace
+	#define CSNS AcsLib::FoxPro                      // C# namespace
 #else
     #define DLL __declspec(dllimport)
     #define EXP_IMP extern
@@ -38,13 +37,13 @@ namespace AcsNetLib
 		typedef CFoxProField* FieldArray;
 
 		/*--------------------------------------------------------------*/
-        // main interface for FoxPro manipulation
+        // interface to AcsLib.FoxPro.FoxProBuffer (C# library)
 		/*--------------------------------------------------------------*/
 
 		// forward declarations
 		struct CFoxProRecord;
 		struct CFoxProField;
-		struct CRecordList;
+		//struct CRecordList;
 		typedef CFoxProField* FieldArray;
 
         struct DLL CFoxProBuffer
@@ -53,8 +52,14 @@ namespace AcsNetLib
             virtual void Close() = 0;
             virtual void Save() = 0;
             virtual void SaveAs(char* outputFile) = 0;
-
-            virtual CFoxProRecord* GetRecord(int index) = 0;
+			
+			// accessing records
+			// IMPORTANT: buffer must be dereferenced to access records with the bracket overload
+			//   example:   CFoxProRecord* first_rec = (*myBuffer)[0] // correct
+			//              CFoxProRecord* first_rec = myBuffer[0]    // incorrect (won't compile)
+			// these two do the same thing... just providing different options
+			virtual CFoxProRecord* GetRecord(int index) = 0;
+			virtual CFoxProRecord* operator[] (int index) = 0;
 
             virtual void AddRecord(CFoxProRecord* record) = 0;
             virtual void RemoveRecord(int index) = 0;
@@ -82,7 +87,7 @@ namespace AcsNetLib
 
 
         /*----------------------------------------------------------*/
-        // data structure for FoxPro records
+        // interface to AcsLib.FoxPro.Record (C# library)
         /*----------------------------------------------------------*/
         struct DLL CFoxProRecord
         {
@@ -109,32 +114,21 @@ namespace AcsNetLib
         /*__________________________________________________________*/
 
 
+		// REMOVED
+		// handled by CFoxProBuffer now
 		/*----------------------------------------------------------*/
 		// list of CFoxProRecords
 		//  - wrapper back to C# list
 		/*----------------------------------------------------------*/
-		/*class DLL CRecordList
+		/*struct DLL CRecordList
 		{
-		public:
-			// constructor / destructor
-			CRecordList(void* ptr);
-			CRecordList() {}
-			~CRecordList() {};
-
-			// access
-			CFoxProRecord* GetAt(int index);
-			void Add(CFoxProRecord* record);
-            int Length();
-
-			#ifdef INSIDE_MANAGED_CODE
-			void _set_ptr(void* ptr);
-			void* _get_ptr();
-			#endif
 			
 
-
-		private:
-			void* _ptr;
+			// access
+			virtual CFoxProRecord* GetAt(int index) = 0;
+			virtual CFoxProRecord* operator[] (int index) = 0;
+			virtual void Add(CFoxProRecord* record) = 0;
+            virtual int Count() = 0; // number of records
 		};*/
 		/*__________________________________________________________*/
 		/*__________________________________________________________*/

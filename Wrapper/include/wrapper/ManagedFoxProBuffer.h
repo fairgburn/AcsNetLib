@@ -25,6 +25,7 @@ namespace ManagedWrappers
         void SaveAs(char* outputFile);
 
         IRecord* GetRecord(int index);
+		IRecord* operator[] (int index);
 
         void AddRecord(IRecord* record);
         void RemoveRecord(int index);

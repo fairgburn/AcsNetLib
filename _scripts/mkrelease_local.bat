@@ -1,4 +1,4 @@
-set dest=.release
+set dest=_release
 
 cd ..
 rmdir /S %dest%

@@ -62,6 +62,12 @@ IRecord* ManagedFoxProBuffer::GetRecord(int index)
     return new ManagedFoxProRecord(_buffer->GetRecord(index));
 }
 
+IRecord* ManagedFoxProBuffer::operator[] (int index)
+{
+	IRecord* rec = this->GetRecord(index);
+	return rec;
+}
+
 void ManagedFoxProBuffer::AddRecord(CFoxProRecord* record)
 {
     // todo
