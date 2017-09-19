@@ -28,8 +28,6 @@ namespace ManagedWrappers
         gcroot<CSNS::Record^> _newRecord;
 
     public:
-        // use factory model to create new records
-		//static IRecord* CreateRecord(CSNS::FoxProBuffer^ buf, int index);
 
         ManagedFoxProRecord(CSNS::Record^);
 
@@ -41,7 +39,7 @@ namespace ManagedWrappers
 
         void GetBlob(unsigned char* dest);
         unsigned char* GetCompleteRecord();
-        void SetBlob(const char* blob);
+        void SetCompleteRecord(const char* blob);
 
 
 		void SetDeleted(bool);

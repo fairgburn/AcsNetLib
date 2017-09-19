@@ -62,7 +62,7 @@ unsigned char* ManagedFoxProRecord::GetCompleteRecord()
     return _blob;
 }
 
-void ManagedFoxProRecord::SetBlob(const char* blob)
+void ManagedFoxProRecord::SetCompleteRecord(const char* blob)
 {
     auto bList = gcnew List<unsigned char>();
     for (unsigned int i = 0; i < strlen(blob); i++) {
