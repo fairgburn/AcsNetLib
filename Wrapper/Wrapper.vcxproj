@@ -125,11 +125,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Library\AcsLib.NET.csproj">
-      <Project>{70aed991-a1d8-44c3-bca9-f5050a7e6ddb}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\CSQLite.h" />
     <ClInclude Include="include\FoxPro.NET.h" />
     <ClInclude Include="include\util\util.h" />
@@ -141,6 +136,11 @@
     <ClCompile Include="src\util\util.cpp" />
     <ClCompile Include="src\wrapper\ManagedFoxProBuffer.cpp" />
     <ClCompile Include="src\wrapper\ManagedFoxProRecord.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Library\AcsLib.NET.csproj">
+      <Project>{70aed991-a1d8-44c3-bca9-f5050a7e6ddb}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

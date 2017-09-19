@@ -12,9 +12,10 @@ using ManagedWrappers::ManagedFoxProRecord;
 * class implementation
 * -------------------------------------*/
 
-ManagedFoxProRecord::ManagedFoxProRecord(CSNS::Record^ rec) : _record(rec) {}
+ManagedFoxProRecord::ManagedFoxProRecord(CSNS::Record^ rec) : _record(rec) { _delBlob = false; }
 ManagedFoxProRecord::~ManagedFoxProRecord()
 {
+    if (_delBlob) delete[] _blob;
     delete this;
 }
 
@@ -45,6 +46,20 @@ void ManagedFoxProRecord::Set(char* field, char* new_value)
 void ManagedFoxProRecord::GetBlob(unsigned char* dest)
 {
     return;
+}
+
+unsigned char* ManagedFoxProRecord::GetCompleteRecord()
+{
+    if (_delBlob) delete[] _blob;
+    auto blob = _record->GetBlob();
+    _blob = new unsigned char[blob->Length];
+
+    for (int i = 0; i < blob->Length; i++)
+    {
+        _blob[i] = blob[i];
+    }
+
+    return _blob;
 }
 
 void ManagedFoxProRecord::SetBlob(const char* blob)

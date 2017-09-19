@@ -8,6 +8,7 @@ x64/
 CSTest/
 
 .release/
+_release/
 _test/
 _build/
 

@@ -19,6 +19,10 @@ namespace ManagedWrappers
         // which record in buffer we're looking at
         int _index;
 
+        // native char array for GetCompleteRecord()
+        unsigned char* _blob;
+        bool _delBlob; // flag to delete blob (unmanaged memory allocation)
+
         // handle for new record (only used if creating a new record)
         bool _new = false;
         gcroot<CSNS::Record^> _newRecord;
@@ -36,6 +40,7 @@ namespace ManagedWrappers
         void Set(char* field, char* new_value);
 
         void GetBlob(unsigned char* dest);
+        unsigned char* GetCompleteRecord();
         void SetBlob(const char* blob);
 
 

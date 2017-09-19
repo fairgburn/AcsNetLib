@@ -102,6 +102,7 @@ namespace AcsNetLib
 
             // get/set DBF data as one blob of bytes
             virtual void GetBlob(unsigned char* dest) = 0;
+            virtual unsigned char* GetCompleteRecord() = 0;
             virtual void SetBlob(const char* blob) = 0;
 
             // 'deleted' flag access
