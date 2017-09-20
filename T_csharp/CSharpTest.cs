@@ -12,6 +12,26 @@ namespace T_csharp
     {
         static void Main(string[] args)
         {
+            Test_AddRecord();
+        }
+
+        static void Test_AddRecord()
+        {
+            FoxProBuffer fp = new FoxProBuffer("sys.dbf");
+            Record r = fp.CreateNewRecord();
+            r.Set("descr", "ksf");
+
+            var r1data = fp.Records[0].GetCompleteRecord();
+            r.SetCompleteRecord(r1data);
+
+            fp.AddRecord(r);
+            fp.SaveAs("addrec.dbf");
+            return;
+        }
+
+        static void Test_CompleteRecordMethods()
+        {
+            
             // create buffer and get first two records
             FoxProBuffer fp = new FoxProBuffer("sys.dbf");
             var firstRecord = fp.Records[0];

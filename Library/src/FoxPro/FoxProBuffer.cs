@@ -73,7 +73,7 @@ namespace AcsLib.FoxPro
               SaveAs(string fileName) - void
                - write changes to a new DBF file (useful for testing)
 
-              RecordFactory(char defaultChar) - new Record
+              CreateNewRecord(char defaultChar) - new Record
                - create a record that's formatted for this DBF
                - defaultChar: character to fill bytes of record with
         -------------------------------------------------------------------*/
@@ -154,8 +154,8 @@ namespace AcsLib.FoxPro
         }
 
         //--------------------------------------------
-        // RecordFactory(): create formatted record
-        public Record RecordFactory(byte defaultFill = (byte)' ')
+        // CreateNewRecord(): create formatted record
+        public Record CreateNewRecord(byte defaultFill = (byte)' ')
         {
             Record result = new Record() { DefaultFill = defaultFill };
 
