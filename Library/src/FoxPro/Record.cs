@@ -166,7 +166,7 @@ namespace AcsLib.FoxPro
                     // update stored record data
                     new_data_table[key] = new_value;
 
-                    // move cursor along input value for next cell
+                    // move cursor in input value to start of next cell
                     cursor += field_length;
                 }
                 _data = new_data_table;
