@@ -51,7 +51,7 @@ void ManagedFoxProRecord::GetBlob(unsigned char* dest)
 unsigned char* ManagedFoxProRecord::GetCompleteRecord()
 {
     if (_delBlob) delete[] _blob;
-    auto blob = _record->GetBlob();
+    auto blob = _record->GetCompleteRecord();
     _blob = new unsigned char[blob->Length];
 
     for (int i = 0; i < blob->Length; i++)
@@ -68,7 +68,7 @@ void ManagedFoxProRecord::SetCompleteRecord(const char* blob)
     for (unsigned int i = 0; i < strlen(blob); i++) {
         bList->Add(blob[i]);
     }
-	_record->SetBlob(bList->ToArray());
+	_record->SetCompleteRecord(bList->ToArray());
 }
 
 void ManagedFoxProRecord::SetDeleted(bool del)
