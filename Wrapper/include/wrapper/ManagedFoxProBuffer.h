@@ -29,7 +29,7 @@ namespace ManagedWrappers
 
         void AddRecord(IRecord* record);
         void RemoveRecord(int index);
-        IRecord* RecordFactory();
+        IRecord* CreateNewRecord();
 
         int NumFields();
         int NumRecords();

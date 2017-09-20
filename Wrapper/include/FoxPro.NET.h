@@ -18,8 +18,8 @@
     #define EXP_IMP
     
     // library internal
-    #define IBuffer AcsNetLib::FoxPro::CFoxProBuffer // native buffer
-    #define IRecord AcsNetLib::FoxPro::CFoxProRecord // native record
+    #define IBuffer AcsNetLib::FoxPro::CFoxProBuffer // native buffer interface
+    #define IRecord AcsNetLib::FoxPro::CFoxProRecord // native record interface
 	#define CSNS AcsLib::FoxPro                      // C# namespace
 #else
     #define DLL __declspec(dllimport)
@@ -71,7 +71,7 @@ namespace AcsNetLib
             // memory is handled properly (internally, record items are byte arrays that
             // must be exactly the right size every time or the file will be corrupted)
             // Parameter: the character with which to fill a record item (default to space ' ')
-            virtual CFoxProRecord* RecordFactory() = 0;
+            virtual CFoxProRecord* CreateNewRecord() = 0;
 
             virtual int NumFields() = 0;
             virtual int NumRecords() = 0;
@@ -103,7 +103,7 @@ namespace AcsNetLib
             // get/set DBF data as one blob of bytes
             virtual void GetBlob(unsigned char* dest) = 0; // ignore
             virtual unsigned char* GetCompleteRecord() = 0;
-            virtual void SetCompleteRecord(const char* blob) = 0;
+            virtual void SetCompleteRecord(unsigned char* blob) = 0;
 
             // 'deleted' flag access
             virtual void SetDeleted(bool) = 0; // set the deleted flag true or false

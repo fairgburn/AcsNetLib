@@ -28,8 +28,12 @@ namespace ManagedWrappers
         gcroot<CSNS::Record^> _newRecord;
 
     public:
-
+        // Constructor: wrap a given C# record
         ManagedFoxProRecord(CSNS::Record^);
+
+        // library access only:
+        // get the C# record (used by ManagedFoxProBuffer::AddRecord() )
+        gcroot<CSNS::Record^> GetCSRecord();
 
 		int Length();
 
@@ -39,7 +43,7 @@ namespace ManagedWrappers
 
         void GetBlob(unsigned char* dest);
         unsigned char* GetCompleteRecord();
-        void SetCompleteRecord(const char* blob);
+        void SetCompleteRecord(unsigned char* blob);
 
 
 		void SetDeleted(bool);

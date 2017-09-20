@@ -19,6 +19,11 @@ ManagedFoxProRecord::~ManagedFoxProRecord()
     delete this;
 }
 
+gcroot<CSNS::Record^> ManagedFoxProRecord::GetCSRecord()
+{
+    return _record;
+}
+
 
 int ManagedFoxProRecord::Length()
 {
@@ -52,23 +57,32 @@ unsigned char* ManagedFoxProRecord::GetCompleteRecord()
 {
     if (_delBlob) delete[] _blob;
     auto blob = _record->GetCompleteRecord();
-    _blob = new unsigned char[blob->Length];
+    _blob = new unsigned char[blob->Length + 1];
+    _delBlob = true;
 
-    for (int i = 0; i < blob->Length; i++)
+    // add deleted flag to the complete record data
+    _blob[0] = (_record->Deleted) ? '*' : ' ';
+
+    for (int i = 1; i < blob->Length + 1; i++)
     {
-        _blob[i] = blob[i];
+        _blob[i] = blob[i-1];
     }
 
     return _blob;
 }
 
-void ManagedFoxProRecord::SetCompleteRecord(const char* blob)
+void ManagedFoxProRecord::SetCompleteRecord(unsigned char* blob)
 {
+    // read deleted flag from input
+    this->SetDeleted((blob[0] == '*') ? true : false);
+
+    // build up a list of all the bytes from input
     auto bList = gcnew List<unsigned char>();
-    for (unsigned int i = 0; i < strlen(blob); i++) {
+    for (unsigned int i = 1; i < _record->Length + 1; i++) {
         bList->Add(blob[i]);
     }
-	_record->SetCompleteRecord(bList->ToArray());
+
+    _record->SetCompleteRecord(bList->ToArray());
 }
 
 void ManagedFoxProRecord::SetDeleted(bool del)

@@ -24,7 +24,7 @@ CFoxProBuffer* AcsNetLib::FoxPro::CreateFoxProBuffer(char* dbfFile)
  * -------------------------------------*/
 
 // protected contructor/destructor 
-// force creation by CreateBuffer()
+// force creation by CreateBuffer() for memory safety
 ManagedFoxProBuffer::ManagedFoxProBuffer(FoxProBuffer^ buf) : _buffer(buf) {}
 ManagedFoxProBuffer::~ManagedFoxProBuffer() { delete this; }
 
@@ -68,11 +68,13 @@ IRecord* ManagedFoxProBuffer::operator[] (int index)
 	return rec;
 }
 
-void ManagedFoxProBuffer::AddRecord(CFoxProRecord* record)
+void ManagedFoxProBuffer::AddRecord(IRecord* record)
 {
-    // todo
-
-    // _buffer->AddRecord();
+    // cast the native record interface to managed type, get the C# record from it,
+    //  then add the record to C#'s buffer
+    auto mfpr = (ManagedFoxProRecord*)record;
+    auto csrec = mfpr->GetCSRecord();
+    _buffer->AddRecord(csrec);
 }
 
 void ManagedFoxProBuffer::RemoveRecord(int index)
@@ -80,11 +82,11 @@ void ManagedFoxProBuffer::RemoveRecord(int index)
     _buffer->Records->RemoveAt(index);
 }
 
-CFoxProRecord* ManagedFoxProBuffer::RecordFactory()
+IRecord* ManagedFoxProBuffer::CreateNewRecord()
 {
-    Record^ new_record = _buffer->RecordFactory(' ');
+    Record^ new_record = _buffer->CreateNewRecord(' ');
            
-    return 0; // todo // ManagedFoxProRecord::CreateRecord();
+    return new ManagedFoxProRecord(new_record);
 }
 
 int ManagedFoxProBuffer::NumFields()
