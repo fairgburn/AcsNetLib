@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\wrapper">
+      <UniqueIdentifier>{d6756843-e63b-4cfb-9280-7dfe37f22766}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\util">
+      <UniqueIdentifier>{1305ed29-705e-400c-b148-125602e1bd12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{efb8f46c-d15b-4ebc-9316-71a094c8a9b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\wrapper">
+      <UniqueIdentifier>{4a8d0eb1-b28a-4fa5-937e-d7240b6b6b1a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\CSQLite.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FoxPro.NET.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wrapper\ManagedFoxProBuffer.h">
+      <Filter>include\wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wrapper\ManagedFoxProRecord.h">
+      <Filter>include\wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="include\util\util.h">
+      <Filter>include\util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\util\util.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper\ManagedFoxProBuffer.cpp">
+      <Filter>src\wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper\ManagedFoxProRecord.cpp">
+      <Filter>src\wrapper</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
