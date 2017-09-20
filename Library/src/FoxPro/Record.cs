@@ -45,9 +45,10 @@ namespace AcsLib.FoxPro
             get
             {
                 int len = 0;
-                foreach (var field in _fields)
+                foreach (var cell in _data.Values)
                 {
-                    len += field.Length;
+                    var bytes = (byte[])cell;
+                    len += bytes.Length;
                 }
                 return len;
             }
@@ -55,7 +56,10 @@ namespace AcsLib.FoxPro
 
         //-------------------------------------------------
         // copy this record using a private contructor
-        public Record Copy() { return new Record(_data); }
+        public Record Copy()
+        {
+            return new Record(_data) { Fields = _fields };
+        }
         private Record(OrderedDictionary d)
         {
             _data = new OrderedDictionary();
@@ -100,7 +104,7 @@ namespace AcsLib.FoxPro
         public string GetString(string s) { return this[s].ToUTF8(); }
 
         // return data a single byte array
-        public byte[] GetBlob()
+        public byte[] GetCompleteRecord()
         {
             var result = new List<byte>();
 
@@ -142,18 +146,30 @@ namespace AcsLib.FoxPro
         }
 
         // modify whole record at once
-        public void SetBlob(byte[] blob)
+        public void SetCompleteRecord(byte[] newData)
         {
-            var new_data = new OrderedDictionary();
-
             try
             {
-                foreach (var field in _fields)
+                if (newData.Length != this.Length)
                 {
-                    new_data[field.Name] =  blob.SubRange(field.Offset, field.Length);
+                    throw new ArgumentException("length mismatch: record is " + this.Length + " bytes (you gave " + newData.Length + ")");
                 }
 
-                _data = new_data;
+                var new_data_table = new OrderedDictionary();
+                int cursor = 0;
+                foreach (var key in _data.Keys)
+                {
+                    // get value from newData to put in each cell of the record
+                    int field_length = ((byte[])_data[key]).Length;
+                    byte[] new_value = newData.SubRange(cursor, field_length);
+
+                    // update stored record data
+                    new_data_table[key] = new_value;
+
+                    // move cursor along input value for next cell
+                    cursor += field_length;
+                }
+                _data = new_data_table;
             }
 
             // if an exception is caught, throw it out to the caller and let them handle it
