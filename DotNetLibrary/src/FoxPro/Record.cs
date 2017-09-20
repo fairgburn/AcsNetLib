@@ -19,7 +19,12 @@ namespace AcsLib.FoxPro
         #region internal
 
         // default constructor
-        public Record() { _data = new OrderedDictionary(); }
+        public Record()
+        {
+            _data = new OrderedDictionary();
+            DefaultFill = (byte)' ';
+            Deleted = false;
+        }
 
         // data from DBF
         private OrderedDictionary _data;
@@ -34,10 +39,10 @@ namespace AcsLib.FoxPro
 
         // byte used to fill empty records and pad client inputs that are too short (default: space)
         // set by FoxProBuffer.RecordFactory()
-        public byte DefaultFill { get; set; } = (byte)' ';
+        public byte DefaultFill { get; set; }
 
         // DBF deleted flag
-        public bool Deleted { get; set; } = false;
+        public bool Deleted { get; set; }
 
         // length of record in bytes
         public int Length

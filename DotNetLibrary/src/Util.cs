@@ -32,7 +32,7 @@ namespace AcsLib
         public static string GetDirectoryFromPath(string path)
         {
             string file = GetFileFromPath(path);                        // C:\inv\invdata\file.dbf ==> file.dbf
-            return path.Replace($"\\{file}", string.Empty); // result ==> C:\inv\invdata (stripped out `\file.dbf`)
+            return path.Replace("\\" + file, string.Empty); // result ==> C:\inv\invdata (stripped out `\file.dbf`)
         }
 
     }

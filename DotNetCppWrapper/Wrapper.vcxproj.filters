@@ -44,9 +44,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\CSQLite.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\util\util.cpp">
       <Filter>src\util</Filter>
     </ClCompile>

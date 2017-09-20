@@ -37,8 +37,8 @@ namespace AcsLib.FoxPro
             _dbfPath = file;
 
             _recover = true;
-            _recoveryDir = $"{System.IO.Directory.GetCurrentDirectory()}\\.recover";
-            _recoveryFile = $"{Math.Abs(_dbfPath.GetHashCode())}.dbf_recover";
+            _recoveryDir = System.IO.Directory.GetCurrentDirectory() + "\\.recover";
+            _recoveryFile = Math.Abs(_dbfPath.GetHashCode()) + ".dbf_recover";
             
             Open();
         }
@@ -49,7 +49,7 @@ namespace AcsLib.FoxPro
             if (_recover)
             {
                 System.IO.Directory.CreateDirectory(_recoveryDir);
-                SaveAs($"{_recoveryDir}\\{_recoveryFile}");
+                SaveAs(_recoveryDir + "\\" + _recoveryFile);
             }
         }
         
@@ -92,7 +92,7 @@ namespace AcsLib.FoxPro
         public void Open()
         {
             // check if a recovery file exists
-            if (System.IO.File.Exists($"{_recoveryDir}\\{_recoveryFile}"))
+            if (System.IO.File.Exists(_recoveryDir + "\\" + _recoveryFile))
             {
                 // TODO
             }
@@ -136,7 +136,11 @@ namespace AcsLib.FoxPro
         //---------------------------------------------------------------
         // Property: access records from DBF
         // allows adding records by doing aBuffer.Records.Add(aRecord)
-        public List<Record> Records => _records;
+        public List<Record> Records
+        {
+            get { return _records; }
+        }
+
         public Record GetRecord(int index)
         {
             return Records[index];
@@ -144,7 +148,11 @@ namespace AcsLib.FoxPro
 
         //-----------------------------------
         // Property: access fields from DBF
-        public List<Field> Fields => _fields;
+        public List<Field> Fields
+        {
+            get { return _fields; }
+            set { _fields = value; }
+        }
 
         //--------------------------------------------
         // AddRecord: put another record in the buffer

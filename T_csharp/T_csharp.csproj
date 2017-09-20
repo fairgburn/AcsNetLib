@@ -49,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Library\AcsLib.NET.csproj">
+    <ProjectReference Include="..\DotNetLibrary\DotNetLibrary.csproj">
       <Project>{70aed991-a1d8-44c3-bca9-f5050a7e6ddb}</Project>
-      <Name>AcsLib.NET</Name>
+      <Name>DotNetLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

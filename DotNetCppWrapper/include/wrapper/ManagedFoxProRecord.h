@@ -23,10 +23,6 @@ namespace ManagedWrappers
         unsigned char* _blob;
         bool _delBlob; // flag to delete blob (unmanaged memory allocation)
 
-        // handle for new record (only used if creating a new record)
-        bool _new = false;
-        gcroot<CSNS::Record^> _newRecord;
-
     public:
         // Constructor: wrap a given C# record
         ManagedFoxProRecord(CSNS::Record^);
