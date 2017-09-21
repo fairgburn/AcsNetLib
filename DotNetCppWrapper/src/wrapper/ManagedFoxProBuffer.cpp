@@ -25,8 +25,18 @@ CFoxProBuffer* AcsNetLib::FoxPro::CreateFoxProBuffer(char* dbfFile)
 
 // protected contructor/destructor 
 // force creation by CreateBuffer() for memory safety
-ManagedFoxProBuffer::ManagedFoxProBuffer(FoxProBuffer^ buf) : _buffer(buf) {}
-ManagedFoxProBuffer::~ManagedFoxProBuffer() { delete this; }
+ManagedFoxProBuffer::ManagedFoxProBuffer(FoxProBuffer^ buf) : _buffer(buf)
+{
+	_records = new ManagedFoxProRecord*[_buffer->Records->Count];
+	for (int i = 0; i < _buffer->Records->Count; i++)
+	{
+		_records[i] = new ManagedFoxProRecord(_buffer->Records[i]);
+	}
+}
+ManagedFoxProBuffer::~ManagedFoxProBuffer()
+{
+	delete this;
+}
 
 // use factory model to create instances
 CFoxProBuffer* ManagedFoxProBuffer::CreateBuffer(char* dbfFile)

@@ -9,6 +9,7 @@ namespace AcsLib.FoxPro
 {
     public class FoxProBuffer
     {
+        
 
         /*------------------------------------------
             | internal data and constructor |

@@ -2,6 +2,7 @@
 
 #include <gcroot.h>
 #include "FoxPro.NET.h"
+#include "ManagedFoxProRecord.h"
 
 namespace ManagedWrappers
 {
@@ -14,6 +15,8 @@ namespace ManagedWrappers
 
         // handle to C# buffer
         gcroot<CSNS::FoxProBuffer^> _buffer;
+
+		ManagedFoxProRecord** _records;
 
     public:
         // use factory model to create instances

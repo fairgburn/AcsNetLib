@@ -11,7 +11,6 @@ namespace ManagedWrappers
     class ManagedFoxProRecord : public IRecord
     {
     protected:
-        ~ManagedFoxProRecord();
 
         // handle to parent C# buffer
         gcroot<CSNS::Record^> _record;
@@ -26,6 +25,7 @@ namespace ManagedWrappers
     public:
         // Constructor: wrap a given C# record
         ManagedFoxProRecord(CSNS::Record^);
+		~ManagedFoxProRecord();
 
         // library access only:
         // get the C# record (used by ManagedFoxProBuffer::AddRecord() )

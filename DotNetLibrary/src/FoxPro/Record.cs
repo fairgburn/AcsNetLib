@@ -13,6 +13,11 @@ namespace AcsLib.FoxPro
     // data structure for storing info about a record from the DBF
     public class Record
     {
+        public void msgbox(string msg)
+        {
+            System.Windows.Forms.MessageBox.Show(msg);
+        }
+
         /*-----------------------
             internal data
         ------------------------*/

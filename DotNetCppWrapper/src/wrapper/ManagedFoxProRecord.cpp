@@ -15,7 +15,7 @@ using ManagedWrappers::ManagedFoxProRecord;
 ManagedFoxProRecord::ManagedFoxProRecord(CSNS::Record^ rec) : _record(rec) { _delBlob = false; }
 ManagedFoxProRecord::~ManagedFoxProRecord()
 {
-    if (_delBlob) delete[] _blob;
+	if (_delBlob) delete[] _blob;
     delete this;
 }
 
