@@ -34,6 +34,9 @@ namespace util
     // convert char* to .NET managed string
     String^ CharArrayToManagedString(char*);
 
+	// fill an array with a default value
+	void FillArray(void* arr, void* value, int arr_size);
+
 
 }
 

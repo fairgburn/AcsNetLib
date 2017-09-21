@@ -19,7 +19,6 @@ namespace ManagedWrappers
 
         // native char array for GetCompleteRecord()
         unsigned char* _blob;
-        bool _delBlob; // flag to delete blob (unmanaged memory allocation)
 
     public:
         // Constructor: wrap a given C# record

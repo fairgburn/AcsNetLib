@@ -22,34 +22,92 @@ CFoxProBuffer* AcsNetLib::FoxPro::CreateFoxProBuffer(char* dbfFile)
  * class implementation
  * -------------------------------------*/
 
+ //-------------------------------------------------------------------------------
 // protected contructor/destructor 
 // force creation by CreateBuffer() for memory safety
+//
 ManagedFoxProBuffer::ManagedFoxProBuffer(FoxProBuffer^ buf) : _buffer(buf)
 {
-	// allocate array of record pointers
-	_records = new ManagedRecordPtr[_buffer->Records->Count];
-	for (int i = 0; i < _buffer->Records->Count; i++)
+	// determine size of _records; always a power of 2
+	// start at 2^0 (1), increase exponent (left shift) until all C# records will fit
+	int num_records = NumRecords();
+
+	_records_size = 1;
+	while (_records_size <= num_records)
+		_records_size <<= 1;
+
+	// initialize array of record wrappers
+	_records = new ManagedRecordPtr[_records_size];
+	for (int i = 0; i < _records_size; i++)
 	{
-		_records[i] = new ManagedFoxProRecord(_buffer->Records[i]);
+		// create a new wrapper for each existing record in C#
+		// initialize extra elements to nullptr
+		//   - _records_size is guaranteed to be bigger than value we get from NumRecords(),
+		//     so there will definitely be extra elements
+		_records[i] = (i < num_records) ? new ManagedFoxProRecord(_buffer->Records[i]) : nullptr;
 	}
 }
+
 ManagedFoxProBuffer::~ManagedFoxProBuffer()
 {
-	Console::WriteLine("buffer destructor");
 	// clean the record wrappers
 	if (_records != nullptr)
 	{
 		// deallocate the individual pointers
-		for (int i = 0; i < _buffer->Records->Count; i++) {
-			delete _records[i];
+		for (int i = 0; i < _records_size; i++) {
+			ManagedRecordPtr rec = _records[i];
+			if (rec != nullptr)
+				delete rec;
 		}
 
 		// deallocate pointer array
 		delete[] _records;
 	}
 
+	// buffer is always dynamically allocated, so delete it too
 	delete this;
 }
+//-------------------------------------------------------------------------------
+
+
+/*--------------------
+* private methods
+*--------------------*/
+
+// grow record pointer array (powers of 2)
+void ManagedFoxProBuffer::GrowRecordPtrArray()
+{
+	if (_records == nullptr) return;
+
+	// double array size and allocate memory for larger array
+	int new_size = _records_size << 1;
+	ManagedRecordPtr* new_array = new ManagedRecordPtr[new_size];
+
+	// store existing pointers, set extra elements to nullptr
+	for (int i = 0; i < new_size; i++) {
+		new_array[i] = (i < _records_size) ? _records[i] : nullptr;
+	}
+
+	// move _records pointer to the new array, update _records_size
+	delete[] _records;
+	_records = new_array;
+	_records_size = new_size;
+}
+
+// shrink record pointer array (powers of 2)
+void ManagedFoxProBuffer::ShrinkRecordPtrArray()
+{
+	if (_records == nullptr) return;
+
+	// same algorithm as above, but with opposite goal
+	int new_size = _records_size >> 1;
+
+}
+
+
+/*------------------------------------------------------------------------------
+* public methods (implementation of CFoxProBuffer interface from FoxPro.NET.h)
+*------------------------------------------------------------------------------*/
 
 // use factory model to create instances
 CFoxProBuffer* ManagedFoxProBuffer::CreateBuffer(char* dbfFile)
@@ -86,7 +144,7 @@ IRecord* ManagedFoxProBuffer::GetRecord(int index)
 	// return new ManagedFoxProRecord(_buffer->GetRecord(index));
 	//   - have to change so client can hold persistent pointer to a record
 
-	// new way: return pointer to ManagedFoxProRecord that's managed internally by the wrapper
+	// new way: return pointer to ManagedFoxProRecord that is managed internally by the wrapper
 	return _records[index];
 }
 
@@ -126,5 +184,3 @@ int ManagedFoxProBuffer::NumRecords()
 {
     return _buffer->Records->Count;
 }
-
-

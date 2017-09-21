@@ -12,12 +12,21 @@ using ManagedWrappers::ManagedFoxProRecord;
 * class implementation
 * -------------------------------------*/
 
-ManagedFoxProRecord::ManagedFoxProRecord(CSNS::Record^ rec) : _record(rec) { _delBlob = false; }
+//----------------------------------------------------------------------------------------------------
+// constructor: set _blob to nullptr until it is told to store data
+// destructor: deallocate _blob, unless it is nullptr
+//
+ManagedFoxProRecord::ManagedFoxProRecord(CSNS::Record^ rec) : _record(rec) { _blob = nullptr; }
+
 ManagedFoxProRecord::~ManagedFoxProRecord()
 {
-	if (_delBlob) delete[] _blob;
+	if (_blob != nullptr) delete[] _blob;
     delete this;
 }
+//
+// note on terminology: "blob" is an abbreviation for "Binary Large OBject" -- in C#,
+//   the "blob" is stored as an array of all the binary data from the record
+//----------------------------------------------------------------------------------------------------
 
 gcroot<CSNS::Record^> ManagedFoxProRecord::GetCSRecord()
 {
@@ -48,6 +57,7 @@ void ManagedFoxProRecord::Set(char* field, char* new_value)
     _record->Set(net_field, net_new_value);
 }
 
+// replaced by GetCompleteRecord
 void ManagedFoxProRecord::GetBlob(unsigned char* dest)
 {
     return;
@@ -55,10 +65,14 @@ void ManagedFoxProRecord::GetBlob(unsigned char* dest)
 
 unsigned char* ManagedFoxProRecord::GetCompleteRecord()
 {
-    if (_delBlob) delete[] _blob;
+	// deallocate _blob if it has already been created
+    if (_blob != nullptr)
+		delete[] _blob;
+
+	// get the complete record data from C#
+	// allocate _blob to the right size for conversion from C# byte array to native C++ array
     auto blob = _record->GetCompleteRecord();
     _blob = new unsigned char[blob->Length + 1];
-    _delBlob = true;
 
     // add deleted flag to the complete record data
     _blob[0] = (_record->Deleted) ? '*' : ' ';

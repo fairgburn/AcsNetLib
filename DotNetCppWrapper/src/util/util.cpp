@@ -23,6 +23,12 @@ String^ util::CharArrayToManagedString(char* charry)
     return gcnew String(charry);
 }
 
+//--- fill an array with a default value --//
+void util::FillArray(void* arr, void* value, int arr_size)
+{
+	
+}
+
 
 
 
