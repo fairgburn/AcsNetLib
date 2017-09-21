@@ -7,8 +7,7 @@ using namespace System;
 
 namespace ManagedWrappers
 {
-
-    class ManagedFoxProRecord : public IRecord
+	class ManagedFoxProRecord : public IRecord
     {
     protected:
 
@@ -45,5 +44,8 @@ namespace ManagedWrappers
 		void SetDeleted(bool);
 		bool IsDeleted();
     };
+
+	// pointer typedef for code readability
+	typedef ManagedFoxProRecord* ManagedRecordPtr;
 
 }

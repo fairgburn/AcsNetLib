@@ -10,7 +10,6 @@ using namespace AcsNetLib::FoxPro;
 using ManagedWrappers::ManagedFoxProBuffer;
 using ManagedWrappers::ManagedFoxProRecord;
 
-
 // native interface:
 // create a buffer in native C++
 CFoxProBuffer* AcsNetLib::FoxPro::CreateFoxProBuffer(char* dbfFile)
@@ -27,7 +26,8 @@ CFoxProBuffer* AcsNetLib::FoxPro::CreateFoxProBuffer(char* dbfFile)
 // force creation by CreateBuffer() for memory safety
 ManagedFoxProBuffer::ManagedFoxProBuffer(FoxProBuffer^ buf) : _buffer(buf)
 {
-	_records = new ManagedFoxProRecord*[_buffer->Records->Count];
+	// allocate array of record pointers
+	_records = new ManagedRecordPtr[_buffer->Records->Count];
 	for (int i = 0; i < _buffer->Records->Count; i++)
 	{
 		_records[i] = new ManagedFoxProRecord(_buffer->Records[i]);
@@ -35,6 +35,19 @@ ManagedFoxProBuffer::ManagedFoxProBuffer(FoxProBuffer^ buf) : _buffer(buf)
 }
 ManagedFoxProBuffer::~ManagedFoxProBuffer()
 {
+	Console::WriteLine("buffer destructor");
+	// clean the record wrappers
+	if (_records != nullptr)
+	{
+		// deallocate the individual pointers
+		for (int i = 0; i < _buffer->Records->Count; i++) {
+			delete _records[i];
+		}
+
+		// deallocate pointer array
+		delete[] _records;
+	}
+
 	delete this;
 }
 
@@ -62,14 +75,19 @@ void ManagedFoxProBuffer::Save()
 
 void ManagedFoxProBuffer::SaveAs(char* outputFile)
 {
-    String^ net_string = gcnew String(outputFile);
-    _buffer->SaveAs(net_string);
+    _buffer->SaveAs(gcnew String(outputFile));
 }
 
 IRecord* ManagedFoxProBuffer::GetRecord(int index)
 {
-    // return ManagedFoxProRecord::CreateRecord(_buffer, index);
-    return new ManagedFoxProRecord(_buffer->GetRecord(index));
+    // old way: create new record wrapper, let destructor handle deallocation when
+	//   it goes out of scope in client code
+	//
+	// return new ManagedFoxProRecord(_buffer->GetRecord(index));
+	//   - have to change so client can hold persistent pointer to a record
+
+	// new way: return pointer to ManagedFoxProRecord that's managed internally by the wrapper
+	return _records[index];
 }
 
 IRecord* ManagedFoxProBuffer::operator[] (int index)
