@@ -33,7 +33,6 @@ namespace ManagedWrappers
 		char* Get(char* field);
         void Set(char* field, char* new_value);
 
-        void GetBlob(unsigned char* dest);
         unsigned char* GetCompleteRecord();
         void SetCompleteRecord(unsigned char* blob);
 

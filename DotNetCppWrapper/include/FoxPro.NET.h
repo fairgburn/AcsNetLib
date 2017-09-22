@@ -65,8 +65,9 @@ namespace AcsNetLib
             virtual int NumRecords() = 0;
         };
 
-        // Library function: create a new buffer
+        // Library function: create a new buffer wrapper
 		// defined in ManagedFoxProBuffer.cpp 
+		// (wrapper classes are defined in src/wrapper/ and include/wrapper/ )
         DLL CFoxProBuffer* CreateFoxProBuffer(char* dbfFile);
 
 		/*______________________________________________________________*/

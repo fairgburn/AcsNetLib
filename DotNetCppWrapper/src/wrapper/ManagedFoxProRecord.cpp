@@ -83,10 +83,7 @@ void ManagedFoxProRecord::Set(char* field, char* new_value)
 }
 
 // replaced by GetCompleteRecord
-void ManagedFoxProRecord::GetBlob(unsigned char* dest)
-{
-    return;
-}
+
 
 unsigned char* ManagedFoxProRecord::GetCompleteRecord()
 {

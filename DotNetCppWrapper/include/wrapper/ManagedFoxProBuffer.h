@@ -60,7 +60,7 @@ namespace ManagedWrappers
 	* public methods (implementation of CFoxProBuffer interface from FoxPro.NET.h)
 	*------------------------------------------------------------------------------*/
     public:
-        // use factory model to create instances
+        // create native buffer instances (needed because the constructor takes a non-native parameter)
         static AcsNetLib::FoxPro::IBufferPtr CreateBuffer(char* dbfFile);
 
         void Open();
