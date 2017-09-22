@@ -58,9 +58,7 @@ namespace AcsNetLib
             //virtual FieldArray GetFields() = 0;
             //virtual CRecordList* GetRecords() = 0;
 
-            // let C# create and manage a new record so we know the size and
-            // memory is handled properly (internally, record items are byte arrays that
-            // must be exactly the right size every time or the file will be corrupted)
+            // generate a new record in C# and return a pointer to its wrapper
             virtual CFoxProRecord* CreateNewRecord() = 0;
 
             virtual int NumFields() = 0;

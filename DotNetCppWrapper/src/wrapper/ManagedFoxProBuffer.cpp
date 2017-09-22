@@ -170,19 +170,19 @@ void ManagedFoxProBuffer::SaveAs(char* outputFile)
     _buffer->SaveAs(gcnew String(outputFile));
 }
 
-IRecord* ManagedFoxProBuffer::GetRecord(int index)
+IRecordPtr ManagedFoxProBuffer::GetRecord(int index)
 {
     // old way: create new record wrapper, let destructor handle deallocation when
 	//   it goes out of scope in client code
 	//
 	// return new ManagedFoxProRecord(_buffer->GetRecord(index));
-	//   - have to change so client can hold persistent pointer to a record
-
-	// new way: return pointer to ManagedFoxProRecord that is managed internally by the wrapper
+	//   - have to change so client can hold/change a persistent pointer to a record
+	//
+	// new way: wrapper performs and tracks all memory allocations internally
 	return _records[index];
 }
 
-IRecord* ManagedFoxProBuffer::operator[] (int index)
+IRecordPtr ManagedFoxProBuffer::operator[] (int index)
 {
 	IRecord* rec = this->GetRecord(index);
 	return rec;
@@ -202,7 +202,7 @@ void ManagedFoxProBuffer::RemoveRecord(int index)
     _buffer->Records->RemoveAt(index);
 }
 
-IRecord* ManagedFoxProBuffer::CreateNewRecord()
+IRecordPtr ManagedFoxProBuffer::CreateNewRecord()
 {
     Record^ new_record = _buffer->CreateNewRecord(' ');
            

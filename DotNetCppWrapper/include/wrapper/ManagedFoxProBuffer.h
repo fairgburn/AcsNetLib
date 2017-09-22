@@ -37,12 +37,12 @@ namespace ManagedWrappers
 		// keep size a power of 2
 		//   - grow the array by left-shifting the size
 		//   - shrink the array by right-shifting the size
-		// this greatly reduces the time spent resizing the array in memory
+		// (for efficiency and to avoid making a separate data structure)
 		//
 		void GrowRecordPtrArray();
 		void ShrinkRecordPtrArray();
-		// 
-		// example (assume original size is 8, and the array is full):
+		// example
+		// (assume original size is 8, and the array is full):
 		/*
 		     AddRecord(my_new_record); // _records_size is 8 and the array is already full
 		         // AddRecord() will see this and call GrowRecordPtrArray()
@@ -50,8 +50,10 @@ namespace ManagedWrappers
 		*/
 
 
-		// initialize the array of record pointers (_records)
-		// if _records != nullptr, then delete it and make a new array to wrap the current C# records
+		// initialize/refresh the array of record pointers (_records)
+		//
+		// if _records == nullptr, then allocate it and a wrapper for each C# record
+		// else, update tracked pointers
 		void UpdateRecordPtrArray();
 		
 	/*------------------------------------------------------------------------------
