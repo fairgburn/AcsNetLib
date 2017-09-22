@@ -18,8 +18,8 @@
     #define EXP_IMP
     
     // library internal
-    #define IBuffer AcsNetLib::FoxPro::CFoxProBuffer // native buffer interface
-    #define IRecord AcsNetLib::FoxPro::CFoxProRecord // native record interface
+    //#define IBuffer AcsNetLib::FoxPro::CFoxProBuffer // native buffer interface
+    //#define IRecord AcsNetLib::FoxPro::CFoxProRecord // native record interface
 	#define CSNS AcsLib::FoxPro                      // C# namespace
 #else
     #define DLL __declspec(dllimport)
@@ -85,7 +85,6 @@ namespace AcsNetLib
 		/*______________________________________________________________*/
 
 
-
         /*----------------------------------------------------------*/
         // interface to AcsLib.FoxPro.Record (C# library)
         /*----------------------------------------------------------*/
@@ -115,26 +114,6 @@ namespace AcsNetLib
         /*__________________________________________________________*/
 
 
-		// REMOVED
-		// handled by CFoxProBuffer now
-		/*----------------------------------------------------------*/
-		// list of CFoxProRecords
-		//  - wrapper back to C# list
-		/*----------------------------------------------------------*/
-		/*struct DLL CRecordList
-		{
-			
-
-			// access
-			virtual CFoxProRecord* GetAt(int index) = 0;
-			virtual CFoxProRecord* operator[] (int index) = 0;
-			virtual void Add(CFoxProRecord* record) = 0;
-            virtual int Count() = 0; // number of records
-		};*/
-		/*__________________________________________________________*/
-		/*__________________________________________________________*/
-
-
 		/*-------------------------------------------------------------------*/
 		// data structure for FoxPro fields
 		/*-------------------------------------------------------------------*/
@@ -152,9 +131,18 @@ namespace AcsNetLib
 		/*___________________________________________________________________*/
 		/*___________________________________________________________________*/
 
+		// optional shorthand typedefs for FoxPro interfaces
+		//typedef CFoxProBuffer fpb;
 
 
-		
+		// optional shorthand typedefs for FoxPro interfaces
+		typedef CFoxProBuffer IBuffer;
+		typedef CFoxProRecord IRecord;
 
+		typedef CFoxProBuffer* IBufferPtr;
+		typedef CFoxProRecord* IRecordPtr;
     }
+
+
+	
 }

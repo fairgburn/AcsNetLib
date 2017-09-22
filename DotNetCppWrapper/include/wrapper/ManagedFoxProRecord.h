@@ -7,15 +7,13 @@ using namespace System;
 
 namespace ManagedWrappers
 {
-	class ManagedFoxProRecord : public IRecord
+	
+	class ManagedFoxProRecord : public AcsNetLib::FoxPro::IRecord
     {
     protected:
 
         // handle to parent C# buffer
         gcroot<CSNS::Record^> _record;
-
-        // which record in buffer we're looking at
-        int _index;
 
         // native char array for GetCompleteRecord()
         unsigned char* _blob;

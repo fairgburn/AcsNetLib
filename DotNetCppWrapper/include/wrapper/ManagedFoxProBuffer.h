@@ -7,7 +7,7 @@
 namespace ManagedWrappers
 {
 
-    class ManagedFoxProBuffer : public IBuffer
+    class ManagedFoxProBuffer : public AcsNetLib::FoxPro::IBuffer
     {
 
 	/*--------------------
@@ -59,19 +59,19 @@ namespace ManagedWrappers
 	*------------------------------------------------------------------------------*/
     public:
         // use factory model to create instances
-        static IBuffer* CreateBuffer(char* dbfFile);
+        static AcsNetLib::FoxPro::IBufferPtr CreateBuffer(char* dbfFile);
 
         void Open();
         void Close();
         void Save();
         void SaveAs(char* outputFile);
 
-        IRecord* GetRecord(int index);
-		IRecord* operator[] (int index);
+		AcsNetLib::FoxPro::IRecordPtr GetRecord(int index);
+		AcsNetLib::FoxPro::IRecordPtr operator[] (int index);
 
-        void AddRecord(IRecord* record);
+        void AddRecord(AcsNetLib::FoxPro::IRecordPtr record);
         void RemoveRecord(int index);
-        IRecord* CreateNewRecord();
+		AcsNetLib::FoxPro::IRecordPtr CreateNewRecord();
 
         int NumFields();
         int NumRecords();
