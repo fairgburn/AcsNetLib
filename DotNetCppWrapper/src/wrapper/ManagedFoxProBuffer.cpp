@@ -214,11 +214,21 @@ IRecordPtr ManagedFoxProBuffer::operator[] (int index)
 
 void ManagedFoxProBuffer::AddRecord(IRecordPtr record)
 {
+	// cast the native interface to ManagedRecordPtr
+	// safe_cast throws an exception if the cast fails
+	auto rec_wrapper = (ManagedRecordPtr)record;
+
+	// get C# record from the wrapper, add it to C# buffer
+	_buffer->AddRecord(rec_wrapper->GetCSRecord());
+
+	// also update the wrapper records 
+	_vectRecords.push_back(rec_wrapper);
+
     // cast the native record interface to managed type, get the C# record from it,
     //  then add the record to C#'s buffer
-    auto mfpr = (ManagedFoxProRecord*)record;
+    /*auto mfpr = (ManagedRecordPtr)record;
     auto csrec = mfpr->GetCSRecord();
-    _buffer->AddRecord(csrec);
+    _buffer->AddRecord(csrec);*/
 }
 
 void ManagedFoxProBuffer::RemoveRecord(int index)
