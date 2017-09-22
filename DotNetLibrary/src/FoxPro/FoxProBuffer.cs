@@ -40,8 +40,9 @@ namespace AcsLib.FoxPro
             _recover = true;
             _recoveryDir = System.IO.Directory.GetCurrentDirectory() + "\\.recover";
             _recoveryFile = Math.Abs(_dbfPath.GetHashCode()) + ".dbf_recover";
-            
+
             Open();
+            
         }
 
         // finalizer: save recovery file if Close() was not called
@@ -153,6 +154,11 @@ namespace AcsLib.FoxPro
         {
             get { return _fields; }
             set { _fields = value; }
+        }
+
+        public Field GetField(int index)
+        {
+            return _fields[index];
         }
 
         //--------------------------------------------
