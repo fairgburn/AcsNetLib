@@ -42,7 +42,7 @@ namespace ManagedWrappers
 		bool IsDeleted();
     };
 
-	// pointer typedef for code readability
+	// pointer typedef
 	typedef ManagedFoxProRecord* ManagedRecordPtr;
 
 }

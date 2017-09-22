@@ -8,9 +8,34 @@ using namespace System;
 using namespace System::Collections::Generic;
 using ManagedWrappers::ManagedFoxProRecord;
 
-/*--------------------------------------
-* class implementation
-* -------------------------------------*/
+/*------------------------------------------------------
+* class ManagedFoxProRecord
+
+Protected
+----------------
+	gcroot<CSNS::Record^> _record;
+	unsigned char* _blob;
+
+Public
+------------------
+	ManagedFoxProRecord(CSNS::Record^);
+	~ManagedFoxProRecord();
+
+	gcroot<CSNS::Record^> GetCSRecord();
+
+	int Length();
+
+	char* Get(int index);
+	char* Get(char* field);
+	void Set(char* field, char* new_value);
+
+	void GetBlob(unsigned char* dest);
+	unsigned char* GetCompleteRecord();
+	void SetCompleteRecord(unsigned char* blob);
+
+	void SetDeleted(bool);
+	bool IsDeleted();
+------------------------------------------------------*/
 
 //----------------------------------------------------------------------------------------------------
 // constructor: set _blob to nullptr until it is told to store data

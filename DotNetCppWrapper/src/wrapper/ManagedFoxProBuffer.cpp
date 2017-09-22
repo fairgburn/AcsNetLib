@@ -188,7 +188,7 @@ IRecord* ManagedFoxProBuffer::operator[] (int index)
 	return rec;
 }
 
-void ManagedFoxProBuffer::AddRecord(IRecord* record)
+void ManagedFoxProBuffer::AddRecord(IRecordPtr record)
 {
     // cast the native record interface to managed type, get the C# record from it,
     //  then add the record to C#'s buffer
