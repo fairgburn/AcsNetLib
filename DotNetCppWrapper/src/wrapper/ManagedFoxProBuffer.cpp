@@ -1,4 +1,5 @@
 #include <gcroot.h>
+#include <vector>
 
 #include "FoxPro.NET.h"
 #include "ManagedFoxProBuffer.h"
@@ -12,7 +13,7 @@ using ManagedWrappers::ManagedFoxProRecord;
 
 // native interface:
 // create a buffer in native C++
-CFoxProBuffer* AcsNetLib::FoxPro::CreateFoxProBuffer(char* dbfFile)
+IBufferPtr AcsNetLib::FoxPro::CreateFoxProBuffer(char* dbfFile)
 {
     return ManagedFoxProBuffer::CreateBuffer(dbfFile);
 }
@@ -56,15 +57,20 @@ Public
 	int NumRecords();
 -------------------------------------------------------------*/
 
- //-------------------------------------------------------------------------------
+ //------------------------------------------------------------------------------------------------
 // protected contructor/destructor 
-// force creation by CreateBuffer() for memory safety
+// force creation by CreateBuffer() since the constructor takes a non-native type as a parameter
 //
 ManagedFoxProBuffer::ManagedFoxProBuffer(FoxProBuffer^ buf) : _buffer(buf)
 {
+	// store a wrapper for each C# record
+	for each (auto rec in _buffer->Records) {
+		_vectRecords.push_back(new ManagedFoxProRecord(rec));
+	}
+
 	// determine size of _records; always a power of 2
 	// start at 2^0 (1), increase exponent (left shift) until all C# records will fit
-	int num_records = NumRecords();
+	/*int num_records = NumRecords();
 
 	_records_size = 1;
 	while (_records_size <= num_records)
@@ -79,13 +85,22 @@ ManagedFoxProBuffer::ManagedFoxProBuffer(FoxProBuffer^ buf) : _buffer(buf)
 		//   - _records_size is guaranteed to be bigger than value we get from NumRecords(),
 		//     so there will definitely be extra elements
 		_records[i] = (i < num_records) ? new ManagedFoxProRecord(_buffer->Records[i]) : nullptr;
-	}
+
+		
+	}*/
 }
 
 ManagedFoxProBuffer::~ManagedFoxProBuffer()
 {
+	// deallocate all record wrappers
+	while (!_vectRecords.empty()) {
+		IRecordPtr rp = _vectRecords.back();
+		_vectRecords.pop_back();
+		delete rp;
+	}
+
 	// clean the record wrappers
-	if (_records != nullptr)
+	/*if (_records != nullptr)
 	{
 		// deallocate the individual pointers
 		for (int i = 0; i < _records_size; i++) {
@@ -94,9 +109,9 @@ ManagedFoxProBuffer::~ManagedFoxProBuffer()
 				delete rec;
 		}
 
-		// deallocate pointer array
+		// deallocate array
 		delete[] _records;
-	}
+	}*/
 
 	// buffer is always dynamically allocated, so delete it too
 	delete this;
@@ -109,7 +124,7 @@ ManagedFoxProBuffer::~ManagedFoxProBuffer()
 *--------------------*/
 
 // grow record pointer array (powers of 2)
-void ManagedFoxProBuffer::GrowRecordPtrArray()
+/*void ManagedFoxProBuffer::GrowRecordPtrArray()
 {
 	if (_records == nullptr) return;
 
@@ -129,14 +144,18 @@ void ManagedFoxProBuffer::GrowRecordPtrArray()
 }
 
 // shrink record pointer array (powers of 2)
+// can be dangerous - calling this when less than half the array is nullptr would cause a memory leak
 void ManagedFoxProBuffer::ShrinkRecordPtrArray()
 {
 	if (_records == nullptr) return;
 
-	// same algorithm as above, but with opposite goal
+	// opposite of above algorithm
 	int new_size = _records_size >> 1;
+	auto new_array = new ManagedRecordPtr[new_size];
 
-}
+
+
+}*/
 
 
 /*------------------------------------------------------------------------------
@@ -172,20 +191,25 @@ void ManagedFoxProBuffer::SaveAs(char* outputFile)
 
 IRecordPtr ManagedFoxProBuffer::GetRecord(int index)
 {
-    // old way: create new record wrapper, let destructor handle deallocation when
+	return _vectRecords[index];
+
+	// old way: create new record wrapper, let destructor handle deallocation when
 	//   it goes out of scope in client code
 	//
 	// return new ManagedFoxProRecord(_buffer->GetRecord(index));
 	//   - have to change so client can hold/change a persistent pointer to a record
 	//
 	// new way: wrapper performs and tracks all memory allocations internally
-	return _records[index];
+	
+	//return _records[index];
+
 }
 
 IRecordPtr ManagedFoxProBuffer::operator[] (int index)
 {
-	IRecord* rec = this->GetRecord(index);
-	return rec;
+	return this->GetRecord(index);
+	//IRecord* rec = this->GetRecord(index);
+	//return rec;
 }
 
 void ManagedFoxProBuffer::AddRecord(IRecordPtr record)

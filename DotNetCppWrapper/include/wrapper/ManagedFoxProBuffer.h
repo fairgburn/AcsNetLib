@@ -1,6 +1,8 @@
 #pragma once
 
 #include <gcroot.h>
+#include <vector>
+
 #include "FoxPro.NET.h"
 #include "ManagedFoxProRecord.h"
 
@@ -24,8 +26,9 @@ namespace ManagedWrappers
 		//   - allocated when buffer is created, and when records are added/removed
 		//
 		// keep an int to track the size of the array
-		ManagedRecordPtr* _records;
-		int _records_size;
+		//ManagedRecordPtr* _records;
+		std::vector<ManagedRecordPtr> _vectRecords;
+		//int _records_size;
 
 
 	/*--------------------
@@ -39,8 +42,8 @@ namespace ManagedWrappers
 		//   - shrink the array by right-shifting the size
 		// (for efficiency and to avoid making a separate data structure)
 		//
-		void GrowRecordPtrArray();
-		void ShrinkRecordPtrArray();
+		//void GrowRecordPtrArray();
+		//void ShrinkRecordPtrArray();
 		// example
 		// (assume original size is 8, and the array is full):
 		/*
