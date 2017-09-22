@@ -65,30 +65,9 @@ Public
 ManagedFoxProBuffer::ManagedFoxProBuffer(CSNS::FoxProBuffer^ buf) : _buffer(buf)
 {
 	// store a wrapper for each C# record
-	for each (auto rec in _buffer->Records) {
+	for each (CSNS::Record^ rec in _buffer->Records) {
 		_vectRecords.push_back(new ManagedFoxProRecord(rec));
 	}
-
-	// determine size of _records; always a power of 2
-	// start at 2^0 (1), increase exponent (left shift) until all C# records will fit
-	/*int num_records = NumRecords();
-
-	_records_size = 1;
-	while (_records_size <= num_records)
-		_records_size <<= 1;
-
-	// initialize array of record wrappers
-	_records = new ManagedRecordPtr[_records_size];
-	for (int i = 0; i < _records_size; i++)
-	{
-		// create a new wrapper for each existing record in C#
-		// initialize extra elements to nullptr
-		//   - _records_size is guaranteed to be bigger than value we get from NumRecords(),
-		//     so there will definitely be extra elements
-		_records[i] = (i < num_records) ? new ManagedFoxProRecord(_buffer->Records[i]) : nullptr;
-
-		
-	}*/
 }
 
 ManagedFoxProBuffer::~ManagedFoxProBuffer()
