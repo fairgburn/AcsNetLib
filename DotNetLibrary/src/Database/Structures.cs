@@ -57,12 +57,12 @@ namespace AcsLib.Database
         {
             _data = new Dictionary<string, string>();
 
-            int i = 0;
+            /*int i = 0;
             foreach (var col in columns)
             {
                 //_data[col.Name] = record[i++];
 
-            }
+            }*/
         }
 
         // allow row[string] indexing

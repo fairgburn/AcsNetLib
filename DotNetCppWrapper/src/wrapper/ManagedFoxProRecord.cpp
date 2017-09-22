@@ -92,7 +92,7 @@ void ManagedFoxProRecord::SetCompleteRecord(unsigned char* blob)
 
     // build up a list of all the bytes from input
     auto bList = gcnew List<unsigned char>();
-    for (unsigned int i = 1; i < _record->Length + 1; i++) {
+    for (int i = 1; i < _record->Length + 1; i++) {
         bList->Add(blob[i]);
     }
 

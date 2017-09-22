@@ -18,9 +18,43 @@ CFoxProBuffer* AcsNetLib::FoxPro::CreateFoxProBuffer(char* dbfFile)
 }
 
 
-/*--------------------------------------
- * class implementation
- * -------------------------------------*/
+/*--------------------------------------------------------
+ * class ManagedFoxProBuffer
+
+Protected
+----------
+	ManagedFoxProBuffer(CSNS::FoxProBuffer^ buf);
+	~ManagedFoxProBuffer();
+
+	gcroot<CSNS::FoxProBuffer^> _buffer;
+	ManagedRecordPtr* _records;
+	int _records_size;
+
+Private
+---------------
+	void GrowRecordPtrArray();
+	void ShrinkRecordPtrArray();
+	void UpdateRecordPtrArray();
+
+Public
+-------------
+	static IBuffer* CreateBuffer(char* dbfFile);
+
+	void Open();
+	void Close();
+	void Save();
+	void SaveAs(char* outputFile);
+
+	IRecord* GetRecord(int index);
+	IRecord* operator[] (int index);
+
+	void AddRecord(IRecord* record);
+	void RemoveRecord(int index);
+	IRecord* CreateNewRecord();
+
+	int NumFields();
+	int NumRecords();
+-------------------------------------------------------------*/
 
  //-------------------------------------------------------------------------------
 // protected contructor/destructor 
