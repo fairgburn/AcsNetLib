@@ -10,6 +10,7 @@ namespace AcsLib.FoxPro
     public class FoxProBuffer
     {
         
+        
 
         /*------------------------------------------
             | internal data and constructor |
@@ -329,9 +330,45 @@ namespace AcsLib.FoxPro
             // save file; allow client to specify a new output file through SaveAs method
             System.IO.File.WriteAllBytes(outFile, _data);
         }
-        
+
         #endregion Private Methods
         //___________________
 
+
+
+
+        // benchmark: speed test for debug vs release code
+        public void Benchmark(int iterations)
+        {
+            var start_time = DateTime.Now;
+            var rand = new Random(start_time.Millisecond);
+
+            // randomly add/remove requested number of records
+            for (int i = 0; i < iterations; i++)
+            {
+                bool even = (rand.Next() & 1) == 0;
+                int index = rand.Next() % _records.Count;
+
+                // add a record if random number was even (or if there are less than 5 records)
+                if (even || _records.Count < 5)
+                {
+                    var new_rec = _records[index].Copy();
+                    new_rec.Set("descr", "BMK");
+                    _records.Add(new_rec);
+                }
+
+                // otherwise, remove a random record
+                else
+                {
+                    _records.RemoveAt(index);
+                }
+            }
+
+            SaveAs("benchmark.dbf");
+
+            double total_time = (DateTime.Now - start_time).TotalMilliseconds;
+            System.Windows.Forms.MessageBox.Show("performed " + iterations + " adds/removes/sets in " + total_time / 1000.0 + " seconds.");
+
+        }
     }
 }

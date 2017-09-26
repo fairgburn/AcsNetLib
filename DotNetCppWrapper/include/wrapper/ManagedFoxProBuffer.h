@@ -2,7 +2,7 @@
 
 #include <gcroot.h>
 #include <vector>
-#include <list>
+#include <memory>
 
 #include "FoxPro.NET.h"
 #include "ManagedFoxProRecord.h"

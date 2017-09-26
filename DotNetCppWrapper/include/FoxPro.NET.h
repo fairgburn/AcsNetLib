@@ -11,7 +11,6 @@
     Brandon Fairburn 9/6/2017
 ------------------------------------------------------------------*/
 
-
 // building DLL or using it?
 #ifdef INSIDE_MANAGED_CODE
 	#define DLL __declspec(dllexport)
