@@ -134,7 +134,6 @@ IRecordPtr ManagedFoxProBuffer::operator[] (int index)
 void ManagedFoxProBuffer::AddRecord(IRecordPtr record)
 {
 	// cast the native interface to ManagedRecordPtr
-	// safe_cast throws an exception if the cast fails
 	auto rec_wrapper = (ManagedRecordPtr)record;
 
 	// get C# record from the wrapper, add it to C# buffer
