@@ -1,3 +1,5 @@
+
+#pragma once
 /*------------------------------------------------------------------
     CFoxProBuffer.h
     [AcsCppLib.NET.dll]
@@ -9,7 +11,6 @@
 
     Brandon Fairburn 9/6/2017
 ------------------------------------------------------------------*/
-#pragma once
 
 
 // building DLL or using it?

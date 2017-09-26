@@ -2,6 +2,7 @@
 
 #include <gcroot.h>
 #include <vector>
+#include <list>
 
 #include "FoxPro.NET.h"
 #include "ManagedFoxProRecord.h"
@@ -22,13 +23,19 @@ namespace ManagedWrappers
         // handle to C# buffer
         gcroot<CSNS::FoxProBuffer^> _buffer;
 
+		//-------------------------
+		// bsf REMOVED: just use std::list or std::vector, no need to roll your own dynamic array...
+		//------
 		// array of pointers to record wrappers
 		//   - allocated when buffer is created, and when records are added/removed
 		//
 		// keep an int to track the size of the array
 		//ManagedRecordPtr* _records;
-		std::vector<ManagedRecordPtr> _vectRecords;
 		//int _records_size;
+		//-------------------------
+
+		// dynamically sized structure for storing record wrappers
+		std::vector<ManagedRecordPtr> _vectRecords;
 
 
 	/*--------------------
@@ -57,7 +64,7 @@ namespace ManagedWrappers
 		//
 		// if _records == nullptr, then allocate it and a wrapper for each C# record
 		// else, update tracked pointers
-		void UpdateRecordPtrArray();
+		//void UpdateRecordPtrArray();
 		
 	/*------------------------------------------------------------------------------
 	* public methods (implementation of CFoxProBuffer interface from FoxPro.NET.h)
@@ -65,7 +72,6 @@ namespace ManagedWrappers
     public:
         // create native buffer instances (needed because the constructor takes a non-native parameter)
         static AcsNetLib::FoxPro::IBufferPtr CreateBuffer(char* dbfFile);
-
         void Open();
         void Close();
         void Save();

@@ -9,8 +9,7 @@
 
 using namespace System;
 using namespace AcsNetLib::FoxPro;
-using ManagedWrappers::ManagedFoxProBuffer;
-using ManagedWrappers::ManagedFoxProRecord;
+using namespace ManagedWrappers;
 
 // native interface:
 // create a buffer in native C++
@@ -67,6 +66,7 @@ ManagedFoxProBuffer::ManagedFoxProBuffer(CSNS::FoxProBuffer^ buf) : _buffer(buf)
 	// store a wrapper for each C# record
 	for each (CSNS::Record^ rec in _buffer->Records) {
 		_vectRecords.push_back(new ManagedFoxProRecord(rec));
+
 	}
 }
 
@@ -83,6 +83,7 @@ ManagedFoxProBuffer::~ManagedFoxProBuffer()
 	delete this;
 }
 //-------------------------------------------------------------------------------
+
 
 
 /*------------------------------------------------------------------------------
@@ -141,6 +142,12 @@ void ManagedFoxProBuffer::AddRecord(IRecordPtr record)
 
 void ManagedFoxProBuffer::RemoveRecord(int index)
 {
+	// removing record from C++ wrapper container (std::vector)
+	std::vector<ManagedRecordPtr>::iterator v_iter = _vectRecords.begin();
+	std::advance(v_iter, index);
+	_vectRecords.erase(v_iter);
+
+	// removing from C# list
     _buffer->Records->RemoveAt(index);
 }
 

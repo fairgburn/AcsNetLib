@@ -23,4 +23,4 @@ CPP/Release/
 CppNativeTest/
 CppManagedTest/
 CSharpTest/
-T_cpp_native/
+T_*/
