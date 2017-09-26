@@ -128,7 +128,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\CSQLite.h" />
     <ClInclude Include="include\FoxPro.NET.h" />
     <ClInclude Include="include\util\util.h" />
     <ClInclude Include="include\wrapper\ManagedFoxProBuffer.h" />

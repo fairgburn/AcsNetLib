@@ -27,9 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\CSQLite.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\FoxPro.NET.h">
       <Filter>include</Filter>
     </ClInclude>

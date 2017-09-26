@@ -39,6 +39,7 @@ namespace AcsNetLib
         struct DLL CFoxProBuffer
         {   
             virtual void Open() = 0;
+			virtual void Close() = 0;
             virtual void Save() = 0;
             virtual void SaveAs(char* outputFile) = 0;
 
