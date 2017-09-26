@@ -18,7 +18,6 @@ namespace ManagedWrappers
 	 *--------------------*/
     protected:
         ManagedFoxProBuffer(CSNS::FoxProBuffer^ buf);
-        ~ManagedFoxProBuffer();
 
         // handle to C# buffer
         gcroot<CSNS::FoxProBuffer^> _buffer;
@@ -34,7 +33,7 @@ namespace ManagedWrappers
 		//int _records_size;
 		//-------------------------
 
-		// dynamically sized structure for storing record wrappers
+		// structure for storing record wrappers
 		std::vector<ManagedRecordPtr> _vectRecords;
 
 
@@ -70,12 +69,15 @@ namespace ManagedWrappers
 	* public methods (implementation of CFoxProBuffer interface from FoxPro.NET.h)
 	*------------------------------------------------------------------------------*/
     public:
+		~ManagedFoxProBuffer();
+
         // create native buffer instances (needed because the constructor takes a non-native parameter)
         static AcsNetLib::FoxPro::IBufferPtr CreateBuffer(char* dbfFile);
         void Open();
-        void Close();
         void Save();
         void SaveAs(char* outputFile);
+
+		void SetAutoSave(bool);
 
 		AcsNetLib::FoxPro::IRecordPtr GetRecord(int index);
 		AcsNetLib::FoxPro::IRecordPtr operator[] (int index);

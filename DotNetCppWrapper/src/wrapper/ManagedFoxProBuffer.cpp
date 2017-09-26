@@ -5,8 +5,6 @@
 #include "ManagedFoxProBuffer.h"
 #include "ManagedFoxProRecord.h"
 
-#using "AcsLib.NET.dll"
-
 using namespace System;
 using namespace AcsNetLib::FoxPro;
 using namespace ManagedWrappers;
@@ -68,10 +66,16 @@ ManagedFoxProBuffer::ManagedFoxProBuffer(CSNS::FoxProBuffer^ buf) : _buffer(buf)
 		_vectRecords.push_back(new ManagedFoxProRecord(rec));
 
 	}
+	
+	// save automatically in C# finalizer
+	SetAutoSave(true);
 }
 
 ManagedFoxProBuffer::~ManagedFoxProBuffer()
 {
+	// save changes
+	_buffer->Save();
+
 	// deallocate all record wrappers
 	while (!_vectRecords.empty()) {
 		IRecordPtr rp = _vectRecords.back();
@@ -90,8 +94,8 @@ ManagedFoxProBuffer::~ManagedFoxProBuffer()
 * public methods (implementation of CFoxProBuffer interface from FoxPro.NET.h)
 *------------------------------------------------------------------------------*/
 
-// use factory model to create instances
-CFoxProBuffer* ManagedFoxProBuffer::CreateBuffer(char* dbfFile)
+// create instances 
+IBufferPtr ManagedFoxProBuffer::CreateBuffer(char* dbfFile)
 {
     auto net_buffer = gcnew CSNS::FoxProBuffer(gcnew String(dbfFile));
     return new ManagedFoxProBuffer(net_buffer);
@@ -102,11 +106,6 @@ void ManagedFoxProBuffer::Open()
     _buffer->Open();
 }
 
-void ManagedFoxProBuffer::Close()
-{
-    _buffer->Close();
-}
-
 void ManagedFoxProBuffer::Save()
 {
     _buffer->Save();
@@ -115,6 +114,11 @@ void ManagedFoxProBuffer::Save()
 void ManagedFoxProBuffer::SaveAs(char* outputFile)
 {
     _buffer->SaveAs(gcnew String(outputFile));
+}
+
+void ManagedFoxProBuffer::SetAutoSave(bool tf)
+{
+	_buffer->AutoSave = tf;
 }
 
 IRecordPtr ManagedFoxProBuffer::GetRecord(int index)

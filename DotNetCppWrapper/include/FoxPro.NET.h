@@ -1,4 +1,3 @@
-
 #pragma once
 /*------------------------------------------------------------------
     CFoxProBuffer.h
@@ -41,9 +40,11 @@ namespace AcsNetLib
         struct DLL CFoxProBuffer
         {   
             virtual void Open() = 0;
-            virtual void Close() = 0;
             virtual void Save() = 0;
             virtual void SaveAs(char* outputFile) = 0;
+
+			// save in destructor if AutoSave is true
+			virtual void SetAutoSave(bool) = 0;
 			
 			// accessing records
 			// IMPORTANT: buffer must be dereferenced to access records with the bracket overload

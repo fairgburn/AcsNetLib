@@ -26,8 +26,6 @@ namespace AcsLib.FoxPro
         private int _firstRecord;
         private int _numRecords;
         private int _recordLength;
-
-        private bool _recover; // flag to save recovery file if client doesn't call Close()
         private string _recoveryDir;
         private string _recoveryFile;
 
@@ -36,22 +34,21 @@ namespace AcsLib.FoxPro
         public FoxProBuffer(string file)
         {
             _dbfPath = file;
-
-            _recover = true;
             _recoveryDir = System.IO.Directory.GetCurrentDirectory() + "\\.recover";
             _recoveryFile = Math.Abs(_dbfPath.GetHashCode()) + ".dbf_recover";
 
+            AutoSave = false;
+
             Open();
-            
         }
 
-        // finalizer: save recovery file if Close() was not called
+        // finalizer: save changes if AutoSave is on
+        public bool AutoSave { get; set; }
         ~FoxProBuffer()
         {
-            if (_recover)
+            if (AutoSave)
             {
-                System.IO.Directory.CreateDirectory(_recoveryDir);
-                SaveAs(_recoveryDir + "\\" + _recoveryFile);
+                Save();
             }
         }
         
@@ -102,13 +99,6 @@ namespace AcsLib.FoxPro
             _data = System.IO.File.ReadAllBytes(_dbfPath);
             _fields = ReadFieldsFromDBF(_data);
             _records = ReadRecordsFromDBF(_data, _fields.ToArray());
-        }
-
-        //-------------------------------------------------
-        // Close: intentional exit, unset recovery flag
-        public void Close()
-        {
-            _recover = false;
         }
 
         //----------------------------------------------------------------
