@@ -106,6 +106,9 @@ void ManagedFoxProBuffer::Open()
     _buffer->Open();
 }
 
+// does nothing now, but some Winvent code won't compile without it
+void ManagedFoxProBuffer::Close() {}
+
 void ManagedFoxProBuffer::Save()
 {
     _buffer->Save();

@@ -74,6 +74,7 @@ namespace ManagedWrappers
         // create native buffer instances (needed because the constructor takes a non-native parameter)
         static AcsNetLib::FoxPro::IBufferPtr CreateBuffer(char* dbfFile);
         void Open();
+		void Close();
         void Save();
         void SaveAs(char* outputFile);
 
