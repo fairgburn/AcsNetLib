@@ -74,13 +74,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\_build\lib\</OutDir>
+    <OutDir>..\..\..\inv\Bin\</OutDir>
     <IncludePath>include\wrapper;include\util;include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <TargetName>AcsCppLib.NET</TargetName>
     <ReferencePath>..\_build\lib;$(VC_ReferencesPath_x86);</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\_build\lib\</OutDir>
+    <OutDir>..\..\..\inv\Bin</OutDir>
     <IncludePath>include\wrapper;include\util;include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <TargetName>AcsCppLib.NET</TargetName>
     <ReferencePath>..\_build\lib;$(VC_ReferencesPath_x86);</ReferencePath>
@@ -93,6 +93,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>INSIDE_MANAGED_CODE;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -105,6 +106,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>INSIDE_MANAGED_CODE;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
