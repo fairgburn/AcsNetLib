@@ -49,7 +49,9 @@ namespace AcsLib.FoxPro
         // DBF deleted flag
         public bool Deleted { get; set; }
 
-        // length of record in bytes
+        /// <summary>
+        /// Number of total bytes in serialized record
+        /// </summary>
         public int Length
         {
             get
@@ -113,7 +115,9 @@ namespace AcsLib.FoxPro
         public string GetString(int index) { return this[index].ToUTF8(); }
         public string GetString(string s) { return this[s].ToUTF8(); }
 
-        // return data a single byte array
+        /// <summary>
+        /// Serialize record to an array of bytes
+        /// </summary>
         public byte[] GetCompleteRecord()
         {
             var result = new List<byte>();
@@ -137,7 +141,9 @@ namespace AcsLib.FoxPro
          * Set data
          * -----------------------------*/
 
-        // modify data in field
+        /// <summary>
+        /// modify data in field
+        /// </summary>
         public void Set(string field, string val)
         {
             // create byte array for the new value
@@ -155,7 +161,10 @@ namespace AcsLib.FoxPro
             _data[field] = new_value;
         }
 
-        // modify whole record at once
+        /// <summary>
+        /// Deserialize array of bytes to set this record's data
+        /// </summary>
+        /// <param name="newData">Serialized record data</param>
         public void SetCompleteRecord(byte[] newData)
         {
             try

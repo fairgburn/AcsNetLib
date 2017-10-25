@@ -9,9 +9,6 @@ namespace AcsLib.FoxPro
 {
     public class FoxProBuffer
     {
-        
-        
-
         /*------------------------------------------
             | internal data and constructor |
         -------------------------------------------*/
@@ -31,7 +28,10 @@ namespace AcsLib.FoxPro
         private string _recoveryFile;
 
 
-        // constructor: save path to DBF
+        /// <summary>
+        /// Creates a new FoxProBuffer
+        /// </summary>
+        /// <param name="file">Path to the DBF file</param>
         public FoxProBuffer(string file)
         {
             _dbfPath = file;
@@ -52,7 +52,7 @@ namespace AcsLib.FoxPro
                 Save();
             }
         }
-        
+
         #endregion Internals
         //___________________
 
@@ -88,28 +88,30 @@ namespace AcsLib.FoxPro
         #region File IO
 
         //-------------------------------------
-        // Open: store file data in _data array
+        /// <summary>
+        /// Read bytes from the DBF file and organize data into fields and records,
+        /// similar to columns and rows in a SQL database
+        /// </summary>
         public void Open()
         {
-            // check if a recovery file exists
-            if (System.IO.File.Exists(_recoveryDir + "\\" + _recoveryFile))
-            {
-                // TODO
-            }
-
             _data = System.IO.File.ReadAllBytes(_dbfPath);
             _fields = ReadFieldsFromDBF(_data);
             _records = ReadRecordsFromDBF(_data, _fields.ToArray());
         }
 
-        //----------------------------------------------------------------
-        // Save() - save changes to default DBF file
-        // SaveAs(string) - client specifies where to save changes
+        //-------------------------------------------
+        /// <summary>
+        /// Overwrite the original file opened by the buffer
+        /// </summary>
         public void Save()
         {
             WriteBufferToDisk(_dbfPath);
         }
 
+        //-------------------------------------------
+        /// <summary>
+        /// Specify path for saving a new DBF file
+        /// </summary>
         public void SaveAs(string fileName)
         {
             WriteBufferToDisk(fileName);
@@ -127,8 +129,9 @@ namespace AcsLib.FoxPro
         #region Data
 
         //---------------------------------------------------------------
-        // Property: access records from DBF
-        // allows adding records by doing aBuffer.Records.Add(aRecord)
+        /// <summary>
+        /// Records from the DBF
+        /// </summary>
         public List<Record> Records
         {
             get { return _records; }
@@ -140,7 +143,9 @@ namespace AcsLib.FoxPro
         }
 
         //-----------------------------------
-        // Property: access fields from DBF
+        /// <summary>
+        /// Fields from the DBF
+        /// </summary>
         public List<Field> Fields
         {
             get { return _fields; }
@@ -153,14 +158,20 @@ namespace AcsLib.FoxPro
         }
 
         //--------------------------------------------
-        // AddRecord: put another record in the buffer
+        /// <summary>
+        /// Add a new record to the list. Consider using myBuffer.Records.Add() instead!
+        /// </summary>
+        /// <param name="r">New record to be added</param>
         public void AddRecord(Record r)
         {
             _records.Add(r);
         }
 
         //--------------------------------------------
-        // CreateNewRecord(): create formatted record
+        /// <summary>
+        /// Returns a new record formatted with the input Foxpro table schema.
+        /// </summary>
+        /// <param name="defaultFill">Value with which to fill empty records. Defaults to a space.</param>
         public Record CreateNewRecord(byte defaultFill = (byte)' ')
         {
             Record result = new Record() { DefaultFill = defaultFill };
@@ -177,10 +188,10 @@ namespace AcsLib.FoxPro
             return result;
         }
 
-        
+
         #endregion Data
         //___________________
-        
+
 
         #endregion Public Methods
         //___________________
@@ -202,7 +213,9 @@ namespace AcsLib.FoxPro
         #region Private Methods
 
         //------------------------------------------------------
-        // get the fields from the DBF 
+        /// <summary>
+        /// Parse the fields from the DBF
+        /// </summary>
         private List<Field> ReadFieldsFromDBF(byte[] data)
         {
             // store the fields in a list while we read them
@@ -229,7 +242,12 @@ namespace AcsLib.FoxPro
         }
 
         //------------------------------------------------------
-        // get the records from the DBF
+        /// <summary>
+        /// Parse the records from the DBF
+        /// </summary>
+        /// <param name="data">All bytes from the DBF file</param>
+        /// <param name="fields">Parsed fields from DBF (optional; will be obtained automatically if no parameter is given)</param>
+        /// <returns></returns>
         private List<Record> ReadRecordsFromDBF(byte[] data, Field[] fields = null)
         {
             if (fields == null) fields = ReadFieldsFromDBF(data).ToArray();
@@ -276,8 +294,10 @@ namespace AcsLib.FoxPro
         }
 
         //-----------------------------------------------------------------------------
-        // save changes to disk
-        //  - move record data in memory back to DBF format and write it to the disk
+        /// <summary>
+        /// save changes to disk
+        ///  - move record data in memory back to DBF format and write it to the disk
+        ///  </summary>
         private void WriteBufferToDisk(string outFile)
         {
             // need to work with a mutable data structure in case records were added/removed
