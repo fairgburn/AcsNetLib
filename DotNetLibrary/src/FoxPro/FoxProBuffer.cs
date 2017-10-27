@@ -247,7 +247,6 @@ namespace AcsLib.FoxPro
         /// </summary>
         /// <param name="data">All bytes from the DBF file</param>
         /// <param name="fields">Parsed fields from DBF (optional; will be obtained automatically if no parameter is given)</param>
-        /// <returns></returns>
         private List<Record> ReadRecordsFromDBF(byte[] data, Field[] fields = null)
         {
             if (fields == null) fields = ReadFieldsFromDBF(data).ToArray();

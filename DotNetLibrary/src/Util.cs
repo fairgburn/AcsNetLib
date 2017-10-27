@@ -1,10 +1,9 @@
-﻿/************************************************
- * Program.cs
+﻿/**********************************************************
+ * Util.cs
  * 
- * - Entry point of program
- * - Static methods useful for other classes
+ * - General utility functions used throughout system
  * 
- ***********************************************/
+ **********************************************************/
 
 using System;
 using System.Collections.Generic;

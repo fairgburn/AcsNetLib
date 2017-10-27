@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{B6B880A8-8FA6-436B-A8A5-AFC1B4DE5F3F}</ProjectGuid>
     <RootNamespace>Wrapper</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
     <TargetFrameworkVersion>4.7</TargetFrameworkVersion>
     <ProjectName>DotNetCppWrapper</ProjectName>
   </PropertyGroup>
