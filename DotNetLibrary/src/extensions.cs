@@ -1,4 +1,11 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * Extensions.cs
+ * 
+ * General extension methods - see https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods
+ * 
+ */
+
+using System.Collections.Generic;
 using System.Linq;
 
 //using AcsLib.Database;
@@ -9,6 +16,7 @@ namespace extensions
     {
 
         /*************** strings **************/
+        #region strings
 
         //_________________________________
         // return file name
@@ -32,9 +40,11 @@ namespace extensions
             return ext;
         }
 
+        #endregion strings
+
 
         /************ byte arrays **************/
-
+        #region byte arrays
 
         /** get a sub-range from the larger array **/
         public static byte[] SubRange(this byte[] bytes, int start, int count)
@@ -74,13 +84,14 @@ namespace extensions
         }
         //_________________________________________________________
 
+        #endregion byte arrays
 
         // BSF 9/20/2017 - removing SQL extensions until 
         //   everyone upgrades to Visual Studio 2017 because
         //   VS2012 doesn't support current C# code
 
         /*************** DBF and SQL structures ******************/
-
+        #region database structures 
         ///
         /// DBF Field
         ///
@@ -128,6 +139,7 @@ namespace extensions
             }
         }*/
 
+        #endregion database structures
 
     }
 }
