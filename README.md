@@ -21,6 +21,9 @@ DotNetCppWrapper/
         Wrapper/src/
           - implementation of wrapper modules
 
+Tests/
+  - unit tests for library classes (code coverage is low currently)
+
 
 
 Other
