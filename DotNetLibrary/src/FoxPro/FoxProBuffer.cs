@@ -24,8 +24,6 @@ namespace AcsLib.FoxPro
         private int _firstRecord;
         private int _numRecords;
         private int _recordLength;
-        private string _recoveryDir;
-        private string _recoveryFile;
 
 
         /// <summary>
@@ -35,8 +33,6 @@ namespace AcsLib.FoxPro
         public FoxProBuffer(string file)
         {
             _dbfPath = file;
-            _recoveryDir = System.IO.Directory.GetCurrentDirectory() + "\\.recover";
-            _recoveryFile = Math.Abs(_dbfPath.GetHashCode()) + ".dbf_recover";
 
             AutoSave = false;
 
